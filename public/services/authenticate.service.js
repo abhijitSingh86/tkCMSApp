@@ -30,7 +30,7 @@ angular.module('authenticationServiceModule',[]).factory('AuthService',
                     {username: username, password: password})
                 // handle success
                     .success(function (data, status) {
-                        if(status === 200 && data.status){
+                        if(status === 200){
                             user = true;
                             deferred.resolve();
                         } else {
@@ -82,7 +82,6 @@ angular.module('authenticationServiceModule',[]).factory('AuthService',
                     details)
                 // handle success
                     .success(function (data, status) {
-                        debugger;
                         if(status === 200 && data.status){
                             deferred.resolve();
                         } else {
