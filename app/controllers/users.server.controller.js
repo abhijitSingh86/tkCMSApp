@@ -95,7 +95,7 @@ exports.signup = function(req, res, next) {
         user.save(function(err) {
             if (err) {
                 var message = getErrorMessage(err);
-                req.flash('error', message);
+                res.flash('error', message);
                 return res;
             }
             req.login(user, function(err) {
