@@ -73,7 +73,7 @@ exports.renderSignin = function(req, res, next) {
             messages: req.flash('error') || req.flash('info')
         });
     } else {
-        return res.redirect('/');
+        return res.json({"action":"success"});
     }
 };
 exports.renderSignup = function(req, res, next) {
@@ -83,7 +83,7 @@ exports.renderSignup = function(req, res, next) {
             messages: req.flash('error')
         });
     } else {
-        return res.redirect('/');
+        return res.json({"action":"success"});
     }
 };
 
@@ -100,11 +100,11 @@ exports.signup = function(req, res, next) {
             }
             req.login(user, function(err) {
                 if (err) return next(err);
-                return res.redirect('/');
+                return res.json({"action":"success"});
             });
         });
     } else {
-        return res.redirect('/');
+        return res.json({"action":"success"});
     }
 };
 exports.create = function(req, res, next) {
@@ -129,7 +129,7 @@ exports.create = function(req, res, next) {
 
 exports.signout = function(req, res) {
     req.logout();
-    res.redirect('/');
+    res.json({"action":"success"});
 };
 
 exports.loggedIn = function loggedIn(req, res) {
