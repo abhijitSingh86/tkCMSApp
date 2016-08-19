@@ -13,11 +13,11 @@ mainApplicationModule.config(function($routeProvider) {
             templateUrl : '/views/registration.html',
             controller: 'RegistrationFormController'
         })
-        .when('/', {
+        .when('/home', {
         templateUrl : '/views/home.html',
-        controller: 'HomeController'
+        //controller: 'ResetPasswordCtrl'
     })
-        .when('/login', {
+        .when('/', {
             templateUrl : '/views/index.ejs',
             controller: 'LoginController'
         })
@@ -25,7 +25,7 @@ mainApplicationModule.config(function($routeProvider) {
 angular.element(document).ready(function() {
     angular.bootstrap(document, [mainApplicationModuleName]);
 });
-
+/*
 mainApplicationModule.run(function ($rootScope, $location, $route, AuthService) {
     $rootScope.$on('$routeChangeStart',
         function (event, next, current) {
@@ -33,4 +33,4 @@ mainApplicationModule.run(function ($rootScope, $location, $route, AuthService) 
                 $location.path('/login');
             }
         });
-});
+});*/
