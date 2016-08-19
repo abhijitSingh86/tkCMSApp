@@ -66,7 +66,6 @@ angular.module('authenticationServiceModule',[]).factory('AuthService',
                         user = false;
                         deferred.reject();
                     });
-
                 // return promise object
                 return deferred.promise;
 
@@ -82,7 +81,7 @@ angular.module('authenticationServiceModule',[]).factory('AuthService',
                     details)
                 // handle success
                     .success(function (data, status) {
-                        if(status === 200 && data.status){
+                        if(status === 200){
                             deferred.resolve();
                         } else {
                             deferred.reject();
@@ -90,7 +89,6 @@ angular.module('authenticationServiceModule',[]).factory('AuthService',
                     })
                     // handle error
                     .error(function (data) {
-                        debugger;
                         deferred.reject();
                     });
 
