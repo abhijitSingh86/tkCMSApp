@@ -1,0 +1,39 @@
+<html>
+<head>
+
+</head>
+<body ng-app="conference-system" layout="column">
+<!-- Container #1 (see wireframe) -->
+<md-toolbar layout="row" layout-align="start end">
+    <section layout="row" layout-sm="column"  >
+        <h3>Conference Management System</h3>
+    </section>
+    <section>
+        <md-menu-bar>
+            <md-menu>
+                <button ng-click="$mdOpenMenu()">
+                    New
+                </button>
+                <md-menu-content>
+                </md-menu-content>
+            </md-menu>
+        </md-menu-bar>
+    </section>
+    <span flex> </span>
+    <section layout="row" layout-sm="column" >
+       <!-- <md-button ng-controller="LogoutController" class="glyphicon glyphicon-log-out pull-right" ng-click="logout($event)"> Logout</md-button>-->
+    </section>
+</md-toolbar>
+<!-- Container #3 -->
+<div flex layout="row">
+    <!-- Container #3 -->
+    <md-sidenav md-is-locked-open="true" class="md-whiteframe-z2" flex="25">
+
+    </md-sidenav>
+    <!-- Container #4 -->
+    <md-content flex id="content" ng-view flex="75">
+
+    </md-content>
+</div>
+</body>
+</html>

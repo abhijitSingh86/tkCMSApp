@@ -34,7 +34,7 @@ module.exports = function() {
     app.use(passport.initialize());
     app.use(passport.session());
 
-    app.set('views', './app/views');
+    app.set('views', './public/views');
     app.set('view engine', 'ejs');
 
     app.use(express.static('./public'));

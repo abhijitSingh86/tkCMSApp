@@ -17,11 +17,19 @@ module.exports = function(app) {
 
     app.route('/signin')
         .get(users.renderSignin)
-        .post(passport.authenticate('local', {
-            successRedirect: '/',
-            failureRedirect: '/signin',
-            failureFlash: true
-        }));
+        .post(passport.authenticate('local'),
+            function(req, res) {
+                // If this function gets called, authentication was successful.
+                // `req.user` contains the authenticated user.
+                // res.redirect('/users/' + req.user.username);
+                if(req.user){
+                    res.json({"user" : "success"});
+
+
+                }else{
+                    res.json({"user" : "invalid","error" : message});
+                }
+            });
     app.get('/signout', users.signout);
 
 
