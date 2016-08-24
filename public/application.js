@@ -1,6 +1,6 @@
 var mainApplicationModuleName = 'conference-system';
 var mainApplicationModule = angular.module(mainApplicationModuleName
-    , ['leftPanelModule','authenticationServiceModule','loginModule','eventsModule','datatables','ngMaterial',  'ngMessages', 'ngRoute','ui.router', 'ngCookies', 'vAccordion']);
+    , ['leftPanelModule','reviewerModule','authenticationServiceModule','loginModule','eventsModule','datatables','ngMaterial',  'ngMessages', 'ngRoute','ui.router', 'ngCookies', 'vAccordion']);
 
 mainApplicationModule.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise('/');
@@ -53,7 +53,15 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider', function($
                     controller: 'EventController'
                 }
             },
-
+        })
+        .state('home.reviewersubmit', {
+            url: 'review',
+            views: {
+                'mainpanel@': {
+                    templateUrl: 'views/reviews/reviewform.html',
+                    controller: 'ReviewerController'
+                }
+            },
         })
         .state('login', {
             url:'/login',
