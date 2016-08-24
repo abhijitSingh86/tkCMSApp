@@ -7,7 +7,7 @@ exports.create = function(req, res, next) {
         var submissionEvent = new SubmissionEvent(req.body);
         submissionEvent.createdBy = req.user._id;
 
-        if(submissionEvent.start_date < submissionEvent.end_date) {
+        if(new Date(req.body.start_date) > new Date(req.body.end_date)) {
             res.json({"error": "Start date can't be greater than End date"});
             return;
         }
@@ -63,6 +63,12 @@ exports.submissionEventByID = function(req, res, next, id) {
 
 exports.update = function(req, res, next) {
     if(req.user && user.isChair(req)) {
+
+        if(new Date(req.body.start_date) > new Date(req.body.end_date)) {
+            res.json({"error": "Start date can't be greater than End date"});
+            return;
+        }
+
         if (req.body._id) delete req.body._id;
         if (req.createdBy) req.createdBy = req.user._id;
         SubmissionEvent.findByIdAndUpdate(req.submissionEvent.id, req.body, function (err, submissionEvent) {
