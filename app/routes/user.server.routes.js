@@ -23,9 +23,7 @@ module.exports = function(app) {
                 // `req.user` contains the authenticated user.
                 // res.redirect('/users/' + req.user.username);
                 if(req.user){
-                    res.json({"user" : "success"});
-
-
+                    res.json({"user" : req.user});
                 }else{
                     res.json({"user" : "invalid","error" : message});
                 }

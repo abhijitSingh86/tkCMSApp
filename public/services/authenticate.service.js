@@ -1,7 +1,5 @@
 angular.module('authenticationServiceModule',[]).factory('AuthService',
-    ['$q', '$timeout', '$http',
-        function ($q, $timeout, $http) {
-
+        function ($q, $timeout, $http, $rootScope, $state, $cookies,$cookieStore) {
             // create user variable
             var user = null;
 
@@ -13,9 +11,13 @@ angular.module('authenticationServiceModule',[]).factory('AuthService',
                 register: register
             });
             function isLoggedIn() {
-                if(user) {
+                var globals= $cookieStore.get('globals');
+
+                //Check if user is already logged in, redirect to home page
+                if (typeof(globals) != "undefined")
+                {
                     return true;
-                } else {
+                } else{
                     return false;
                 }
             }
@@ -31,7 +33,13 @@ angular.module('authenticationServiceModule',[]).factory('AuthService',
                 // handle success
                     .success(function (data, status) {
                         if(status === 200){
-                            user = true;
+                            $rootScope.globals = {
+                                currentUser : {
+                                    id : data.user.id,
+                                    username : data.user.username,
+                                }
+                            }
+                            $cookieStore.put('globals', $rootScope.globals);
                             deferred.resolve();
                         } else {
                             user = false;
@@ -55,10 +63,11 @@ angular.module('authenticationServiceModule',[]).factory('AuthService',
                 var deferred = $q.defer();
 
                 // send a get request to the server
-                $http.get('/user/logout')
+                $http.get('/signout')
                 // handle success
                     .success(function (data) {
-                        user = false;
+                        $rootScope.globals = {};
+                        $cookieStore.remove('globals');
                         deferred.resolve();
                     })
                     // handle error
@@ -96,4 +105,4 @@ angular.module('authenticationServiceModule',[]).factory('AuthService',
                 return deferred.promise;
 
             }
-        }]);
+        });

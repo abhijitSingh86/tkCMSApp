@@ -8,39 +8,31 @@
       <script type="text/javascript" src="/scripts-angular1.5.8/angular-messages.min.js"></script>
       <script type="text/javascript" src="/scripts-angular1.5.8/angular-aria.min.js"></script>
       <script type="text/javascript" src="/scripts-angular1.5.8/angular-material.min.js"></script>
-      <script type="text/javascript" src="/scripts-angular1.5.8/lf-ng-md-file-input.min.js"></script>
+      <script type="text/javascript" src="/scripts-angular1.5.8/angular-ui-router.min.js"></script>
+      <script type="text/javascript" src="/scripts-angular1.5.8/v-accordion.min.js"></script>
       <script type="text/javascript" src="/application.js"></script>
       <link rel="stylesheet" href="/scripts-angular1.5.8/angular-material.min.css" />
-      <link href="/scripts-angular1.5.8/lf-ng-md-file-input.min.css" rel="stylesheet" />
-       <script type="text/javascript" src="controller/registration.client.controller.js"></script>
+      <link rel="stylesheet" href="/scripts-angular1.5.8/v-accordion.min.css" />
+      <link rel="stylesheet" href="/css/custom.css" />
+      <script type="text/javascript" src="controller/registration.client.controller.js"></script>
       <script src="controller/login.controller.js"></script>
       <script src="controller/reset.controller.js"></script>
+      <script src="controller/leftpanel.controller.js"></script>
+      <script src="controller/event.controller.js"></script>
       <script type="text/javascript" src="services/authenticate.service.js"></script>
    </head>
-   <body ng-app="conference-system" layout="column" ng-view>
-   <form class="form" ng-submit="login()">
-   <div ng-controller="LoginController"  ng-cloak="" class="inputIcons" align="center">
-      <h1 class="md-display-2">Open Conference Management System</h1>
-      <br>
-      <md-content class="autoScroll" style="margin-top: 7%">
-         <md-input-container class="md-icon-float md-block" flex="25" align="center">
-            <!-- Use floating label instead of placeholder -->
-            <label>UserName (required)</label>
-            <md-icon md-svg-src="img/ic_person_24px.svg" class="name"></md-icon>
-            <input ng-model="user.username" type="text" aria-setsize="10">
-         </md-input-container>
+   <body layout="column">
+   <div id="content"  ui-view="header">
 
-         <md-input-container class="md-block" flex="25" align="center">
-            <!-- Use floating placeholder instead of label -->
-            <md-icon  md-svg-src="img/ic_person_24px.svg" class="vpn_key"></md-icon>
-            <input ng-model="user.password" type="password" placeholder="Password (required)" ng-required="true">
-         </md-input-container>
+   </div>
+   <!-- Container #3 -->
+   <div flex layout="row">
+      <!-- Container #3 -->
+      <md-sidenav md-is-locked-open="true" class="md-whiteframe-z2" ng-if="currentUser" flex="25" ui-view="leftpanel">
+      </md-sidenav>
+      <!-- Container #4 -->
+      <md-content flex id="content" ui-view="mainpanel" flex="75">
 
-         <md-button class="md-raised" ng-click="login()"> Login </md-button>
-         <md-button class="md-raised"> Reset </md-button>
-         <p class="margin right-align medium-small"><a ng-href="#forget-pass">Forgot Your Password?</a>
-         <a ng-href="/register">Register Now!!!</a> </p>
       </md-content>
    </div>
-   </form>
    </body>

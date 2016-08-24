@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Header</title>
+</head>
+<body>
+<md-toolbar layout="row" layout-align="start end">
+    <section layout="row" layout-sm="column"  >
+        <h3>Conference Management System</h3>
+    </section>
+    <section>
+        <md-menu-bar>
+            <md-menu>
+                <button ng-click="$mdOpenMenu()">
+                    New
+                </button>
+                <md-menu-content>
+                    <md-menu-item ><md-button ><a ui-sref=".newevent">Event</a></md-button></md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </md-menu-bar>
+    </section>
+    <span flex> </span>
+    <section layout="row" layout-sm="column" >
+        <md-button ng-controller="LoginController" class="glyphicon glyphicon-log-out pull-right" ng-click="logout()"> Logout</md-button>
+    </section>
+</md-toolbar>
+</body>
+</html>
