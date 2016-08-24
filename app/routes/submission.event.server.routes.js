@@ -1,4 +1,5 @@
 var SubmissionEventSchema =  require('../controllers/submission.event.server.controller.js');
+var  passport = require("passport")
 module.exports = function(app) {
     app.route('/subEvents').
     post(SubmissionEventSchema.create).

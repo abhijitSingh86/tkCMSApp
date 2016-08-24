@@ -21,6 +21,7 @@ exports.userByID = function(req, res, next, id) {
         if (err) {
             return next(err);
         } else {
+            if(user._id) delete user._id;
             req.user = user;
             next();
         }
@@ -131,6 +132,10 @@ exports.signout = function(req, res) {
     req.logout();
     res.json({"action":"success"});
 };
+
+exports.isChair=function(req){
+    if(req.user.roles.indexOf("chair") >-1) return true; else return false;
+}
 
 exports.loggedIn = function loggedIn(req, res) {
     res.send(req.isAuthenticated() ? req.user : '0');

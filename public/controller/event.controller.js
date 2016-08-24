@@ -27,7 +27,7 @@ app.controller('EventController', function ($scope, $http, $mdToast, $state) {
             })
             // handle error
             .error(function (data) {
-
+                $mdToast.show($mdToast.simple().textContent("Error Occurred \n"+data));
             });
     };
     $scope.updateForm = function(event) {
@@ -36,7 +36,11 @@ app.controller('EventController', function ($scope, $http, $mdToast, $state) {
             event)
         // handle success
             .success(function (data) {
-                $mdToast.show($mdToast.simple().textContent("Updated Successfully"));
+                if(data.error){
+                    $mdToast.show($mdToast.simple().textContent(data.error));
+                }else {
+                    $mdToast.show($mdToast.simple().textContent("Updated Successfully"));
+                }
             })
             // handle error
             .error(function (data) {
