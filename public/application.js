@@ -1,6 +1,6 @@
 var mainApplicationModuleName = 'conference-system';
 var mainApplicationModule = angular.module(mainApplicationModuleName
-    , ['leftPanelModule','authenticationServiceModule','loginModule','eventsModule','datatables','ngMaterial',  'ngMessages', 'ngRoute','ui.router', 'ngCookies', 'vAccordion']);
+    , ['leftPanelModule','authenticationServiceModule','loginModule','submissionModule','eventsModule','datatables','ngMaterial',  'ngMessages', 'ngRoute','ui.router', 'ngCookies', 'vAccordion']);
 
 mainApplicationModule.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise('/');
@@ -44,13 +44,31 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider', function($
                 }
             },
 
-        })
+        }).state('home.event.submissions', {
+        url: '/submission',
+        views: {
+            'datatable@home.event': {
+                templateUrl: 'views/submission/submissiondatatable.html',
+                controller: 'SubmissionController'
+            }
+        },
+
+    })
         .state('home.newevent', {
             url: 'event',
             views: {
                 'mainpanel@': {
                     templateUrl: 'views/event/eventform.html',
                     controller: 'EventController'
+                }
+            },
+        })
+        .state('home.newsubmission', {
+            url: 'submission',
+            views: {
+                'mainpanel@': {
+                    templateUrl: 'views/submission/submission-form.html',
+                    controller: 'SubmissionFormController'
                 }
             },
 

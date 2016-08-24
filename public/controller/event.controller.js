@@ -4,7 +4,6 @@
 var app = angular.module('eventsModule', []);
 app.controller('EventController', function ($scope, $http, $mdToast, $state, DTOptionsBuilder, DTColumnDefBuilder) {
     $scope.event = {};
-    var vm = this;
     $scope.renderDataTable = function(){
         $http.get('/subEvents')
         // handle success
@@ -70,4 +69,7 @@ app.controller('EventController', function ($scope, $http, $mdToast, $state, DTO
 
             });
     };
+    $scope.loadSubmissions = function(){
+        $state.go('home.event.submissions')
+    }
 });
