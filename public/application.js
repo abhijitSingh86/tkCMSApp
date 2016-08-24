@@ -1,6 +1,6 @@
 var mainApplicationModuleName = 'conference-system';
 var mainApplicationModule = angular.module(mainApplicationModuleName
-    , ['leftPanelModule','authenticationServiceModule','loginModule','eventsModule','ngMaterial',  'ngMessages', 'ngRoute','ui.router', 'ngCookies', 'vAccordion']);
+    , ['leftPanelModule','authenticationServiceModule','loginModule','eventsModule','datatables','ngMaterial',  'ngMessages', 'ngRoute','ui.router', 'ngCookies', 'vAccordion']);
 
 mainApplicationModule.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise('/');
@@ -59,7 +59,7 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider', function($
             url:'/login',
             views: {
                 'mainpanel': {
-                    templateUrl: 'views/login.html'
+                    templateUrl: 'views/authentication/login.html'
                 }
             },
             controller: 'LoginController',
@@ -75,7 +75,26 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider', function($
                 }
             }
         })
-
+        .state('register', {
+            url:'/register',
+            views: {
+                'mainpanel': {
+                    templateUrl: 'views/authentication/registration.html'
+                }
+            },
+            controller: 'LoginController',
+            resolve: {
+                auth: function (AuthService, $q, $rootScope) {
+                    var deferred = $q.defer();
+                    if (AuthService.isLoggedIn()) {
+                        deferred.reject({redirectTo: 'home'});
+                    } else {
+                        deferred.resolve({});
+                    }
+                    return deferred.promise;
+                }
+            }
+        })
 }]);
 mainApplicationModule.run(function ($rootScope, AuthService, $state) {
     if(AuthService.isLoggedIn()){

@@ -2,8 +2,31 @@
  * Created by manny on 23.08.2016.
  */
 var app = angular.module('eventsModule', []);
-app.controller('EventController', function ($scope, $http, $mdToast, $state) {
+app.controller('EventController', function ($scope, $http, $mdToast, $state, DTOptionsBuilder, DTColumnDefBuilder) {
     $scope.event = {};
+    var vm = this;
+    $scope.renderDataTable = function(){
+        $http.get('/subEvents')
+        // handle success
+            .success(function (data, status) {
+                debugger;
+                $scope.events = data;
+
+                $scope.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers');
+                $scope.dtColumnDefs = [
+                    DTColumnDefBuilder.newColumnDef(0),
+                    DTColumnDefBuilder.newColumnDef(1),
+                    DTColumnDefBuilder.newColumnDef(2),
+                    DTColumnDefBuilder.newColumnDef(3),
+                    DTColumnDefBuilder.newColumnDef(4),
+                    DTColumnDefBuilder.newColumnDef(5).notSortable()
+                ];
+            })
+            // handle error
+            .error(function (data) {
+
+            });
+    }
     $scope.loadEvent = function() {
         $http.get('/subEvent/' + $state.params.id)
         // handle success
