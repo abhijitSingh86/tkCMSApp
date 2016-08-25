@@ -96,3 +96,63 @@ exports.delete = function(req, res, next) {
         res.json({"error":"User is not authorized to change the Event"});
     }
 };
+
+exports.addToInterestedUserList = function(req,res,next){
+    if(true){//req.user && user.isChair(req)) {
+        var userList = req.body.interestedUsers;
+        for (var i = 0; i < userList.length; i++) {
+            if(req.submissionEvent.interestedUsers.indexOf(userList[i]) ==-1){
+                req.submissionEvent.interestedUsers.push(userList[i]);
+            }
+        }
+
+            if(userList && userList.length >0) {
+            var id=req.submissionEvent.id;
+            SubmissionEvent.findByIdAndUpdate(id,
+               // {$set : {name:"newName11"}},
+                {  $set: { interestedUsers: req.submissionEvent.interestedUsers}},
+                {new:true,safe: true, upsert: true},
+                function (err, submissionEvent) {
+                    if (err) {
+                        return next(err);
+                    } else {
+                        res.json(submissionEvent);
+                    }
+                });
+        }else{
+            res.json({"error":"Interested user list can't be empty"})
+        }
+    }else{
+        res.json({"error":"User is not authorized to change the Event"});
+    }
+};
+
+exports.deleteFromInterestedUserList = function(req,res,next){
+    if(true){//req.user && user.isChair(req)) {
+        var userList = req.body.interestedUsers;
+        for (var i = 0; i < userList.length; i++) {
+            if(req.submissionEvent.interestedUsers.indexOf(userList[i]) >-1){
+                req.submissionEvent.interestedUsers.splice(i,1);
+            }
+        }
+
+        if(userList && userList.length >0) {
+            var id=req.submissionEvent.id;
+            SubmissionEvent.findByIdAndUpdate(id,
+                // {$set : {name:"newName11"}},
+                {  $set: { interestedUsers: req.submissionEvent.interestedUsers}},
+                {new:true,safe: true, upsert: true},
+                function (err, submissionEvent) {
+                    if (err) {
+                        return next(err);
+                    } else {
+                        res.json(submissionEvent);
+                    }
+                });
+        }else{
+            res.json({"error":"Interested user list can't be empty"})
+        }
+    }else{
+        res.json({"error":"User is not authorized to change the Event"});
+    }
+};

@@ -7,9 +7,13 @@ module.exports = function(app) {
 
 
     app.route('/subEvent/:subEventId').
-    get(SubmissionEventSchema.read).
-    put(SubmissionEventSchema.update).
-    delete(SubmissionEventSchema.delete);
+        get(SubmissionEventSchema.read).
+        put(SubmissionEventSchema.update).
+        delete(SubmissionEventSchema.delete);
+
+    app.route('/subEvent/addtointeresteduserlist/:subEventId')
+        .put(SubmissionEventSchema.addToInterestedUserList)
+        .delete(SubmissionEventSchema.deleteFromInterestedUserList);
 
     app.param('subEventId', SubmissionEventSchema.submissionEventByID);
 
