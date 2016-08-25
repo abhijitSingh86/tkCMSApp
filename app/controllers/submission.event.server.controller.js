@@ -25,7 +25,7 @@ exports.create = function(req, res, next) {
 };
 
 exports.list = function(req, res, next) {
-    SubmissionEvent.find().populate('createdBy').exec(function(err, subevnts) {
+    SubmissionEvent.find().populate('createdBy','firstName').populate('interestedUsers','firstName').exec(function(err, subevnts) {
         if (err) {
             return next(err);
         } else {
@@ -35,7 +35,7 @@ exports.list = function(req, res, next) {
 };
 
 exports.get = function(req, res, next) {
-    SubmissionEvent.find().populate('createdBy').exec(function(err, subevnts) {
+    SubmissionEvent.find().populate('createdBy','firstName').populate('interestedUsers','firstName').exec(function(err, subevnts) {
         if (err) {
             return next(err);
         } else {
@@ -46,12 +46,21 @@ exports.get = function(req, res, next) {
 
 
 exports.read = function(req, res) {
-    res.json(req.submissionEvent);
+    SubmissionEvent.findOne({
+        _id: req.submissionEvent.id
+    }).populate('createdBy','firstName').populate('interestedUsers','firstName').exec(function(err, submissionEvent) {
+        if (err) {
+            return next(err);
+        } else {
+            res.json(submissionEvent);
+        }
+    });
+
 };
 exports.submissionEventByID = function(req, res, next, id) {
     SubmissionEvent.findOne({
         _id: id
-    }).populate('createdBy').exec(function(err, submissionEvent) {
+    }).populate('createdBy','firstName').exec(function(err, submissionEvent) {
         if (err) {
             return next(err);
         } else {
@@ -85,13 +94,13 @@ exports.update = function(req, res, next) {
 
 exports.delete = function(req, res, next) {
     if(req.user && user.isChair(req)) {
-    req.submissionEvent.remove(function(err) {
-        if (err) {
-            return next(err);
-        } else {
-            res.json(req.submissionEvent);
-        }
-    })
+        req.submissionEvent.remove(function(err) {
+            if (err) {
+                return next(err);
+            } else {
+                res.json(req.submissionEvent);
+            }
+        })
     }else{
         res.json({"error":"User is not authorized to change the Event"});
     }
@@ -105,7 +114,6 @@ exports.addToInterestedUserList = function(req,res,next){
                 req.submissionEvent.interestedUsers.push(userList[i]);
             }
         }
-
             if(userList && userList.length >0) {
             var id=req.submissionEvent.id;
             SubmissionEvent.findByIdAndUpdate(id,
@@ -120,10 +128,10 @@ exports.addToInterestedUserList = function(req,res,next){
                     }
                 });
         }else{
-            res.json({"error":"Interested user list can't be empty"})
+            res.status(400).json({"error":"Interested user list can't be empty"})
         }
     }else{
-        res.json({"error":"User is not authorized to change the Event"});
+        res.status(401).json({"error":"User is not authorized to change the Event"});
     }
 };
 
@@ -135,7 +143,6 @@ exports.deleteFromInterestedUserList = function(req,res,next){
                 req.submissionEvent.interestedUsers.splice(i,1);
             }
         }
-
         if(userList && userList.length >0) {
             var id=req.submissionEvent.id;
             SubmissionEvent.findByIdAndUpdate(id,
@@ -150,9 +157,15 @@ exports.deleteFromInterestedUserList = function(req,res,next){
                     }
                 });
         }else{
-            res.json({"error":"Interested user list can't be empty"})
+            res.status(400).json({"error":"Interested user list can't be empty"})
         }
     }else{
-        res.json({"error":"User is not authorized to change the Event"});
+        res.status(401).json({"error":"User is not authorized to change the Event"});
+    }
+};
+
+exports.retrieveUsersBelongingToEvent = function(req,res,next){
+    if(true) {//req.user && user.isChair(req)) {
+
     }
 };

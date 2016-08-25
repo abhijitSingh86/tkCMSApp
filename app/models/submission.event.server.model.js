@@ -21,9 +21,9 @@ var SubmissionEventSchema = new Schema({
         type: Schema.ObjectId,
         ref: 'User'
     }
-    ,interestedUsers:{
-        type:[Schema.ObjectId],
+    ,interestedUsers:[{
+        type:Schema.ObjectId,
         ref:'User'
-    }
+    }]
 });
 mongoose.model('SubmissionEvent', SubmissionEventSchema);
