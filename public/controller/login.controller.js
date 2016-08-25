@@ -42,4 +42,17 @@ angular.module('loginModule',[]).controller('LoginController',
                     });
 
             };
+            $scope.register = function (user) {
+
+                // call login from service
+                AuthService.register(user)
+                // handle success
+                    .then(function (data) {
+                        $state.go('login');
+                    })
+                    // handle error
+                    .catch(function () {
+                    });
+
+            };
         });

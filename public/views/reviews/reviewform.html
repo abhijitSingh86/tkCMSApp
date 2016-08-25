@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div  layout="column" class="md-inline-form" >
+    <md-tab-body layout-padding="" class="layout-padding">
+        <form name="reviewForm" novalidate ng-submit="reviewForm.$valid && submitForm(review)">
+
+            <div layout-gt-sm="row" class="layout-gt-sm-row">
+               <md-input-container class="md-block" flex-gt-xs>
+                    <!--<label>Reviewer Expertise:</label> -->
+                    <span>What is your Expertise(rate 1-5)?</span>
+                    <md-select ng-model="review.expertise" placeholder="Select Your Expertise Level for this topic" class="md-no-underline">
+                        <md-option value="v1">1- Not at all familiar to topic</md-option>
+                        <md-option value="v2">2- Very Basic Understanding</md-option>
+                        <md-option value="v3">3- General Understanding</md-option>
+                        <md-option value="v4">4- Good Understanding of Topic</md-option>
+                        <md-option value="v5">5- Excellent Understanding</md-option>
+                    </md-select>
+
+              </md-input-container>
+            </div>
+            <div layout="row" layout-align="space-between center">
+                <md-input-container class="md-block" flex-gt-xs>
+                     <!--<label>Reviewer Expertise:</label> -->
+
+                    <span>Your Overall Evaluation:</span>
+                    <md-select ng-model="review.overall" placeholder="Your Overall Evaluation" class="md-no-underline">
+                        <md-option value="val1">1- Strongly Reject</md-option>
+                        <md-option value="val2">2- Reject</md-option>
+                        <md-option value="val3">3- Neither accept nor reject</md-option>
+                        <md-option value="val4">4- Accept</md-option>
+                        <md-option value="val5">5- Strongly Accept</md-option>
+                    </md-select>
+
+                </md-input-container>
+            </div>
+            <div layout-gt-sm="row" class="layout-gt-sm-row">
+                <md-input-container class="md-block" flex-gt-xs>
+                    <label>Summary:</label>
+                    <input type="textbox" name="summary" ng-model="review.summary">
+                </md-input-container>
+            </div>
+
+            <div layout-gt-sm="row" class="layout-gt-sm-row">
+                <md-input-container class="md-block" flex-gt-xs>
+                    <label>Major Strong Points:</label>
+                    <input type="textbox" name="name" ng-model="review.strongpt">
+                </md-input-container>
+            </div>
+
+            <div layout-gt-sm="row" class="layout-gt-sm-row">
+                <md-input-container class="md-block" flex-gt-xs>
+                    <label>Major Weak Points:</label>
+                    <input type="textbox" name="name" ng-model="review.weakpt">
+                </md-input-container>
+            </div>
+
+            <div layout-gt-sm="row" class="layout-gt-sm-row">
+                <md-input-container class="md-block" flex-gt-xs>
+                    <label>Detailed Comments for the review:</label>
+                    <input type="textbox" name="name" ng-model="review.detail">
+                </md-input-container>
+            </div>
+
+
+            <section layout="row" layout-sm="column" layout-align="end" layout-wrap>
+                <md-button type=submit  class="md-raised md-primary">Submit</md-button>
+            </section>
+        </form>
+    </md-tab-body>
+</div>
+</body></html>

@@ -1,0 +1,37 @@
+<div flex layout="row" layout-padding>
+    <md-content flex layout-padding id="content" class="registration-container">
+        <form name="submissionForm" novalidate ng-submit="submissionSubmit(sub) && submissionForm.$valid">
+            <div layout-gt-sm="row" class="layout-gt-sm-row">
+                <md-input-container class="md-block" flex-gt-md>
+                    <input required ng-model="sub.name" placeholder="Name">
+                </md-input-container>
+            </div>
+            <div layout-gt-sm="row" class="layout-gt-sm-row">
+                <md-input-container class="md-block" flex-gt-md>
+                    <label>Keywords</label>
+                    <input ng-model="sub.keyword">
+                </md-input-container>
+            </div>
+            <div layout-gt-sm="row" class="layout-gt-sm-row">
+                <md-input-container class="md-block" flex-gt-md>
+                    <label>Abstract</label>
+                    <input required name="abstract" ng-model="sub.abstract">
+                </md-input-container>
+            </div>
+            <div layout-gt-sm="row" class="layout-gt-sm-row">
+                <md-input-container class="md-block" flex-gt-sm >
+                    <label>Authors</label>
+                    <md-select ng-model="sub.authors" multiple >
+                        <md-option ng-repeat="author in authors" value="{{author.id}}">
+                            {{author.name}}
+                        </md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+                <section layout="row" layout-sm="column" layout-align="end" layout-wrap>
+                    <md-button type="submit" class="md-raised md-primary">Submit</md-button>
+                </section>
+            </div>
+        </form>
+    </md-content>
+</div>
