@@ -43,6 +43,7 @@ module.exports = function() {
     require('../app/routes/submission.document.server.routes.js')(app);
     require('../app/routes/submission.event.server.routes')(app);
     require('../app/routes/user.server.routes.js')(app);
+    require('../app/routes/review.document.server.routes.js')(app);
 
     return app;
 };

@@ -5,5 +5,6 @@ module.exports = function() {
     require('../app/models/user.server.model');
     require('../app/models/submission.event.server.model.js');
     require('../app/models/submission.document.server.model.js');
+    require('../app/models/reviewers.document.server.model.js');
     return db;
 };

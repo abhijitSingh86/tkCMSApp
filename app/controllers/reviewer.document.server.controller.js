@@ -1,20 +1,26 @@
 var ReviewersDocument = require("mongoose").model("ReviewersDocument");
 
-
-
-exports.create = function(req, res, next) {
-    var reviewersEvent = new ReviewersDocument(req.body);
-    reviewersEvent.save(function(err) {
-        if (err) {
-            return next(err);
-        } else {
-            res.json(reviewersEvent);
-        }
-    });
-};
-
+/* This will go and fetch the submissions done/ pending for the reviewer
+*
+* Select * from submissions where submissionid = 'coming from ui'
+* */
 exports.list = function(req, res, next) {
-    ReviewersDocument.find().populate('createdBy').populate('authors').exec(function(err, subevnts) {
+
+        ReviewersDocument.find({submissionDocId: req.subDocumentId}).exec(function(err, subevnts) {
+            if (err) {
+                return next(err);
+            } else {
+                res.json(subevnts);
+            }
+        });
+};
+
+/*This will either create / update the review done by the reviewer for a individual submission
+*  Update/insert command based on the submission id.
+*
+* */
+exports.put = function(req, res, next) {
+    ReviewersDocument.Place.findOneAndUpdate(req.reviewerDocument.id, req.body,{upsert: true}, function(err, reviewerDocument){
         if (err) {
             return next(err);
         } else {
@@ -23,8 +29,12 @@ exports.list = function(req, res, next) {
     });
 };
 
-exports.get = function(req, res, next) {
-    ReviewersDocument.find().populate('createdBy').populate('authors').exec(function(err, subevnts) {
+/* This will show all the submissions for a reviwer
+ *   Select * from submissions where reviewer in (ui id)
+  *
+  * */
+exports.getDetails = function(req, res, next) {
+    ReviewersDocument.find({submissionDocId: req.subDocumentId}).populate('createdBy').populate('authors').exec(function(err, subevnts) {
         if (err) {
             return next(err);
         } else {
@@ -33,37 +43,15 @@ exports.get = function(req, res, next) {
     });
 };
 
-
-exports.read = function(req, res) {
-    res.json(req.ReviewersDocument);
-};
-exports.ReviewersDocumentByID = function(req, res, next, id) {
-    ReviewersDocument.findOne().populate('createdBy').populate('authors').exec(function(err, ReviewersDocument) {
+exports.reviewersDocumentByID = function(req, res, next, id) {
+    ReviewersDocument.findOne({
+        _id: id
+    }).populate('createdBy').populate('authors').exec(function(err, reviewerDocument) {
         if (err) {
             return next(err);
         } else {
-            req.ReviewersDocument = ReviewersDocument;
+            req.reviewerDocument = reviewerDocument;
             next();
         }
     });
-};
-
-exports.update = function(req, res, next) {
-    ReviewersDocument.findByIdAndUpdate(req.ReviewersDocument.id, req.body, function(err, ReviewersDocument) {
-        if (err) {
-            return next(err);
-        } else {
-            res.json(ReviewersDocument);
-        }
-    });
-};
-
-exports.delete = function(req, res, next) {
-    req.ReviewersDocument.remove(function(err) {
-        if (err) {
-            return next(err);
-        } else {
-            res.json(req.ReviewersDocument);
-        }
-    })
 };
