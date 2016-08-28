@@ -32,10 +32,10 @@
                     </form>
 
                     <form name="eventInterestForm" novalidate ng-submit="eventInterestForm.$valid && addToInterestedUser(event)" ng-if="!eventAccess">
-                        <div layout-gt-sm="row" class="layout-gt-sm-row">
-                            <div>
+                        <div layout-gt-sm="column" class="layout-gt-sm-column">
+                            <md-content>
                                 You are not subscribed to the event. Please Subscribe to the event to add submission.
-                            </div>
+                            </md-content>
                             <section layout="row" layout-sm="column" layout-align="end" layout-wrap>
                                 <md-button type=submit  class="md-raised md-primary">Subscribe</md-button>
                             </section>

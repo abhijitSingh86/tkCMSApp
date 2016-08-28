@@ -89,5 +89,7 @@ app.controller('EventController', function ($scope, $http, $mdToast, $state, DTO
         });
         $state.go('home.event',{id:event._id})
     }
-    $scope.addToInterestedUser(event)
+    $scope.addToInterestedUser = function(event){
+
+    }
 });
