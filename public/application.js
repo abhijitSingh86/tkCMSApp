@@ -43,17 +43,37 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider', function($
                     controller: 'EventController'
                 }
             },
-
-        }).state('home.event.submissions', {
-        url: '/submission',
-        views: {
-            'datatable@home.event': {
-                templateUrl: 'views/submission/submissiondatatable.html',
-                controller: 'SubmissionController'
+        })
+        .state('home.events', {
+            url: 'events/:filter',
+            views: {
+                'mainpanel@': {
+                    templateUrl: 'views/event/eventdatatable.html',
+                    controller: 'EventController'
+                }
+            },
+            resolve: {
+                auth: function (AuthService, $q, $rootScope) {
+                    var deferred = $q.defer();
+                    /*check if user role is normal user*/
+                    if (AuthService.checkUserRole()) {
+                        deferred.reject({redirectTo: 'home'});
+                    } else {
+                        deferred.resolve({});
+                    }
+                    return deferred.promise;
+                }
             }
-        },
-
-    })
+        })
+        .state('home.event.submissions', {
+            url: '/submission',
+            views: {
+                'datatable@home.event': {
+                    templateUrl: 'views/submission/submissiondatatable.html',
+                    controller: 'SubmissionController'
+                }
+            },
+        })
         .state('home.newevent', {
             url: 'event',
             views: {
@@ -62,6 +82,18 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider', function($
                     controller: 'EventController'
                 }
             },
+            resolve: {
+                auth: function (AuthService, $q, $rootScope) {
+                    var deferred = $q.defer();
+                    /*check if user role is chair*/
+                    if (!AuthService.checkUserRole()) {
+                        deferred.reject({redirectTo: 'home'});
+                    } else {
+                        deferred.resolve({});
+                    }
+                    return deferred.promise;
+                }
+            }
         })
         .state('home.newsubmission', {
             url: 'submission',
@@ -72,6 +104,15 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider', function($
                 }
             },
         })
+        .state('home.submission', {
+            url: 'submission/:id',
+            views: {
+                'mainpanel@': {
+                    templateUrl: 'views/submission/submission.html',
+                    controller: 'SubmissionController'
+                }
+            },
+         })
         .state('home.reviewersubmit', {
             url: 'review',
             views: {
@@ -127,6 +168,13 @@ mainApplicationModule.run(function ($rootScope, AuthService, $state) {
         $rootScope.currentUser = true;
     } else {
         $rootScope.currentUser = false;
+    }
+    if(AuthService.checkUserRole()){
+        $rootScope.chair = true;
+        $rootScope.normalUser = false;
+    } else {
+        $rootScope.normalUser = true;
+        $rootScope.chair = false;
     }
     $rootScope.$on('$stateChangeError', function(evt, to, toParams, from, fromParams, error) {
         if (error.redirectTo) {

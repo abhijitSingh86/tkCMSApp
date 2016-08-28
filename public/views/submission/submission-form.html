@@ -1,5 +1,5 @@
 <div flex layout="row" layout-padding>
-    <md-content flex layout-padding id="content" class="registration-container">
+    <md-content flex layout-padding id="content" class="submission-container">
         <form name="submissionForm" novalidate ng-submit="submissionSubmit(sub) && submissionForm.$valid">
             <div layout-gt-sm="row" class="layout-gt-sm-row">
                 <md-input-container class="md-block" flex-gt-md>
@@ -28,10 +28,9 @@
                     </md-select>
                 </md-input-container>
             </div>
-                <section layout="row" layout-sm="column" layout-align="end" layout-wrap>
-                    <md-button type="submit" class="md-raised md-primary">Submit</md-button>
-                </section>
-            </div>
+            <section layout="row" layout-sm="column" layout-align="end" layout-wrap>
+                <md-button type="submit" class="md-raised md-primary">Submit</md-button>
+            </section>
         </form>
     </md-content>
 </div>

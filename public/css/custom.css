@@ -2,3 +2,10 @@
     background-color: rgb(140,158,255);
     color: rgb(40,53,147);
 }
+
+md-menu-item a{
+    display:block;
+    height: 100%;
+    width: 100%;
+    text-decoration: none;
+}

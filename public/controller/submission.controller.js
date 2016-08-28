@@ -24,9 +24,24 @@ app.controller('SubmissionController', function ($scope, $http, $mdToast, $state
 
             });
     }
+
+    $scope.goToSubmission = function(submission){
+        $state.go("home.submission",{id: submission._id});
+    }
+
+    $scope.loadSubmission= function() {
+        $http.get('/subDocument/' + $state.params.id)
+        // handle success
+            .success(function (data) {
+                $scope.sub = data;
+            })
+            // handle error
+            .error(function (data) {
+            });
+    };
 })
 
-app.controller('SubmissionFormController', function ($scope, $http, $mdToast, $state, DTOptionsBuilder, DTColumnDefBuilder) {
+app.controller('SubmissionFormController', function ($scope, $http, $mdToast, $state) {
     function getUserListForAuthor(){
         $http.get('/users')
         // handle success
@@ -44,15 +59,24 @@ app.controller('SubmissionFormController', function ($scope, $http, $mdToast, $s
         $http.post('/subDocument', sub)
             // handle success
             .success(function (data) {
-                if(data.error){
-                    $mdToast.show($mdToast.simple().textContent(data.error));
-                } else {
-                    $mdToast.show($mdToast.simple().textContent("Created Successfully"));
-                }
+                $mdToast.show($mdToast.simple().textContent("Created Successfully"));
             })
             // handle error
             .error(function (data) {
-
+                $mdToast.show($mdToast.simple().textContent(data.error));
             });
     }
+    $scope.updateSubmissionSubmit = function(sub) {
+        // send a put request to the server
+        $http.put('/subDocument/' + $state.params.id,
+            sub)
+        // handle success
+            .success(function (data) {
+                $mdToast.show($mdToast.simple().textContent("Updated Successfully"));
+            })
+            // handle error
+            .error(function (data) {
+                $mdToast.show($mdToast.simple().textContent(data.error));
+            });
+    };
 })

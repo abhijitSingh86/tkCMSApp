@@ -2,13 +2,23 @@
  * Created by manny on 23.08.2016.
  */
 var app = angular.module('eventsModule', []);
-app.controller('EventController', function ($scope, $http, $mdToast, $state, DTOptionsBuilder, DTColumnDefBuilder) {
+app.controller('EventController', function ($scope, $http, $mdToast, $state, DTOptionsBuilder, DTColumnDefBuilder, $rootScope) {
     $scope.event = {};
     $scope.renderDataTable = function(){
-        $http.get('/subEvents')
+        var url;
+        var parameter = $state.params.filter;
+        if(parameter == "all"){
+            url = "/subEvents"
+        }
+        if(parameter == "subscribed"){
+            url = "/subEvents"
+        }
+        if(parameter == "interested"){
+            url = "/subEvents"
+        }
+        $http.get(url)
         // handle success
             .success(function (data, status) {
-                debugger;
                 $scope.events = data;
 
                 $scope.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers');
@@ -58,18 +68,26 @@ app.controller('EventController', function ($scope, $http, $mdToast, $state, DTO
             event)
         // handle success
             .success(function (data) {
-                if(data.error){
-                    $mdToast.show($mdToast.simple().textContent(data.error));
-                }else {
-                    $mdToast.show($mdToast.simple().textContent("Updated Successfully"));
-                }
+                $mdToast.show($mdToast.simple().textContent("Updated Successfully"));
             })
             // handle error
             .error(function (data) {
-
+                $mdToast.show($mdToast.simple().textContent(data.error));
             });
     };
     $scope.loadSubmissions = function(){
         $state.go('home.event.submissions')
     }
+    $scope.goToEvent = function(event){
+        var userId = $rootScope.globals.currentUser.id;
+        var interestedUsers = event.interestedUsers;
+        angular.forEach(interestedUsers, function(value, key) {
+            $scope.eventAccess = false;
+            if(value === userId){
+                $scope.eventAccess = true;
+            }
+        });
+        $state.go('home.event',{id:event._id})
+    }
+    $scope.addToInterestedUser(event)
 });

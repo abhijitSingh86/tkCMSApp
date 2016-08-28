@@ -8,7 +8,8 @@ angular.module('authenticationServiceModule',[]).factory('AuthService',
                 isLoggedIn: isLoggedIn,
                 login: login,
                 logout: logout,
-                register: register
+                register: register,
+                checkUserRole: checkUserRole
             });
             function isLoggedIn() {
                 var globals= $cookieStore.get('globals');
@@ -19,6 +20,18 @@ angular.module('authenticationServiceModule',[]).factory('AuthService',
                     return true;
                 } else{
                     return false;
+                }
+            }
+
+            function checkUserRole() {
+                var globals= $cookieStore.get('globals');
+                if (typeof(globals) != "undefined") {
+                    if (globals.currentUser.role == "chair")
+                    {
+                        return true;
+                    } else{
+                        return false;
+                    }
                 }
             }
 
@@ -37,6 +50,7 @@ angular.module('authenticationServiceModule',[]).factory('AuthService',
                                 currentUser : {
                                     id : data.user.id,
                                     username : data.user.username,
+                                    role: data.user.roles[0]
                                 }
                             }
                             $cookieStore.put('globals', $rootScope.globals);

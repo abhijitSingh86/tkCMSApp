@@ -1,9 +1,10 @@
 <div id="eventpage">
     <md-tabs md-dynamic-height="true">
+        <!--Start Normal User View -->
         <md-tab label="Event"  ng-init="loadEvent()">
             <div  layout="column" class="md-inline-form" >
                 <md-tab-body layout-padding="" class="layout-padding">
-                    <form name="eventForm" novalidate ng-submit="eventForm.$valid && updateForm(event)">
+                    <form name="eventForm" novalidate ng-submit="eventForm.$valid && updateForm(event)" ng-if="chair || eventAccess">
                         <div layout-gt-sm="row" class="layout-gt-sm-row">
                             <md-input-container class="md-block" flex-gt-xs>
                                 <label>Name</label>
@@ -29,10 +30,21 @@
                             <md-button type=submit  class="md-raised md-primary">Submit</md-button>
                         </section>
                     </form>
+
+                    <form name="eventInterestForm" novalidate ng-submit="eventInterestForm.$valid && addToInterestedUser(event)" ng-if="!eventAccess">
+                        <div layout-gt-sm="row" class="layout-gt-sm-row">
+                            <div>
+                                You are not subscribed to the event. Please Subscribe to the event to add submission.
+                            </div>
+                            <section layout="row" layout-sm="column" layout-align="end" layout-wrap>
+                                <md-button type=submit  class="md-raised md-primary">Subscribe</md-button>
+                            </section>
+                        </div>
+                    </form>
                 </md-tab-body>
                </div>
            </md-tab>
-            <md-tab label="Submissions" ng-click="loadSubmissions()">
+            <md-tab label="Submissions" ng-click="loadSubmissions()" ng-if="chair">
                 <div layout-padding="" class="layout-padding" ui-view="datatable">
                 </div>
             </md-tab>

@@ -1,34 +1,30 @@
 angular.module('loginModule',[]).controller('LoginController',
-        function ($scope, $location, AuthService,$rootScope, $state) {
+        function ($scope, $location, AuthService,$rootScope, $state, $mdToast) {
 
             $scope.login = function () {
-
-                // initial values
-                $scope.error = false;
-                $scope.disabled = true;
 
                 // call login from service
                 AuthService.login($scope.user.username, $scope.user.password)
                 // handle success
                     .then(function (data) {
                         $rootScope.currentUser = true;
+                        if(AuthService.checkUserRole()){
+                            $rootScope.chair = true;
+                            $rootScope.normalUser = false;
+                        } else {
+                            $rootScope.normalUser = true;
+                            $rootScope.chair = false;
+                        }
                         $state.go('home');
                     })
                     // handle error
-                    .catch(function () {
-                        $scope.error = true;
-                        $scope.errorMessage = "Invalid username and/or password";
-                        $scope.disabled = false;
-                        $scope.loginForm = {};
+                    .catch(function (data) {
+                        $mdToast.show($mdToast.simple().textContent(data.error));
                     });
 
             };
 
             $scope.logout = function () {
-
-                // initial values
-                $scope.error = false;
-                $scope.disabled = true;
 
                 // call login from service
                 AuthService.logout()
@@ -38,7 +34,8 @@ angular.module('loginModule',[]).controller('LoginController',
                         $state.go('login');
                     })
                     // handle error
-                    .catch(function () {
+                    .catch(function (data) {
+                        $mdToast.show($mdToast.simple().textContent(data.error));
                     });
 
             };
@@ -51,8 +48,14 @@ angular.module('loginModule',[]).controller('LoginController',
                         $state.go('login');
                     })
                     // handle error
-                    .catch(function () {
+                    .catch(function (data) {
+                        debugger;
+                        $mdToast.show($mdToast.simple().textContent(data.error));
                     });
 
             };
+
+            $scope.backtologin = function () {
+                $state.go('login');
+            }
         });

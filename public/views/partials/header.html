@@ -9,7 +9,7 @@
     <section layout="row" layout-sm="column"  >
         <h3>Conference Management System</h3>
     </section>
-    <section>
+    <section ng-if="chair">
         <md-menu-bar>
             <md-menu>
                 <md-button ng-click="$mdOpenMenu()">
@@ -20,6 +20,29 @@
                     <md-menu-item><md-button ><a ui-sref=".newsubmission">Submission</a></md-button></md-menu-item>
                 </md-menu-content>
             </md-menu>
+        </md-menu-bar>
+    </section>
+    <section ng-if="normalUser">
+        <md-menu-bar>
+            <md-menu>
+                <md-button ng-click="$mdOpenMenu()">
+                    Events
+                </md-button>
+                <md-menu-content>
+                    <md-menu-item><md-button ><a ui-sref=".events({filter:'all'})">All Events</a></md-button></md-menu-item>
+                    <md-menu-item><md-button ><a ui-sref=".events({filter:'subscribed'})">Subscribed</a></md-button></md-menu-item>
+                    <md-menu-item><md-button ><a ui-sref=".events({filter:'interested'})">Interested</a></md-button></md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        <md-menu>
+            <md-button ng-click="$mdOpenMenu()">
+                Submissions
+            </md-button>
+            <md-menu-content>
+                <md-menu-item><md-button ><a ui-sref=".submission-own">My Submissions</a></md-button></md-menu-item>
+                <md-menu-item><md-button ><a ui-sref=".submission-assigned">Assigned</a></md-button></md-menu-item>
+            </md-menu-content>
+        </md-menu>
         </md-menu-bar>
     </section>
     <span flex> </span>
