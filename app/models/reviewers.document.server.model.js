@@ -14,6 +14,25 @@ var ReviewersDocumentSchema = new Schema({
         trim: true
 
     },
+    reviewerExpertise:{
+        type: Number
+
+    },
+    overallEval:{
+        type: Number
+    },
+    summary:{
+        type: String,
+        trim: true
+    },
+    majorStrongPoints:{
+        type: String,
+        trim: true
+    },
+    majorWeakPoints:{
+        type: String,
+        trim: true
+    },
     submissionDocId:{
         type : Schema.ObjectId,
         ref: "SubmissionDocument"
