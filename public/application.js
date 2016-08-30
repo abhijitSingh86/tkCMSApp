@@ -1,6 +1,6 @@
 var mainApplicationModuleName = 'conference-system';
 var mainApplicationModule = angular.module(mainApplicationModuleName
-    , ['leftPanelModule','reviewerModule','authenticationServiceModule','loginModule','eventsModule','datatables','ngMaterial','ngMessages','ngRoute','ui.router','ngCookies','vAccordion']);
+    , ['leftPanelModule','reviewerModule','authenticationServiceModule','loginModule','eventsModule','datatables','ngMaterial','ngMessages','ngRoute','ui.router','ngCookies','vAccordion','angularTrix']);
 
 mainApplicationModule.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise('/');
