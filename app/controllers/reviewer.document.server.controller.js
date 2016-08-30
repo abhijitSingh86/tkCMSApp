@@ -6,7 +6,7 @@ var ReviewersDocument = require("mongoose").model("ReviewersDocument");
 * */
 exports.list = function(req, res, next) {
 
-        ReviewersDocument.find({submissionDocId: req.subDocumentId}).exec(function(err, subevnts) {
+        ReviewersDocument.find({_id : req.reviewerId}).populate('submissionDocId').exec(function(err, subevnts) {
             if (err) {
                 return next(err);
             } else {
