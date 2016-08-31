@@ -141,3 +141,22 @@ exports.loggedIn = function loggedIn(req, res) {
     res.send(req.isAuthenticated() ? req.user : '0');
 }
 
+exports.getAllReviews = function getAllReviewUserSpecific(req,res){
+    if (true){//req.user) {
+        var id = req.user.id;
+        User.findOne({
+            _id: id
+        }).populate("assignedSubmissionForReview").exec(function(err, user) {
+            if (err) {
+                return res.status(400).json({"error":"Error occurred while query execution"});
+            } else {
+                res.json(
+                    user.assignedSubmissionForReview
+                );
+            }
+        });
+    } else {
+        res.status(403).json({"error" : "Invalid request"});
+    }
+}
+

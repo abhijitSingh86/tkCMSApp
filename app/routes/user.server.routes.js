@@ -3,6 +3,13 @@ var  passport = require("passport")
 module.exports = function(app) {
     //app.route('/users').post(users.create).get(users.list);;
 
+    //----------
+    app.route('/userreview/:userId').
+    get(users.getAllReviews);
+
+    //--
+
+
     app.route('/users/:userId').
     get(users.read).
     put(users.update).

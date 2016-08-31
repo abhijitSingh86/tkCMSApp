@@ -169,3 +169,21 @@ exports.retrieveUsersBelongingToEvent = function(req,res,next){
 
     }
 };
+
+
+exports.retrieveAuthorsToEvent = function(req,res,next){
+    if(true) {//req.user && user.isChair(req)) {
+                // req.submissionEvent.
+        SubmissionEvent.findOne({
+            _id: req.submissionEvent.id
+        }).populate('interestedUsersAsAuthor','firstName').exec(function(err, submissionEvent) {
+            if (err) {
+                return next(err);
+            } else {
+                res.json(submissionEvent.interestedUsersAsAuthor);
+            }
+        });
+    }
+};
+
+
