@@ -2,7 +2,7 @@
  * Created by pratik_k on 8/24/2016.
  */
 var app = angular.module('submissionModule', []);
-app.controller('SubmissionController', function ($scope, $http, $mdToast, $state, DTOptionsBuilder, DTColumnDefBuilder) {
+app.controller('SubmissionController', function ($scope, $http, $mdToast, $state, DTOptionsBuilder, DTColumnDefBuilder, $stateParams) {
     $scope.renderDataTable = function(){
         $http.get('/subDocument')
         // handle success
@@ -25,8 +25,12 @@ app.controller('SubmissionController', function ($scope, $http, $mdToast, $state
             });
     }
 
-    $scope.goToSubmission = function(submission){
-        $state.go("home.submission",{id: submission._id});
+    $scope.goToMySubmission = function(submission){
+        $state.go("home.my-submission",{id: submission._id});
+    }
+
+    $scope.goToAssignedSubmission = function(submission){
+        $state.go("home.assigned-submission",{id: submission._id});
     }
 
     $scope.loadSubmission= function() {
@@ -39,6 +43,14 @@ app.controller('SubmissionController', function ($scope, $http, $mdToast, $state
             .error(function (data) {
             });
     };
+
+    $scope.loadAllReviewsForNormalUser = function(){
+        $state.go('home.my-submission.reviews',{documentId: $state.params.id});
+    }
+
+    $scope.loadReview = function(){
+        $state.go('home.assigned-submission.review',{documentId: $state.params.id});
+    }
 })
 
 app.controller('SubmissionFormController', function ($scope, $http, $mdToast, $state) {
@@ -55,7 +67,7 @@ app.controller('SubmissionFormController', function ($scope, $http, $mdToast, $s
     }
 
     $scope.submissionSubmit = function(sub){
-        sub.submissionEventId = '57bccfed19ecc8f806e5878e';
+        sub.submissionEventId = $state.params.id;
         $http.post('/subDocument', sub)
             // handle success
             .success(function (data) {

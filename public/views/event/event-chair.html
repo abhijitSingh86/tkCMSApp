@@ -1,0 +1,41 @@
+<div id="eventpage">
+    <md-tabs md-dynamic-height="true">
+        <!--Start Normal User View -->
+        <md-tab label="Event"  ng-init="loadEvent()">
+            <div  layout="column" class="md-inline-form" >
+                <md-tab-body layout-padding="" class="layout-padding">
+                    <form name="eventForm" novalidate ng-submit="eventForm.$valid && updateForm(event)" ng-if="chair">
+                        <div layout-gt-sm="row" class="layout-gt-sm-row">
+                            <md-input-container class="md-block" flex-gt-xs>
+                                <label>Name</label>
+                                <input type="text" name="name" ng-model="event.name">
+                            </md-input-container>
+                        </div>
+                        <div layout-gt-sm="row" class="layout-gt-sm-row">
+                            <md-input-container class="md-block" flex-gt-xs>
+                                <label>Description</label>
+                                <input type="text" name="description" ng-model="event.description">
+                            </md-input-container>
+                        </div>
+                        <div layout-gt-sm="row" class="layout-gt-sm-row">
+                            <label>Start Date</label>
+                            <md-datepicker name="startdate" ng-model="event.start_date">
+                            </md-datepicker>
+                        </div>
+                        <div layout-gt-sm="row" class="layout-gt-sm-row">
+                            <label>End Date</label>
+                            <md-datepicker name="enddate" ng-model="event.end_date"></md-datepicker>
+                        </div>
+                        <section layout="row" layout-sm="column" layout-align="end" layout-wrap>
+                            <md-button type=submit  class="md-raised md-primary">Submit</md-button>
+                        </section>
+                    </form>
+                </md-tab-body>
+            </div>
+        </md-tab>
+        <md-tab label="Submissions" ng-click="loadSubmissions()" ng-if="chair">
+            <div layout-padding="" class="layout-padding" ui-view="datatable">
+            </div>
+        </md-tab>
+    </md-tabs>
+</div>

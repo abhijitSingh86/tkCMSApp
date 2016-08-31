@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div ng-controller="SubmissionController" ng-init="renderDataTable()">
+    <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="row-border hover">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>KeyWords</th>
+            <th>Created Date</th>
+            <th>CreatedBy</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="sub in subs">
+            <td>{{ sub._id }}</td>
+            <td>{{ sub.name }}</td>
+            <td>{{ sub.keywords }}</td>
+            <td>{{ sub.created | date: "dd.MM.yyyy h:mm:ss"}}</td>
+            <td>{{ sub.createdBy }}</td>
+            <td>
+                <md-button class="md-primary" ng-click="goToMySubmission(sub)" aria-label="More Info">More Info</md-button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

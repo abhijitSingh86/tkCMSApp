@@ -1,35 +1,64 @@
 <div flex layout="row" layout-padding>
     <md-content flex layout-padding id="content" class="submission-container">
-        <form name="submissionForm" novalidate ng-submit="submissionSubmit(sub) && submissionForm.$valid">
+        <form ng-controller="SubmissionFormController" name="submissionForm" novalidate >
             <div layout-gt-sm="row" class="layout-gt-sm-row">
                 <md-input-container class="md-block" flex-gt-md>
-                    <input required ng-model="sub.name" placeholder="Name">
+                    <input ng-required="true" ng-model="sub.name" name="name" placeholder="Name">
+                    <div ng-messages="submissionForm.name.$error">
+                        <div ng-message="required">Name is required.</div>
+                    </div>
                 </md-input-container>
             </div>
             <div layout-gt-sm="row" class="layout-gt-sm-row">
                 <md-input-container class="md-block" flex-gt-md>
                     <label>Keywords</label>
-                    <input ng-model="sub.keyword">
+                    <input ng-model="sub.keywords" name="keyword">
+                    <div ng-messages="submissionForm.keyword.$error">
+                        <div ng-message="required">Keywords is required.</div>
+                    </div>
                 </md-input-container>
             </div>
             <div layout-gt-sm="row" class="layout-gt-sm-row">
                 <md-input-container class="md-block" flex-gt-md>
                     <label>Abstract</label>
-                    <input required name="abstract" ng-model="sub.abstract">
+                    <input ng-required="true" name="abstract" ng-model="sub.abstract">
+                    <div ng-messages="submissionForm.abstract.$error">
+                        <div ng-message="required">Abstract is required.</div>
+                    </div>
                 </md-input-container>
             </div>
             <div layout-gt-sm="row" class="layout-gt-sm-row">
                 <md-input-container class="md-block" flex-gt-sm >
                     <label>Authors</label>
-                    <md-select ng-model="sub.authors" multiple >
+                    <md-select ng-model="sub.authors" multiple name="authors">
                         <md-option ng-repeat="author in authors" value="{{author.id}}">
                             {{author.name}}
                         </md-option>
                     </md-select>
+                    <div ng-if="submissionForm.$submitted || submissionForm.authors.$touched" ng-messages="policyForm.authors.$error">
+                        <div ng-message="required">Authors is required</div>
+                    </div>
                 </md-input-container>
             </div>
-            <section layout="row" layout-sm="column" layout-align="end" layout-wrap>
-                <md-button type="submit" class="md-raised md-primary">Submit</md-button>
+            <div layout-gt-sm="row" class="layout-gt-sm-row">
+                <md-input-container class="md-block" flex-gt-xs>
+                    <label>Status</label>
+                    <md-select ng-model="event.status" placeholder="Select Status" ng-disabled="normalUser" class="md-no-underline">
+                        <md-option value="0">InComplete</md-option>
+                        <md-option value="1">Complete</md-option>
+                        <md-option value="2">Closed</md-option>
+                        <md-option value="3">Accepted</md-option>
+                        <md-option value="4">Rejected</md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+            <section layout="row" layout-sm="column" ng-if="new" layout-align="end" layout-wrap>
+                <md-button ng-click="withdrawSubmission()" class="md-raised md-primary">Withdraw Submission</md-button>
+                <md-button type="submit" ng-click="submissionSubmit(sub) " name="submit" class="md-raised md-primary">Submit</md-button>
+            </section>
+            <section layout="row" layout-sm="column" ng-if="!new" layout-align="end" layout-wrap>
+                <md-button ng-click="withdrawSubmission()" class="md-raised md-primary">Withdraw Submission</md-button>
+                <md-button type="submit" ng-click="submissionForm.$valid && updateSubmissionSubmit(sub)" name="update" class="md-raised md-primary">Update</md-button>
             </section>
         </form>
     </md-content>
