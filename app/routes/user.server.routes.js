@@ -29,6 +29,15 @@ module.exports = function(app) {
                 }
             });
     app.get('/signout', users.signout);
-
+    
+    //service to retrieve all users interseted in any event
+    app.route('/users/Intevents/:userId')
+        .get(users.intevents);
+     //service to retrieve all users subs in any event
+    app.route('/users/Subevents/:userId')
+        .get(users.subevents);
+ //service to retrieve all document made by a user
+     app.route('/users/Subdocs/:userId')
+        .get(users.subdocs);
 
 };

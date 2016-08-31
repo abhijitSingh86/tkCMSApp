@@ -1,5 +1,7 @@
 var User = require("mongoose").model("User"),
 passport = require('passport');
+var SubmissionEvent = require("mongoose").model("SubmissionEvent");
+var SubmissionDocument = require("mongoose").model("SubmissionDocument");
 
 exports.list = function(req, res, next) {
     User.find({}, function(err, users) {
@@ -127,6 +129,40 @@ exports.create = function(req, res, next) {
         res.json({"user" : "valid"});
     }
 };
+
+exports.intevents = function(req, res, next) {
+    SubmissionEvent.find({interestedUsers : req.userId}).populate('name').populate('description').exec(function(err, subevnts) {
+        if (err) {
+            return next(err);
+        } else {
+            res.json(subevnts);
+        }
+    });
+
+};
+
+exports.subevents = function(req, res, next) {
+    SubmissionEvent.find({SubscribedUsers : req.userId}).populate('name').populate('description').exec(function(err, subevnts) {
+        if (err) {
+            return next(err);
+        } else {
+            res.json(subevnts);
+        }
+    });
+
+};
+
+exports.subdocs = function(req, res, next) {
+    SubmissionDocument.find( { $or: [{SubscribedUsers : req.userId}, {authors: req.userId}] }).populate('name').populate('description').exec(function(err, subevnts) {
+        if (err) {
+            return next(err);
+        } else {
+            res.json(subevnts);
+        }
+    });
+
+};
+
 
 exports.signout = function(req, res) {
     req.logout();
