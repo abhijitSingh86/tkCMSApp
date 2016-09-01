@@ -55,3 +55,17 @@ exports.reviewersDocumentByID = function(req, res, next, id) {
         }
     });
 };
+
+
+
+exports.create = function(req, res, next) {
+    var reviewerDocument = new ReviewersDocument(req.body);
+    reviewerDocument.save(function(err) {
+        if (err) {
+            console.log(err)
+            return next(err);
+        } else {
+            res.json(reviewerDocument);
+        }
+    });
+};
