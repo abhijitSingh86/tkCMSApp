@@ -80,3 +80,28 @@ exports.create = function(req, res, next) {
         }
     });
 };
+
+
+exports.getReviewForASubDocument = function getReviewDocumentSpecific(req, res,next){
+    if (true){//req.user) {
+        var id = req.user.id;
+        var docId = req.body.submissionDocId;
+
+        ReviewersDocument.findOne({
+            createdBy : id , submissionDocId:docId
+        }).exec(function(err, result) {
+            if (err) {
+                return res.status(400).json({"error":"Error occurred while query execution"});
+            } else {
+                if(result == null){
+                    res.json({"status":"notsubmitted"});
+                }else{
+                    res.json(result);
+                }
+            }
+        });
+    } else {
+        res.status(403).json({"error" : "Invalid request"});
+    }
+
+}
