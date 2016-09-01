@@ -13,3 +13,7 @@ md-menu-item a{
 .trix-editor-label{
     color: rgba(0,0,0,0.38);
 }
+
+th {
+    text-align: left !important;
+}

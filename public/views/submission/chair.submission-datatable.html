@@ -5,7 +5,7 @@
     <title>Title</title>
 </head>
 <body>
-<div ng-controller="SubmissionController" ng-init="renderDataTable('mySubmissions')">
+<div ng-controller="SubmissionController" ng-init="renderDataTableForChair()">
     <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="row-border hover">
         <thead>
         <tr>
@@ -25,7 +25,7 @@
             <td>{{ sub.created | date: "dd.MM.yyyy h:mm:ss"}}</td>
             <td>{{ sub.createdBy }}</td>
             <td>
-                <md-button class="md-primary" ng-click="goToMySubmission(sub)" aria-label="More Info">More Info</md-button>
+                <md-button class="md-primary" ng-click="goToSubmissionForChair(sub)" aria-label="More Info">More Info</md-button>
             </td>
         </tr>
         </tbody>

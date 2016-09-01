@@ -136,15 +136,6 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider', function($
             }
         })
         //access: chair
-        .state('chair.home.event.submissions', {
-            url: '/submission',
-            views: {
-                'datatable@home.event': {
-                    templateUrl: 'views/submission/mysubmission-datatable.html',
-                    controller: 'SubmissionController'
-                }
-            },
-        })
         .state('home.newevent', {
             url: 'newevent',
             views: {
@@ -152,7 +143,56 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider', function($
                     templateUrl: 'views/event/eventform.html',
                     controller: 'EventController'
                 }
+            }
+        })
+        //access: chair
+        .state('home.chair-events', {
+            url: 'all-event',
+            views: {
+                'mainpanel@': {
+                    templateUrl: 'views/event/chair.eventdatatable.html',
+                    controller: 'EventController'
+                }
             },
+        })
+        //access: chair
+        .state('home.chair-event', {
+            url: 'admin/event/:id',
+            views: {
+                'mainpanel@': {
+                    templateUrl: 'views/event/event-chair.html',
+                    controller: 'EventController'
+                }
+            },
+        })
+        //access: chair
+        .state('home.chair-event.submissions', {
+            views: {
+                'datatable@home.chair-event': {
+                    templateUrl: 'views/submission/chair.submission-datatable.html',
+                    controller: 'SubmissionController'
+                }
+            },
+        })
+        //access: chair
+        .state('home.chair-submission', {
+            url: 'admin/submission/:id',
+            views: {
+                'mainpanel@': {
+                    templateUrl: 'views/submission/chair.submission.html',
+                    controller: 'SubmissionController'
+                }
+            }
+        })
+        //access: chair
+        .state('home.chair-submission.reviews', {
+            views: {
+                'review-datatable@home.chair-submission': {
+                    templateUrl: 'views/reviews/reviewdatatable.html',
+                    controller: 'ReviewController',
+                }
+            },
+            params : { documentId: null },
         })
         .state('home.newsubmission', {
             url: 'submission',
@@ -224,7 +264,7 @@ mainApplicationModule.run(function ($rootScope, AuthService, $state) {
         if (error.redirectTo) {
             $state.go(error.redirectTo);
         } else {
-            $state.go('error', {status: error.status})
+            $state.go('/')
         }
     })
 });

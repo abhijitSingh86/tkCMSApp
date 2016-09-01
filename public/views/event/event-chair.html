@@ -1,6 +1,6 @@
 <div id="eventpage">
     <md-tabs md-dynamic-height="true">
-        <!--Start Normal User View -->
+        <!--Start Chair User View -->
         <md-tab label="Event"  ng-init="loadEvent()">
             <div  layout="column" class="md-inline-form" >
                 <md-tab-body layout-padding="" class="layout-padding">
@@ -33,7 +33,7 @@
                 </md-tab-body>
             </div>
         </md-tab>
-        <md-tab label="Submissions" ng-click="loadSubmissions()" ng-if="chair">
+        <md-tab label="Submissions" ng-click="loadSubmissionsForChair()" ng-if="chair">
             <div layout-padding="" class="layout-padding" ui-view="datatable">
             </div>
         </md-tab>

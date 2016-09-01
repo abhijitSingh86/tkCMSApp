@@ -2,8 +2,8 @@
     <md-content flex layout-padding id="content" class="submission-container">
         <form ng-controller="SubmissionFormController" name="submissionForm" novalidate >
             <div layout-gt-sm="row" class="layout-gt-sm-row">
-                <md-input-container class="md-block" flex-gt-md>
-                    <input ng-required="true" ng-model="sub.name" name="name" placeholder="Name">
+                <md-input-container ng-disabled="chair" class="md-block" flex-gt-md>
+                    <input  ng-disabled="chair" ng-required="true" ng-model="sub.name" name="name" placeholder="Name">
                     <div ng-messages="submissionForm.name.$error">
                         <div ng-message="required">Name is required.</div>
                     </div>
@@ -12,8 +12,8 @@
             <div layout-gt-sm="row" class="layout-gt-sm-row">
                 <md-input-container class="md-block" flex-gt-md>
                     <label>Keywords</label>
-                    <input ng-model="sub.keywords" name="keyword">
-                    <div ng-messages="submissionForm.keyword.$error">
+                    <input  ng-disabled="chair" ng-model="sub.keywords" name="keyword">
+                    <div  ng-messages="submissionForm.keyword.$error">
                         <div ng-message="required">Keywords is required.</div>
                     </div>
                 </md-input-container>
@@ -21,16 +21,16 @@
             <div layout-gt-sm="row" class="layout-gt-sm-row">
                 <md-input-container class="md-block" flex-gt-md>
                     <label>Abstract</label>
-                    <input ng-required="true" name="abstract" ng-model="sub.abstract">
+                    <input  ng-disabled="chair" ng-required="true" name="abstract" ng-model="sub.abstract">
                     <div ng-messages="submissionForm.abstract.$error">
                         <div ng-message="required">Abstract is required.</div>
                     </div>
                 </md-input-container>
             </div>
             <div layout-gt-sm="row" class="layout-gt-sm-row">
-                <md-input-container class="md-block" flex-gt-sm >
+                <md-input-container  class="md-block" flex-gt-sm >
                     <label>Authors</label>
-                    <md-select ng-model="sub.authors" multiple name="authors">
+                    <md-select ng-disabled="chair" ng-model="sub.authors" multiple name="authors">
                         <md-option ng-repeat="author in authors" value="{{author.id}}">
                             {{author.name}}
                         </md-option>

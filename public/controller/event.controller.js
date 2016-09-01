@@ -16,6 +16,9 @@ app.controller('EventController', function ($scope, $http, $mdToast, $state, DTO
         if(parameter == "interested"){
             url = "/subEvents"
         }
+        loadEvents(url);
+    }
+    function loadEvents(url){
         $http.get(url)
         // handle success
             .success(function (data, status) {
@@ -48,36 +51,7 @@ app.controller('EventController', function ($scope, $http, $mdToast, $state, DTO
             .error(function (data) {
             });
     };
-    $scope.submitForm = function(event) {
-        // send a post request to the server
-        $http.post('/subEvents',
-            event)
-            // handle success
-            .success(function (data) {
-                $mdToast.show($mdToast.simple().textContent("Created Successfully"));
-                $state.go('home.event',{id: data.success._id});
-            })
-            // handle error
-            .error(function (data) {
-                $mdToast.show($mdToast.simple().textContent("Error Occurred \n"+data));
-            });
-    };
-    $scope.updateForm = function(event) {
-        // send a put request to the server
-        $http.put('/subEvent/' + $state.params.id,
-            event)
-        // handle success
-            .success(function (data) {
-                $mdToast.show($mdToast.simple().textContent("Updated Successfully"));
-            })
-            // handle error
-            .error(function (data) {
-                $mdToast.show($mdToast.simple().textContent(data.error));
-            });
-    };
-    $scope.loadSubmissions = function(){
-        $state.go('home.event.submissions')
-    }
+
     $scope.goToEvent = function(event){
         $state.go('home.event',{id:event._id})
     }
@@ -103,9 +77,7 @@ app.controller('EventController', function ($scope, $http, $mdToast, $state, DTO
             });
 
     };
-    $scope.addToInterestedUser = function(event){
 
-    }
     $scope.loadSubmissionForNormalUser = function(){
         $http.get('/users/')
         // handle success
@@ -128,7 +100,54 @@ app.controller('EventController', function ($scope, $http, $mdToast, $state, DTO
         $state.go('home.event.reviews',{documentId: 1234});
     }
 
+    /*Methods used for chair role*/
+    $scope.submitForm = function(event) {
+        // send a post request to the server
+        $http.post('/subEvents',
+            event)
+        // handle success
+            .success(function (data) {
+                $mdToast.show($mdToast.simple().textContent("Created Successfully"));
+                $state.go('home.event',{id: data.success._id});
+            })
+            // handle error
+            .error(function (data) {
+                $mdToast.show($mdToast.simple().textContent("Error Occurred \n"+data));
+            });
+    };
+    $scope.updateForm = function(event) {
+        // send a put request to the server
+        $http.put('/subEvent/' + $state.params.id,
+            event)
+        // handle success
+            .success(function (data) {
+                $mdToast.show($mdToast.simple().textContent("Updated Successfully"));
+            })
+            // handle error
+            .error(function (data) {
+                $mdToast.show($mdToast.simple().textContent(data.error));
+            });
+    };
+
     $scope.loadSubmissionsForNormalUser = function(){
-        $state.go('home.event.submissions',{viewType:"my-submissions"})
+        $state.go('home.event.submissions')
     }
+
+    $scope.renderDataTableForChair = function () {
+        var url = "/subEvents";
+        loadEvents(url);
+    }
+
+    $scope.loadSubmissionsForChair = function(){
+        $state.go('home.chair-event.submissions')
+    }
+
+    $scope.goToEventDetailsForChair = function(event){
+        $state.go('home.chair-event',{id:event._id})
+    }
+
+    $scope.addToInterestedUser = function(event){
+
+    }
+
 });

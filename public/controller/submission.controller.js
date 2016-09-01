@@ -2,9 +2,19 @@
  * Created by pratik_k on 8/24/2016.
  */
 var app = angular.module('submissionModule', []);
-app.controller('SubmissionController', function ($scope, $http, $mdToast, $state, DTOptionsBuilder, DTColumnDefBuilder, $stateParams) {
-    $scope.renderDataTable = function(){
-        $http.get('/subDocument')
+app.controller('SubmissionController', function ($scope, $http, $mdToast, $state, DTOptionsBuilder, DTColumnDefBuilder, $stateParams, AuthService) {
+    $scope.renderDataTable = function(parameter){
+        var url;
+        if(parameter == "mySubmissions"){
+            url = '/users/Subdocs/'+AuthService.getUserId();
+        }
+        if(parameter == "assignedSubmissions"){
+            //url = '/users/Subdocs/'+AuthService.getUserId();
+        }
+        loadSubmissions('/subDocument') // change to url when server side complete
+    }
+    function loadSubmissions(url){
+        $http.get(url)
         // handle success
             .success(function (data, status) {
                 $scope.subs = data;
@@ -24,7 +34,6 @@ app.controller('SubmissionController', function ($scope, $http, $mdToast, $state
 
             });
     }
-
     $scope.goToMySubmission = function(submission){
         $state.go("home.my-submission",{id: submission._id});
     }
@@ -51,10 +60,35 @@ app.controller('SubmissionController', function ($scope, $http, $mdToast, $state
     $scope.loadReview = function(){
         $state.go('home.assigned-submission.review',{documentId: $state.params.id});
     }
+    /*Methods used for chair*/
+    $scope.renderDataTableForChair = function(){
+        loadSubmissions('/subDocument') // change to url when server side complete
+    }
+
+    $scope.goToSubmissionForChair = function(submission){
+        $state.go("home.chair-submission",{id: submission._id});
+    }
+
+    $scope.loadAllReviewsForChair = function(){
+        $state.go('home.chair-submission.reviews',{documentId: $state.params.id});
+    }
+    $scope.authorListOfSubmission = function(){
+        //to be changed: add url to get all author details of the submission
+        $http.get('/submission/authors/'+$state.params.id)
+            // handle success
+            .success(function (data, status) {
+                $scope.users = data;
+            })
+            // handle error
+            .error(function (data) {
+
+            });
+    }
 })
 
 app.controller('SubmissionFormController', function ($scope, $http, $mdToast, $state) {
     function getUserListForAuthor(){
+        //to be changed
         $http.get('/users')
         // handle success
             .success(function (data, status) {
