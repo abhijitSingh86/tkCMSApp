@@ -70,3 +70,26 @@ exports.delete = function(req, res, next) {
         }
     })
 };
+
+exports.listOfSubmissionDocumentForUserAndEvent = function  hiYeah(req,res,next){
+    if (true){//req.user) {
+        var userId = req.body.userId;
+        var eventId = req.body.submissionEventId;
+
+        SubmissionDocument.findOne({
+            createdBy : userId , submissionEventId:eventId
+        }).exec(function(err, result) {
+            if (err) {
+                return res.status(400).json({"error":"Error occurred while query execution"});
+            } else {
+                if(result == null){
+                    res.json({"status":"notsubmitted"});
+                }else{
+                    res.json(result);
+                }
+            }
+        });
+    } else {
+        res.status(403).json({"error" : "Invalid request"});
+    }
+}

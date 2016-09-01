@@ -165,11 +165,11 @@ exports.subdocs = function(req, res, next) {
 };
 
 exports.getall = function(req, res, next) {
-    User.find().populate('username').exec(function(err, subevnts) {
+    User.find({},'-salt -password').exec(function(err, users) {
         if (err) {
             return next(err);
         } else {
-            res.json(subevnts);
+            res.json(users);
         }
     });
 
