@@ -10,11 +10,13 @@ app.controller('EventController', function ($scope, $http, $mdToast, $state, DTO
         if(parameter == "all"){
             url = "/subEvents"
         }
-        if(parameter == "subscribed"){
-            url = "/subEvents"
+        else if(parameter == "subscribed"){
+            url = "/users/Subevents/"+AuthService.getUserId();
         }
-        if(parameter == "interested"){
-            url = "/subEvents"
+        else if(parameter == "interested"){
+            url = "/users/Intevents/"+AuthService.getUserId();
+        } else {
+            $state.go('home');
         }
         loadEvents(url);
     }
@@ -150,4 +152,81 @@ app.controller('EventController', function ($scope, $http, $mdToast, $state, DTO
 
     }
 
+    $scope.renderUsersInterestedInEvent = function(){
+        // url to get users to be interested in a event(to be changed)
+        $http.get('/users/'+AuthService.getUserId())
+        // handle success
+            .success(function (data) {
+                // to be changed when service is ready
+                var array = [];
+                array.push(data);
+                $scope.users = array;
+            })
+            // handle error
+            .error(function (data) {
+            });
+    }
+
+    $scope.selected = [];
+    $scope.toggle = function (itemId, list) {
+        var idx = list.indexOf(itemId);
+        if (idx > -1) {
+            list.splice(idx, 1);
+        }
+        else {
+            list.push(itemId);
+        }
+    };
+    $scope.addToSubscribedUsers = function() {
+        if($scope.selected == 0){
+            $mdToast.show($mdToast.simple().textContent("Please select atleast one user"));
+        } else {
+            /*send list to service which will add users to subscribed users and refresh the table*/
+            // url to submit users to be subscribed to an event(to be changed)
+            var url;
+            $http.post(url, $scope.selected)
+            // handle success
+                .success(function (data) {
+                    $scope.renderUsersInterestedInEvent();
+                    $scope.renderUsersSubscribedInEvent();
+                })
+                // handle error
+                .error(function (data) {
+                });
+        }
+    };
+
+    $scope.renderUsersSubscribedInEvent = function(){
+        // url to get users subscribed to an event(to be changed)
+        $http.get('/users/'+AuthService.getUserId())
+        // handle success
+            .success(function (data) {
+                // to be changed when service is ready
+                var array = [];
+                array.push(data);
+                $scope.users = array;
+            })
+            // handle error
+            .error(function (data) {
+            });
+    }
+
+    $scope.removeFromSubscribedUsers = function() {
+        if($scope.selected == 0){
+            $mdToast.show($mdToast.simple().textContent("Please select atleast one user"));
+        } else {
+            /*send list to service which will add users to subscribed users and refresh the table*/
+            // url to submit users to be subscribed to an event(to be changed)
+            var url;
+            $http.post(url, $scope.selected)
+            // handle success
+                .success(function (data) {
+                    $scope.renderUsersInterestedInEvent();
+                    $scope.renderUsersSubscribedInEvent();
+                })
+                // handle error
+                .error(function (data) {
+                });
+        }
+    };
 });

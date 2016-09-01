@@ -37,5 +37,17 @@
             <div layout-padding="" class="layout-padding" ui-view="datatable">
             </div>
         </md-tab>
+        <md-tab label="User Request Management" ng-if="chair">
+            <md-tabs>
+                <md-tab label="Requests">
+                    <div flex layout="row" layout-padding ng-include="'views/event/interested-users-datatable.html'">
+                    </div>
+                </md-tab>
+                <md-tab label="Subscribed">
+                    <div flex layout="row" layout-padding ng-include="'views/event/subscribed-users-datatable.html'">
+                    </div>
+                </md-tab>
+            </md-tabs>
+        </md-tab>
     </md-tabs>
 </div>

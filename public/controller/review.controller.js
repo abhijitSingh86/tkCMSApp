@@ -7,7 +7,7 @@ app.controller('ReviewController', function ($scope, $http, $mdToast, $state,$st
     $scope.submitForm = function(review) {
         review.submissionDocId = $state.params.id;
         // send a post request to the server
-        $http.post('/reviewer',
+        $http.put('/reviewer',
             review)
         // handle success
             .success(function (review) {
@@ -60,20 +60,21 @@ app.controller('UserListForReviewController', function ($http, $scope, DTOptions
                 list.push(itemId);
             }
         };
-        $scope.add = function(list) {
+        $scope.add = function() {
             if($scope.selected == 0){
                 $mdToast.show($mdToast.simple().textContent("Please select atleast one user"));
+            } else {
+                /*send list to service which will assign this list of users as reviewers and refresh the table*/
+                // url to submit users to be assigned as a reviewer(to be changed)
+                var url;
+                $http.post(url, $scope.selected)
+                // handle success
+                    .success(function (data) {
+                        $scope.renderUsersToBeAssignedForUser();
+                    })
+                    // handle error
+                    .error(function (data) {
+                    });
             }
-            /*send list to service which will assign this list of users as reviewers and refresh the table*/
-            // url to submit users to be assigned as a reviewer(to be changed)
-            var url;
-            $http.post(url, list)
-            // handle success
-                .success(function (data) {
-                    $scope.renderUsersToBeAssignedForUser();
-                })
-                // handle error
-                .error(function (data) {
-                });
         };
 })
