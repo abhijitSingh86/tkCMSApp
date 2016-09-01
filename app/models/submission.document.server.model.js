@@ -36,9 +36,6 @@ var SubmissionDocumentSchema = new Schema({
         type : Schema.ObjectId,
         ref: "User"
     }]
-
-
-
 });
 
 
@@ -49,7 +46,8 @@ SubmissionDocumentSchema.pre('validate', function(next) {
             if (err) {
                 console.log("Error retrieving event for Submission document validation check"+err);
                 next(Error("eror"));
-            } else {
+            } else if(subevnts ==null){next()}
+            else{
                 // console.log(new Date(ct_dt) >= new Date(subevnts.start_date));
 
                 console.log(ct_dt+"--"+subevnts.start_date+"--"+subevnts.end_date);
