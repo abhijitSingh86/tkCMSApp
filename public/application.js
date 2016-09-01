@@ -189,6 +189,10 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider','$breadcrum
                     controller: 'EventController'
                 }
             },
+            ncyBreadcrumb: {
+                label: 'New Event',
+                parent: 'home'
+            },
         })
         //access: chair
         .state('home.chair-events', {
@@ -213,6 +217,10 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider','$breadcrum
                     controller: 'EventController'
                 }
             },
+            ncyBreadcrumb: {
+                label: 'Event {{event._id}}',
+                parent: 'home.chair-events'
+            },
         })
         //access: chair
         .state('home.chair-event.submissions', {
@@ -221,6 +229,9 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider','$breadcrum
                     templateUrl: 'views/submission/chair.submission-datatable.html',
                     controller: 'SubmissionController'
                 }
+            },
+            ncyBreadcrumb: {
+                skip:true
             },
         })
         //access: chair
@@ -231,7 +242,12 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider','$breadcrum
                     templateUrl: 'views/submission/chair.submission.html',
                     controller: 'SubmissionController'
                 }
-            }
+            },
+            ncyBreadcrumb: {
+                label: 'Submission {{sub._id}}',
+                //parent: 'home.chair-event({id:sub.submissionEventId})',
+                parent: 'home'
+            },
         })
         //access: chair
         .state('home.chair-submission.reviews', {
@@ -242,6 +258,9 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider','$breadcrum
                 }
             },
             params : { documentId: null },
+            ncyBreadcrumb: {
+                skip:true
+            },
         })
         .state('home.newsubmission', {
             url: 'submission',

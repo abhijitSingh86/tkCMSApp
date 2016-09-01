@@ -81,7 +81,7 @@ app.controller('EventController', function ($scope, $http, $mdToast, $state, DTO
     };
 
     $scope.loadSubmissionForNormalUser = function(){
-        $http.get('/users/')
+        $http.get('/users/allusers')
         // handle success
             .success(function (data) {
                 $scope.authors = data;
