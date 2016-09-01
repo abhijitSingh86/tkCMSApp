@@ -10,6 +10,17 @@ module.exports = function(app) {
     put(submissionDocument.update).
     delete(submissionDocument.delete);
 
+    /*
+     listOfSubmissionDocumentForUserAndEvent
+     {
+     "userId" : 
+     "submissionEventId":
+     }
+     */
+    app.route('/subDocumentByEventId')
+        .post(submissionDocument.listOfSubmissionDocumentForUserAndEvent);
+
+
     app.param('subDocumentId', submissionDocument.submissionDocumentByID);
 
 };

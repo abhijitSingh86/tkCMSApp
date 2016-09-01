@@ -24,7 +24,7 @@ module.exports = function(app) {
     //     post(users.getReviewForASubDocument)
 
     /*
-    revtrieve all the submission event assigned to the user
+    retrieve all the submission event assigned to the user
      */
     app.route('/user/submission/:userId').
     get(users.getAssignedSubmissions);
@@ -89,7 +89,7 @@ module.exports = function(app) {
         .get(users.subdocs);
 
     //service to get all users
-    app.route('/users/allusers')
+    app.route('/allusers')
         .get(users.getall);
 
 };
