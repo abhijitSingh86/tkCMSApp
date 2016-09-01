@@ -1,4 +1,6 @@
 var reviewerDocument =  require('../controllers/reviewer.document.server.controller.js');
+var users =require('../../app/controllers/users.server.controller');
+
 module.exports = function(app) {
     app.route('/reviewer/:reviewerId').
     get(reviewerDocument.list);
@@ -21,9 +23,19 @@ module.exports = function(app) {
     put(reviewerDocument.put).
     post(reviewerDocument.create);
 
+
+    /*
+     get the review for particular submission document id
+     {
+     "submissionDocID" : ""
+     }
+     */
+    app.route('/reviewForDocument/:userId').
+        post(reviewerDocument.getReviewForASubDocument)
+
     app.route('/reviewer/getreviewer/:subDocumentId').
     get(reviewerDocument.getDetails);
 
     app.param('reviewerId', reviewerDocument.reviewersDocumentByID);
-
+    app.param('userId', users.userByID);
 };

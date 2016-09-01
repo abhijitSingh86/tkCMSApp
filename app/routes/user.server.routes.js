@@ -15,6 +15,15 @@ module.exports = function(app) {
     get(users.getAssignedReviews);
 
     /*
+    get the review for particular submission document id
+    {
+     "submissionDocID" : ""
+     }
+     */
+    // app.route('/user/reviewForDocument/:userId').
+    //     post(users.getReviewForASubDocument)
+
+    /*
     revtrieve all the submission event assigned to the user
      */
     app.route('/user/submission/:userId').
@@ -38,7 +47,7 @@ module.exports = function(app) {
      }
     */
         app.route('/assignDocumentToUsersReview').
-        put(users.subscribeReviewerToEvent);
+        put(users.subscribeReviewerToDocument);
     //--
 
 

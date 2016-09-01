@@ -1,4 +1,5 @@
 var SubmissionEventSchema =  require('../controllers/submission.event.server.controller.js');
+var users =require('../../app/controllers/users.server.controller');
 var  passport = require("passport")
 module.exports = function(app) {
     app.route('/subEvents').
@@ -21,14 +22,21 @@ module.exports = function(app) {
         .put(SubmissionEventSchema.addToInterestedUserList)
         .delete(SubmissionEventSchema.deleteFromInterestedUserList);
 
+    /*
+        to retrieve a list of accepted and not yet accepted user list for authors
+        based on event
+     */
+    app.route('/subEvent/retrieveApprovedAuthorsToEvent/:subEventId')
+        .get(SubmissionEventSchema.retrieveApprovedAuthorsToEvent);
+
     app.param('subEventId', SubmissionEventSchema.submissionEventByID);
+    app.param('userId', users.userByID);
+
+    app.route('/subEvent/getInterestedReviewers/:subEventId').
+    get(SubmissionEventSchema.retrieveInterestedReviewersForEvent);
 
 
-    app.route('/subEvent/getReviewers/:subEventId').
-    get(SubmissionEventSchema.retrieveReviewersForEvent);
-
-
-    app.route('/subEvent/getAuthors/:subEventId').
+    app.route('/subEvent/getInterestedAuthors/:subEventId').
     get(SubmissionEventSchema.retrieveAuthorsToEvent);
 
 };

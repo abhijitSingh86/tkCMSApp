@@ -210,6 +210,34 @@ exports.getAssignedSubmissions = function getAllAssignedEvents(req, res){
 };
 
 
+// exports.getReviewForASubDocument = function getReviewDocumentSpecific(req, res,next){
+//     if (true){//req.user) {
+//         var id = req.user.id;
+//         User.findOne({
+//             _id: id
+//         }).populate("assignedSubmissionForReview").exec(function(err, user) {
+//             if (err) {
+//                 return res.status(400).json({"error":"Error occurred while query execution"});
+//             } else {
+//                 var jsonData = user.assignedSubmissionForReview;
+//                 var docId = req.body.submissionDocId;
+//                 if(jsonData!=null && jsonData.length >0){
+//                     for(var i=0;i<jsonData.length;i++){
+//                         if(jsonData[i].id == docId ){
+//                             res.json(jsonData[i]);
+//                            next();
+//                         }
+//                     }
+//                     next();
+//                 }
+//             }
+//         });
+//     } else {
+//         res.status(403).json({"error" : "Invalid request"});
+//     }
+//
+// }
+
 exports.getAssignedReviews = function getAllReviewUserSpecific(req, res){
     if (true){//req.user) {
         var id = req.user.id;
@@ -274,7 +302,7 @@ exports.subscribeUserToEvent = function(req,res,next){
     }
 };
 
-exports.subscribeReviewerToEvent = function(req,res,next){
+exports.subscribeReviewerToDocument = function(req, res, next){
     if(true){//req.user && user.isChair(req)) {
 
         var userList = req.body.users;

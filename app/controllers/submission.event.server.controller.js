@@ -171,7 +171,7 @@ exports.retrieveUsersBelongingToEvent = function(req,res,next){
 };
 
 
-exports.retrieveReviewersForEvent = function(req,res,next){
+exports.retrieveInterestedReviewersForEvent = function(req, res, next){
     if(true) {//req.user && user.isChair(req)) {
                 // req.submissionEvent.
         SubmissionEvent.findOne({
@@ -181,6 +181,39 @@ exports.retrieveReviewersForEvent = function(req,res,next){
                 return next(err);
             } else {
                 res.json(submissionEvent.interestedUsersAsReviewer);
+            }
+        });
+    }
+};
+
+exports.retrieveApprovedAuthorsToEvent = function(req,res,next){
+    if(true) {//req.user && user.isChair(req)) {
+        var submissionEventId = req.submissionEvent.id;
+        SubmissionEvent.findOne({
+            _id: submissionEventId
+        }).populate('interestedUsers').exec(function(err, submissionEvent) {
+            if (err) {
+                return next(err);
+            } else {
+                var acceptedArr = [];
+                var rejectedArr = [];
+                if(submissionEvent==null || submissionEvent.length ==0){
+                    res.status(405).json({"error":"Invalid Event id"});
+                }else if(submissionEvent.interestedUsers.length ==null || submissionEvent.interestedUsers ==0) {
+                    res.status(405).json({"error":"Empty interested user list"})
+                }else
+                {
+                    for(var i=0;i<submissionEvent.interestedUsers.length;i++) {
+                        var assignedEvents = submissionEvent.interestedUsers[i].assignedSubmissionEvents;
+                        if (assignedEvents.indexOf(submissionEventId) != -1) {
+                            acceptedArr.push(submissionEvent.interestedUsers[i].id);
+                        } else {
+                            rejectedArr.push(submissionEvent.interestedUsers[i].id);
+                        }
+                    }
+                    res.json({"acceptedUser":acceptedArr,"notAcceptedUser":rejectedArr});
+
+                }
             }
         });
     }
