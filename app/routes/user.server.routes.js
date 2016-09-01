@@ -4,6 +4,10 @@ module.exports = function(app) {
     //app.route('/users').post(users.create).get(users.list);;
 
     //----------
+
+    app.route('/userreview/:userId').
+    get(users.getAllReviews);
+
     app.route('/user/review/:userId').
     get(users.getAssignedReviews);
 
