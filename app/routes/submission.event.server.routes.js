@@ -17,4 +17,12 @@ module.exports = function(app) {
 
     app.param('subEventId', SubmissionEventSchema.submissionEventByID);
 
+
+    app.route('/subEvent/getReviewers/:subEventId').
+    get(SubmissionEventSchema.retrieveReviewersForEvent);
+
+
+    app.route('/subEvent/getAuthors/:subEventId').
+    get(SubmissionEventSchema.retrieveAuthorsToEvent);
+
 };

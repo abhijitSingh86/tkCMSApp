@@ -2,6 +2,7 @@ var User = require("mongoose").model("User"),
 passport = require('passport');
 var SubmissionEvent = require("mongoose").model("SubmissionEvent");
 var SubmissionDocument = require("mongoose").model("SubmissionDocument");
+    var mongoose = require('mongoose');
 
 exports.list = function(req, res, next) {
     User.find({}, function(err, users) {
@@ -98,7 +99,7 @@ exports.signup = function(req, res, next) {
         user.save(function(err) {
             if (err) {
                 var message = getErrorMessage(err);
-                res.flash('error', message);
+                res.json('error', message);
                 return res;
             }
             req.login(user, function(err) {
@@ -204,5 +205,57 @@ exports.getAllReviews = function getAllReviewUserSpecific(req,res){
     } else {
         res.status(403).json({"error" : "Invalid request"});
     }
-}
+};
+
+
+exports.subscribeUserToEvent = function(req,res,next){
+    if(true){//req.user && user.isChair(req)) {
+
+        var userList = req.body.users;
+        var submissionEventId = req.body.submissionEventId;
+        if(userList && userList.length >0) {
+            for(var i=0;i<userList.length;i++) {
+                User.update({_id: mongoose.Types.ObjectId(userList[i])}, {$addToSet: {assignedSubmissionEvents: mongoose.Types.ObjectId(submissionEventId)}},
+                    {new: true, safe: true},
+                    function (err, output) {
+                        if (err) {
+                            return next(err);
+                        } else {
+                            res.json({"success": output});
+                        }
+                    });
+            }
+        }else{
+            res.status(400).json({"error":"Interested user list can't be empty"})
+        }
+    }else{
+        res.status(401).json({"error":"User is not authorized to change the Event"});
+    }
+};
+
+exports.subscribeReviewerToEvent = function(req,res,next){
+    if(true){//req.user && user.isChair(req)) {
+
+        var userList = req.body.users;
+        var submissionDocumentId = req.body.submissionDocumentId;
+        if(userList && userList.length >0) {
+            for(var i=0;i<userList.length;i++) {
+                User.update({_id: mongoose.Types.ObjectId(userList[i])}, {$addToSet: {assignedSubmissionForReview: mongoose.Types.ObjectId(submissionDocumentId)}},
+                    {new: true, safe: true},
+                    function (err, output) {
+                        if (err) {
+                            return next(err);
+                        } else {
+                            res.json({"success": output});
+                        }
+                    });
+            }
+        }else{
+            res.status(400).json({"error":"Interested user list can't be empty"})
+        }
+    }else{
+        res.status(401).json({"error":"User is not authorized to change the Event"});
+    }
+};
+
 

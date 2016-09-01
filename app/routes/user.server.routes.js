@@ -4,9 +4,17 @@ module.exports = function(app) {
     //app.route('/users').post(users.create).get(users.list);;
 
     //----------
-    app.route('/userreview/:userId').
-    get(users.getAllReviews);
+    app.route('/user/review/:userId').
+    get(users.getAssignedReviews);
 
+    app.route('/user/submission/:userId').
+    get(users.getAssignedSubmissions);
+
+    app.route('/assignEventToUsers/').
+    put(users.subscribeUserToEvent);
+
+    app.route('/assignDocumentToUsersReview').
+        put(users.subscribeReviewerToEvent);
     //--
 
 

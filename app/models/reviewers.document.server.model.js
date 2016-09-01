@@ -12,11 +12,9 @@ var ReviewersDocumentSchema = new Schema({
     comments: {
         type: String,
         trim: true
-
     },
     reviewerExpertise:{
         type: Number
-
     },
     overallEval:{
         type: Number

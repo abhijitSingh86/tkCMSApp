@@ -171,19 +171,33 @@ exports.retrieveUsersBelongingToEvent = function(req,res,next){
 };
 
 
-exports.retrieveAuthorsToEvent = function(req,res,next){
+exports.retrieveReviewersForEvent = function(req,res,next){
     if(true) {//req.user && user.isChair(req)) {
                 // req.submissionEvent.
         SubmissionEvent.findOne({
             _id: req.submissionEvent.id
-        }).populate('interestedUsersAsAuthor','firstName').exec(function(err, submissionEvent) {
+        }).populate('interestedUsersAsReviewer','firstName').exec(function(err, submissionEvent) {
             if (err) {
                 return next(err);
             } else {
-                res.json(submissionEvent.interestedUsersAsAuthor);
+                res.json(submissionEvent.interestedUsersAsReviewer);
             }
         });
     }
 };
 
+exports.retrieveAuthorsToEvent = function(req,res,next){
+    if(true) {//req.user && user.isChair(req)) {
+        // req.submissionEvent.
+        SubmissionEvent.findOne({
+            _id: req.submissionEvent.id
+        }).populate('interestedUsers','firstName').exec(function(err, submissionEvent) {
+            if (err) {
+                return next(err);
+            } else {
+                res.json(submissionEvent.interestedUsers);
+            }
+        });
+    }
+};
 

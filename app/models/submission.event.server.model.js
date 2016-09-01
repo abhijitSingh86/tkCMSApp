@@ -25,7 +25,7 @@ var SubmissionEventSchema = new Schema({
         type:Schema.ObjectId,
         ref:'User'
     }],
-    interestedUsersAsAuthor:[{
+    interestedUsersAsReviewer:[{
         type:Schema.ObjectId,
         ref:'User'
     }]
