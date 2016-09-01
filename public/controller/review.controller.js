@@ -7,7 +7,7 @@ app.controller('ReviewController', function ($scope, $http, $mdToast, $state,$st
     $scope.submitForm = function(review) {
         review.submissionDocId = $state.params.id;
         // send a post request to the server
-        $http.put('/reviewer',
+        $http.post('/reviewer',
             review)
         // handle success
             .success(function (review) {

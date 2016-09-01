@@ -149,7 +149,18 @@ app.controller('EventController', function ($scope, $http, $mdToast, $state, DTO
     }
 
     $scope.addToInterestedUser = function(event){
-
+        var sendData = {
+            "submissionEventId": event._id,
+            "users":[AuthService.getUserId()]
+        }
+        $http.put('assignEventToUsers', sendData)
+        // handle success
+            .success(function (data) {
+                $state.go();
+            })
+            // handle error
+            .error(function (data) {
+            });
     }
 
     $scope.renderUsersInterestedInEvent = function(){
@@ -183,8 +194,11 @@ app.controller('EventController', function ($scope, $http, $mdToast, $state, DTO
         } else {
             /*send list to service which will add users to subscribed users and refresh the table*/
             // url to submit users to be subscribed to an event(to be changed)
-            var url;
-            $http.post(url, $scope.selected)
+            var url = "/subEvent/addtointeresteduserlist/"+$state.params.id;
+            debugger;
+            var usersList = {'interestedUsers':$scope.selected}
+
+            $http.put(url, usersList)
             // handle success
                 .success(function (data) {
                     $scope.renderUsersInterestedInEvent();
@@ -217,8 +231,8 @@ app.controller('EventController', function ($scope, $http, $mdToast, $state, DTO
         } else {
             /*send list to service which will add users to subscribed users and refresh the table*/
             // url to submit users to be subscribed to an event(to be changed)
-            var url;
-            $http.post(url, $scope.selected)
+            var url = "/subEvent/addtointeresteduserlist/"+$state.params.id;
+            $http.delete(url, $scope.selected)
             // handle success
                 .success(function (data) {
                     $scope.renderUsersInterestedInEvent();
