@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Header</title>
+</head>
+<body>
+<md-toolbar layout="row" layout-align="start end">
+    <section layout="row" layout-sm="column"  >
+        <h3>Conference Management System</h3>
+    </section>
+    <section ng-if="chair">
+        <md-menu-bar>
+            <md-menu>
+                <md-button ng-click="$mdOpenMenu()">
+                    Events
+                </md-button>
+                <md-menu-content>
+                    <md-menu-item><md-button ><a ui-sref=".newevent">New</a></md-button></md-menu-item>
+                    <md-menu-item><md-button ><a ui-sref=".chair-events">All Events</a></md-button></md-menu-item>
+                </md-menu-content>
+            </md-menu>
+            <md-menu>
+                <md-button ng-click="$mdOpenMenu()">
+                    Submissions
+                </md-button>
+                <md-menu-content>
+                    <md-menu-item><md-button ><a ui-sref=".chair-all-submissions">All Submissions</a></md-button></md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </md-menu-bar>
+    </section>
+    <section ng-if="normalUser">
+        <md-menu-bar>
+            <md-menu>
+                <md-button ng-click="$mdOpenMenu()">
+                    Events
+                </md-button>
+                <md-menu-content>
+                    <md-menu-item><md-button ><a ui-sref=".events({filter:'all'})">All Events</a></md-button></md-menu-item>
+                    <md-menu-item><md-button ><a ui-sref=".events({filter:'subscribed'})">Subscribed</a></md-button></md-menu-item>
+                    <md-menu-item><md-button ><a ui-sref=".events({filter:'interested'})">Interested</a></md-button></md-menu-item>
+                </md-menu-content>
+            </md-menu>
+            <md-menu>
+                <md-button ng-click="$mdOpenMenu()">
+                    Submissions
+                </md-button>
+                <md-menu-content>
+                    <md-menu-item><md-button ><a ui-sref=".my-submissions">My Submissions</a></md-button></md-menu-item>
+                    <md-menu-item><md-button ><a ui-sref=".assigned-submissions">Assigned</a></md-button></md-menu-item>
+                </md-menu-content>
+            </md-menu>
+            <md-menu>
+                <md-button ng-click="$mdOpenMenu()">
+                    Reviews
+                </md-button>
+                <md-menu-content>
+                    <md-menu-item><md-button ><a ui-sref=".my-reviews">My Reviews</a></md-button></md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </md-menu-bar>
+    </section>
+    <span flex> </span>
+    <section layout="row" layout-sm="column" >
+        <md-button ng-controller="LoginController" class="glyphicon glyphicon-log-out pull-right" ng-click="logout()"> Logout</md-button>
+    </section>
+</md-toolbar>
+</body>
+</html>

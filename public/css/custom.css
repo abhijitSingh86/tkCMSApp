@@ -1,0 +1,19 @@
+.nav-active {
+    background-color: rgb(140,158,255);
+    color: rgb(40,53,147);
+}
+
+md-menu-item a{
+    display:block;
+    height: 100%;
+    width: 100%;
+    text-decoration: none;
+}
+
+.trix-editor-label{
+    color: rgba(0,0,0,0.38);
+}
+
+th {
+    text-align: left !important;
+}
