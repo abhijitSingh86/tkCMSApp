@@ -8,16 +8,36 @@ module.exports = function(app) {
     app.route('/userreview/:userId').
     get(users.getAllReviews);
 
+    /*
+    retrieve all the submission document list which are assigned to the user for review
+     */
     app.route('/user/review/:userId').
     get(users.getAssignedReviews);
 
+    /*
+    revtrieve all the submission event assigned to the user
+     */
     app.route('/user/submission/:userId').
     get(users.getAssignedSubmissions);
 
+    /*
+    assign a event to list of user
+     {
+     "submissionEventId" : "57bd32b07be70f7930dd30b6",
+     "users" : [ "57b36080ae1fdc161aecc1cd" ,"57b34b48ae1fdc161aecc1cb"]
+     }
+
+     */
     app.route('/assignEventToUsers/').
     put(users.subscribeUserToEvent);
-
-    app.route('/assignDocumentToUsersReview').
+    /*
+     assign a document to list of user for review
+     {
+     "submissionDocumentId" : "57c831b86f6555c13602aa62",
+     "users" : [ "57b36080ae1fdc161aecc1cd" ,"57b34b48ae1fdc161aecc1cb"]
+     }
+    */
+        app.route('/assignDocumentToUsersReview').
         put(users.subscribeReviewerToEvent);
     //--
 
