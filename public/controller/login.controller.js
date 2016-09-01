@@ -1,3 +1,6 @@
+/**
+ * Created by pratik_k on 8/24/2016.
+ */
 angular.module('loginModule',[]).controller('LoginController',
         function ($scope, $location, AuthService,$rootScope, $state, $mdToast) {
 

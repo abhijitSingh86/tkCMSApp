@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+<div id="submissionpage">
+    <md-tabs md-dynamic-height="true">
+        <md-tab label="Submissions" ng-init="loadSubmission()">
+            <div flex layout="row" layout-padding ng-include="'views/submission/submission-form.html'">
+            </div>
+        </md-tab>
+        <md-tab label="Reviews" ng-click="loadAllReviewsForNormalUser()" ng-if="normalUser">
+            <div layout-padding="" class="layout-padding" ui-view="review-datatable">
+            </div>
+        </md-tab>
+    </md-tabs>
+</div>
+</body>
+</html>

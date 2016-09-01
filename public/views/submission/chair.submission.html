@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+<div id="submissionpage">
+    <md-tabs md-dynamic-height="true">
+        <md-tab label="Submission" ng-init="loadSubmission()">
+            <div flex layout="row" layout-padding ng-include="'views/submission/submission-form.html'">
+            </div>
+        </md-tab>
+        <md-tab label="Authors" ng-if="chair">
+            <div flex layout="row" layout-padding ng-include="'views/submission/authorsdatatable.html'">
+            </div>
+        </md-tab>
+        <md-tab label="Review Management" ng-if="chair">
+            <div flex layout="row" layout-padding ng-include="'views/reviews/usersdatatable.html'">
+            </div>
+        </md-tab>
+        <md-tab label="Reviews" ng-click="loadAllReviewsForChair()" ng-if="chair">
+            <div layout-padding="" class="layout-padding" ui-view="review-datatable">
+            </div>
+        </md-tab>
+    </md-tabs>
+</div>
+</body>
+</html>

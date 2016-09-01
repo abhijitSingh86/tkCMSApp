@@ -1,8 +1,8 @@
 /**
- * Created by manny on 23.08.2016.
+ * Created by pratik_k on 8/24/2016.
  */
 var app = angular.module('eventsModule', []);
-app.controller('EventController', function ($scope, $http, $mdToast, $state, DTOptionsBuilder, DTColumnDefBuilder, $rootScope) {
+app.controller('EventController', function ($scope, $http, $mdToast, $state, DTOptionsBuilder, DTColumnDefBuilder, $rootScope, AuthService) {
     $scope.event = {};
     $scope.renderDataTable = function(){
         var url;
@@ -16,6 +16,9 @@ app.controller('EventController', function ($scope, $http, $mdToast, $state, DTO
         if(parameter == "interested"){
             url = "/subEvents"
         }
+        loadEvents(url);
+    }
+    function loadEvents(url){
         $http.get(url)
         // handle success
             .success(function (data, status) {
@@ -48,14 +51,64 @@ app.controller('EventController', function ($scope, $http, $mdToast, $state, DTO
             .error(function (data) {
             });
     };
+
+    $scope.goToEvent = function(event){
+        $state.go('home.event',{id:event._id})
+    }
+
+    $scope.loadEventForNormalUser = function() {
+        $http.get('/subEvent/' + $state.params.id)
+        // handle success
+            .success(function (data) {
+                if (data.start_date != null) data.start_date = new Date(data.start_date);
+                if (data.end_date != null) data.end_date = new Date(data.end_date);
+                $scope.event = data;
+                var userId = AuthService.getUserId();
+                var interestedUsers = data.interestedUsers;
+                angular.forEach(interestedUsers, function(value, key) {
+                    $scope.eventAccess = false;
+                    if(value.id == userId){
+                        $scope.eventAccess = true;
+                    }
+                });
+            })
+            // handle error
+            .error(function (data) {
+            });
+
+    };
+
+    $scope.loadSubmissionForNormalUser = function(){
+        $http.get('/users/')
+        // handle success
+            .success(function (data) {
+                $scope.authors = data;
+            })
+            // handle error
+            .error(function (data) {
+            });
+        $scope.new=true;
+        /*check whether user has already created a submission for that event.
+        If already created, check the deadline and disable fields accordingly
+        If already created change type to update
+        */
+
+        //retrieve document ID and store it in a variable to retrieve reviews
+    }
+
+    $scope.loadAllReviewsForNormalUser = function(){
+        $state.go('home.event.reviews',{documentId: 1234});
+    }
+
+    /*Methods used for chair role*/
     $scope.submitForm = function(event) {
         // send a post request to the server
         $http.post('/subEvents',
             event)
-            // handle success
+        // handle success
             .success(function (data) {
                 $mdToast.show($mdToast.simple().textContent("Created Successfully"));
-                $state.go('home.event',{id: data._id});
+                $state.go('home.event',{id: data.success._id});
             })
             // handle error
             .error(function (data) {
@@ -75,21 +128,26 @@ app.controller('EventController', function ($scope, $http, $mdToast, $state, DTO
                 $mdToast.show($mdToast.simple().textContent(data.error));
             });
     };
-    $scope.loadSubmissions = function(){
+
+    $scope.loadSubmissionsForNormalUser = function(){
         $state.go('home.event.submissions')
     }
-    $scope.goToEvent = function(event){
-        var userId = $rootScope.globals.currentUser.id;
-        var interestedUsers = event.interestedUsers;
-        angular.forEach(interestedUsers, function(value, key) {
-            $scope.eventAccess = false;
-            if(value === userId){
-                $scope.eventAccess = true;
-            }
-        });
-        $state.go('home.event',{id:event._id})
+
+    $scope.renderDataTableForChair = function () {
+        var url = "/subEvents";
+        loadEvents(url);
     }
+
+    $scope.loadSubmissionsForChair = function(){
+        $state.go('home.chair-event.submissions')
+    }
+
+    $scope.goToEventDetailsForChair = function(event){
+        $state.go('home.chair-event',{id:event._id})
+    }
+
     $scope.addToInterestedUser = function(event){
 
     }
+
 });

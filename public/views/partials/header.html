@@ -13,11 +13,19 @@
         <md-menu-bar>
             <md-menu>
                 <md-button ng-click="$mdOpenMenu()">
-                    New
+                    Events
                 </md-button>
                 <md-menu-content>
-                    <md-menu-item><md-button ><a ui-sref=".newevent">Event</a></md-button></md-menu-item>
-                    <md-menu-item><md-button ><a ui-sref=".newsubmission">Submission</a></md-button></md-menu-item>
+                    <md-menu-item><md-button ><a ui-sref=".newevent">New</a></md-button></md-menu-item>
+                    <md-menu-item><md-button ><a ui-sref=".chair-events">All Events</a></md-button></md-menu-item>
+                </md-menu-content>
+            </md-menu>
+            <md-menu>
+                <md-button ng-click="$mdOpenMenu()">
+                    Submissions
+                </md-button>
+                <md-menu-content>
+                    <md-menu-item><md-button ><a ui-sref=".chair-all-submissions">All Submissions</a></md-button></md-menu-item>
                 </md-menu-content>
             </md-menu>
         </md-menu-bar>
@@ -34,15 +42,23 @@
                     <md-menu-item><md-button ><a ui-sref=".events({filter:'interested'})">Interested</a></md-button></md-menu-item>
                 </md-menu-content>
             </md-menu>
-        <md-menu>
-            <md-button ng-click="$mdOpenMenu()">
-                Submissions
-            </md-button>
-            <md-menu-content>
-                <md-menu-item><md-button ><a ui-sref=".submission-own">My Submissions</a></md-button></md-menu-item>
-                <md-menu-item><md-button ><a ui-sref=".submission-assigned">Assigned</a></md-button></md-menu-item>
-            </md-menu-content>
-        </md-menu>
+            <md-menu>
+                <md-button ng-click="$mdOpenMenu()">
+                    Submissions
+                </md-button>
+                <md-menu-content>
+                    <md-menu-item><md-button ><a ui-sref=".my-submissions">My Submissions</a></md-button></md-menu-item>
+                    <md-menu-item><md-button ><a ui-sref=".assigned-submissions">Assigned</a></md-button></md-menu-item>
+                </md-menu-content>
+            </md-menu>
+            <md-menu>
+                <md-button ng-click="$mdOpenMenu()">
+                    Reviews
+                </md-button>
+                <md-menu-content>
+                    <md-menu-item><md-button ><a ui-sref=".my-reviews">My Reviews</a></md-button></md-menu-item>
+                </md-menu-content>
+            </md-menu>
         </md-menu-bar>
     </section>
     <span flex> </span>
