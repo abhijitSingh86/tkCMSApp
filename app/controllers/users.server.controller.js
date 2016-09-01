@@ -163,6 +163,16 @@ exports.subdocs = function(req, res, next) {
 
 };
 
+exports.getall = function(req, res, next) {
+    User.find().populate('username').exec(function(err, subevnts) {
+        if (err) {
+            return next(err);
+        } else {
+            res.json(subevnts);
+        }
+    });
+
+};
 
 exports.signout = function(req, res) {
     req.logout();

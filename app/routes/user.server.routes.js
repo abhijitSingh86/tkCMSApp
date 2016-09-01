@@ -40,4 +40,8 @@ module.exports = function(app) {
      app.route('/users/Subdocs/:userId')
         .get(users.subdocs);
 
+    //service to get all users
+    app.route('/users/allusers')
+        .get(users.getall);
+
 };
