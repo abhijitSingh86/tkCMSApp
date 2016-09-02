@@ -1,4 +1,5 @@
 var SubmissionEventSchema =  require('../controllers/submission.event.server.controller.js');
+var submissionDocument =  require('../controllers/submission.document.server.controller.js');
 var users =require('../../app/controllers/users.server.controller');
 var  passport = require("passport")
 module.exports = function(app) {
@@ -35,8 +36,12 @@ module.exports = function(app) {
     app.route('/subEvent/getInterestedReviewers/:subEventId').
     get(SubmissionEventSchema.retrieveInterestedReviewersForEvent);
 
+    app.route('/subEvent/getInterestedReviewersForDocument/:subDocumentId').
+    get(SubmissionEventSchema.retrieveInterestedReviewersForDocument);
+
 
     app.route('/subEvent/getInterestedAuthors/:subEventId').
     get(SubmissionEventSchema.retrieveAuthorsToEvent);
 
+    app.param('subDocumentId', submissionDocument.submissionDocumentByID);
 };
