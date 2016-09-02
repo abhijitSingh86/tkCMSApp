@@ -5,14 +5,13 @@
     <title>Title</title>
 </head>
 <body>
-<div  layout="column" class="md-inline-form" >
-    <md-tab-body layout-padding="" class="layout-padding">
-        <form name="reviewForm" novalidate ng-submit="reviewForm.$valid && submitForm(review)">
-
+<div flex layout="row" layout-padding>
+    <md-content flex layout-padding id="content" class="submission-container">
+        <form ng-controller="ReviewController" name="reviewForm" novalidate>
             <div layout-gt-sm="row" class="layout-gt-sm-row">
                <md-input-container class="md-block" flex-gt-xs>
                     <label>What is your Expertise(rate 1-5)?</label>
-                    <md-select ng-model="review.reviewerExpertise" placeholder="Select Your Expertise Level for this topic" class="md-no-underline">
+                    <md-select ng-required="true" ng-model="review.reviewerExpertise" placeholder="Select Your Expertise Level for this topic" class="md-no-underline">
                         <md-option value="1">1- Not at all familiar to topic</md-option>
                         <md-option value="2">2- Very Basic Understanding</md-option>
                         <md-option value="3">3- General Understanding</md-option>
@@ -24,7 +23,7 @@
             <div layout="row" layout-align="space-between center">
                 <md-input-container class="md-block" flex-gt-xs>
                     <label>Your Overall Evaluation:</label>
-                    <md-select ng-model="review.overallEval" placeholder="Your Overall Evaluation" class="md-no-underline">
+                    <md-select ng-required="true" ng-model="review.overallEval" placeholder="Your Overall Evaluation" class="md-no-underline">
                         <md-option value="1">1- Strongly Reject</md-option>
                         <md-option value="2">2- Reject</md-option>
                         <md-option value="3">3- Neither accept nor reject</md-option>
@@ -44,27 +43,30 @@
             <div layout-gt-sm="row" class="layout-gt-sm-row">
                 <md-input-container class="md-block" flex-gt-xs>
                     <label>Major Strong Points:</label>
-                    <textarea name="name" ng-model="review.majorStrongPoints"></textarea>
+                    <textarea ng-required="true" name="name" ng-model="review.majorStrongPoints"></textarea>
                 </md-input-container>
             </div>
 
             <div layout-gt-sm="row" class="layout-gt-sm-row">
                 <md-input-container class="md-block" flex-gt-xs>
                     <label>Major Weak Points:</label>
-                    <textarea name="name" ng-model="review.majorWeakPoints"></textarea>
+                    <textarea ng-required="true" name="name" ng-model="review.majorWeakPoints"></textarea>
                 </md-input-container>
             </div>
 
             <div layout-gt-sm="row" class="layout-gt-sm-row">
                 <md-content class="md-block" flex-gt-xs>
                     <label class="trix-editor-label">Detailed Comments for the review:</label>
-                    <trix-editor angular-trix class="trix-content" ng-model="review.comments"></trix-editor>
+                    <trix-editor ng-required="true" angular-trix class="trix-content" ng-model="review.comments"></trix-editor>
                 </md-content>
             </div>
-            <section layout="row" layout-sm="column" layout-align="end" layout-wrap>
-                <md-button type=submit  class="md-raised md-primary">Submit</md-button>
+            <section layout="row" ng-if="new" layout-sm="column" layout-align="end" layout-wrap>
+                <md-button type=submit ng-click="reviewForm.$valid && submitReview(review)"  class="md-raised md-primary">Submit</md-button>
+            </section>
+            <section layout="row" ng-if="!new" layout-sm="column" layout-align="end" layout-wrap>
+                <md-button type=submit ng-click="reviewForm.$valid && updateReview(review)"  class="md-raised md-primary">Update</md-button>
             </section>
         </form>
-    </md-tab-body>
+    </md-content>
 </div>
 </body></html>

@@ -10,11 +10,13 @@ app.controller('EventController', function ($scope, $http, $mdToast, $state, DTO
         if(parameter == "all"){
             url = "/subEvents"
         }
-        if(parameter == "subscribed"){
-            url = "/subEvents"
+        else if(parameter == "subscribed"){
+            url = "/users/Subevents/"+AuthService.getUserId();
         }
-        if(parameter == "interested"){
-            url = "/subEvents"
+        else if(parameter == "interested"){
+            url = '/user/submission/'+AuthService.getUserId();
+        } else {
+            $state.go('home');
         }
         loadEvents(url);
     }
@@ -65,8 +67,8 @@ app.controller('EventController', function ($scope, $http, $mdToast, $state, DTO
                 $scope.event = data;
                 var userId = AuthService.getUserId();
                 var interestedUsers = data.interestedUsers;
+                $scope.eventAccess = false;
                 angular.forEach(interestedUsers, function(value, key) {
-                    $scope.eventAccess = false;
                     if(value.id == userId){
                         $scope.eventAccess = true;
                     }
@@ -76,10 +78,55 @@ app.controller('EventController', function ($scope, $http, $mdToast, $state, DTO
             .error(function (data) {
             });
 
+        /*check whether user has already created a submission for this event.
+         If already created change type to update
+         */
+        var dataToCheckDocumentForEvent = {
+            "userId" : AuthService.getUserId(),
+            "submissionEventId" : $state.params.id
+        }
+        $http.post('subDocumentByEventId',dataToCheckDocumentForEvent)
+            .success(function (data) {
+                if(data.status == "notsubmitted"){
+                    $scope.new = true;
+                    $scope.hideReviewsTab = false;
+                } else {
+                    $scope.hideReviewsTab = true;
+                    $scope.new = false;
+                    $scope.showUpdate = true;
+                    $scope.showWithdraw = true;
+                    $http.get('/subDocument/'+data._id)
+                    // handle success
+                        .success(function (data) {
+                            $scope.sub = data;
+                            $scope.sub.id = data._id;
+                            angular.forEach(data.authors,function(obj){
+                                $scope.sub.authors.splice(obj);
+                                $scope.sub.authors.push(obj.id);
+                            })
+                        })
+                        // handle error
+                        .error(function (data) {
+                        });
+                    $http.get('/review/getReviewForDocument/' + data._id)
+                    // handle success
+                        .success(function (data) {
+                            $scope.reviews = data;
+                        })
+                        // handle error
+                        .error(function (data) {
+                        });
+                }
+            })
+            // handle error
+            .error(function (data) {
+            });
+
+        //retrieve document ID and store it in a variable to retrieve reviews
     };
 
     $scope.loadSubmissionForNormalUser = function(){
-        $http.get('/users/')
+        $http.get('/allusers')
         // handle success
             .success(function (data) {
                 $scope.authors = data;
@@ -87,19 +134,31 @@ app.controller('EventController', function ($scope, $http, $mdToast, $state, DTO
             // handle error
             .error(function (data) {
             });
-        $scope.new=true;
-        /*check whether user has already created a submission for that event.
-        If already created, check the deadline and disable fields accordingly
-        If already created change type to update
-        */
-
-        //retrieve document ID and store it in a variable to retrieve reviews
     }
 
     $scope.loadAllReviewsForNormalUser = function(){
-        $state.go('home.event.reviews',{documentId: 1234});
+        $state.go('home.event.reviews',{documentId: documentIdForReviews});
     }
 
+    $scope.addToInterestedUser = function(event){
+        var sendData = {
+            "interestedUsers":[AuthService.getUserId()]
+        }
+        var url = "/subEvent/addtointeresteduserlist/"+event._id;
+        $http.put(url, sendData)
+        // handle success
+            .success(function (data) {
+                //reload event page
+                $state.go('home.event',{id:event._id})
+            })
+            // handle error
+            .error(function (data) {
+            });
+    }
+
+    $scope.loadSubmissionsForNormalUser = function(){
+        $state.go('home.event.submissions')
+    }
     /*Methods used for chair role*/
     $scope.submitForm = function(event) {
         // send a post request to the server
@@ -117,6 +176,9 @@ app.controller('EventController', function ($scope, $http, $mdToast, $state, DTO
     };
     $scope.updateForm = function(event) {
         // send a put request to the server
+        event.createdBy = {};
+        event.interestedUsers = {};
+        event.interestedUsersAsReviewer = {};
         $http.put('/subEvent/' + $state.params.id,
             event)
         // handle success
@@ -128,10 +190,6 @@ app.controller('EventController', function ($scope, $http, $mdToast, $state, DTO
                 $mdToast.show($mdToast.simple().textContent(data.error));
             });
     };
-
-    $scope.loadSubmissionsForNormalUser = function(){
-        $state.go('home.event.submissions')
-    }
 
     $scope.renderDataTableForChair = function () {
         var url = "/subEvents";
@@ -146,8 +204,112 @@ app.controller('EventController', function ($scope, $http, $mdToast, $state, DTO
         $state.go('home.chair-event',{id:event._id})
     }
 
-    $scope.addToInterestedUser = function(event){
-
+    $scope.renderUsersInterestedInEvent = function(){
+        $scope.dtOptions2 = DTOptionsBuilder.newOptions().withPaginationType('full_numbers');
+        $scope.dtColumnDefs2 = [
+            DTColumnDefBuilder.newColumnDef(0).notSortable(),
+            DTColumnDefBuilder.newColumnDef(1),
+            DTColumnDefBuilder.newColumnDef(2),
+            DTColumnDefBuilder.newColumnDef(3),
+            DTColumnDefBuilder.newColumnDef(4),
+        ];
+        // url to get users to be interested in a event(to be changed)
+        $http.get('/subEvent/retrieveApprovedAuthorsToEvent/'+$state.params.id)
+        // handle success
+            .success(function (data) {
+                $scope.users = [];
+                angular.forEach(data.notAcceptedUser, function(userId){
+                    $http.get('/users/'+userId)
+                        .success(function (data) {
+                            $scope.users.push(data);
+                        })
+                })
+                /*to be changed: after service change remove the above code and uncomment the below line*/
+                //$scope.users = data.notAcceptedUser;
+            })
+            // handle error
+            .error(function (data) {
+            });
     }
 
+    $scope.selected = [];
+    $scope.toggle = function (itemId, list) {
+        var idx = list.indexOf(itemId);
+        if (idx > -1) {
+            list.splice(idx, 1);
+        }
+        else {
+            list.push(itemId);
+        }
+    };
+    $scope.addToSubscribedUsers = function() {
+        if($scope.selected == 0){
+            $mdToast.show($mdToast.simple().textContent("Please select atleast one user"));
+        } else {
+            /*send list to service which will add users to subscribed users and refresh the table*/
+            var url = "/assignEventToUsers/";
+            var usersList = {
+                "submissionEventId" : $state.params.id,
+                "users" : $scope.selected
+            }
+
+            $http.put(url, usersList)
+            // handle success
+                .success(function (data) {
+                    $scope.renderUsersInterestedInEvent();
+                    $scope.renderUsersSubscribedInEvent();
+                })
+                // handle error
+                .error(function (data) {
+                });
+        }
+    };
+
+    $scope.renderUsersSubscribedInEvent = function(){
+        $scope.dtOptions1 = DTOptionsBuilder.newOptions().withPaginationType('full_numbers');
+        $scope.dtColumnDefs1 = [
+            DTColumnDefBuilder.newColumnDef(0).notSortable(),
+            DTColumnDefBuilder.newColumnDef(1),
+            DTColumnDefBuilder.newColumnDef(2),
+            DTColumnDefBuilder.newColumnDef(3),
+            DTColumnDefBuilder.newColumnDef(4),
+        ];
+        // url to get users subscribed to an event(to be changed)
+        $http.get('/subEvent/retrieveApprovedAuthorsToEvent/'+$state.params.id)
+        // handle success
+            .success(function (data) {
+                $scope.usersApproved = [];
+                angular.forEach(data.acceptedUser, function(userId){
+                    $http.get('/users/'+userId)
+                        .success(function (data) {
+                            $scope.usersApproved.push(data);
+                        })
+                })
+                /*to be changed: after service change remove the above code and uncomment the below line*/
+                //$scope.usersApproved = data.acceptedUser;
+            })
+            // handle error
+            .error(function (data) {
+            });
+    }
+
+    $scope.removeFromSubscribedUsers = function() {
+        if($scope.selected == 0){
+            $mdToast.show($mdToast.simple().textContent("Please select atleast one user"));
+        } else {
+            debugger;
+            /*send list to service which will add users to subscribed users and refresh the table*/
+            var url = "/subEvent/addtointeresteduserlist/"+$state.params.id;
+            var usersList = {'interestedUsers':$scope.selected};
+            $http.post(url, usersList)
+            // handle success
+                .success(function (data) {
+                    $scope.renderUsersInterestedInEvent();
+                    $scope.renderUsersSubscribedInEvent();
+                })
+                // handle error
+                .error(function (data) {
+                });
+        }
+    };
 });

@@ -1,8 +1,13 @@
 var mainApplicationModuleName = 'conference-system';
 var mainApplicationModule = angular.module(mainApplicationModuleName
-    , ['leftPanelModule','submissionModule','reviewerModule','authenticationServiceModule','loginModule','eventsModule','datatables','ngMaterial','ngMessages','ngRoute','ui.router','ngCookies','vAccordion','angularTrix']);
+    , ['leftPanelModule','submissionModule','reviewerModule','authenticationServiceModule','loginModule','eventsModule','datatables','ngMaterial','ngMessages','ngRoute','ui.router','ngCookies','vAccordion','angularTrix', 'ncy-angular-breadcrumb']);
 
-mainApplicationModule.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+mainApplicationModule.config(['$stateProvider', '$urlRouterProvider','$breadcrumbProvider', function($stateProvider, $urlRouterProvider, $breadcrumbProvider) {
+    $breadcrumbProvider.setOptions({
+        prefixStateName: 'home',
+        template: 'bootstrap2'
+    });
+
     $urlRouterProvider.otherwise('/');
 
     $stateProvider
@@ -12,16 +17,19 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider', function($
                 'header': {
                     templateUrl: 'views/partials/header.html'
                 },
-                'leftpanel': {
+                /*'leftpanel': {
                     templateUrl: 'views/partials/accordianPanel.html',
                     controller: 'LeftPanelController'
-                },
+                },*/
                 'mainpanel': {
                     templateUrl: 'views/partials/content.html'
                 },
                 'footer': {
                     templateUrl: 'views/partials/footer.html'
                 }
+            },
+            ncyBreadcrumb: {
+                label: 'Home'
             },
             resolve: {
                 auth: function (AuthService, $q, $rootScope) {
@@ -44,6 +52,10 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider', function($
                     controller: 'EventController'
                 }
             },
+            ncyBreadcrumb: {
+                label: 'Event {{event._id}}',
+                parent: 'home'
+            },
         })
         //access: normal user
         .state('home.event.reviews', {
@@ -54,6 +66,9 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider', function($
                 }
             },
             params : { documentId: null },
+            ncyBreadcrumb: {
+                skip:true
+            },
         })
         //access: normal user
         .state('home.events', {
@@ -64,6 +79,10 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider', function($
                     controller: 'EventController'
                 }
             },
+            ncyBreadcrumb: {
+                label: 'Events',
+                parent: 'home'
+            },
         })
         //access: normal user
         .state('home.my-submissions', {
@@ -73,7 +92,11 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider', function($
                     templateUrl: 'views/submission/mysubmission-datatable.html',
                     controller: 'SubmissionController'
                 }
-            }
+            },
+            ncyBreadcrumb: {
+                label: 'My Submissions',
+                parent: 'home'
+            },
         })
         //access: normal user
         .state('home.my-submission.reviews', {
@@ -84,6 +107,9 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider', function($
                 }
             },
             params : { documentId: null },
+            ncyBreadcrumb: {
+                skip:true
+            },
         })
         //access: normal user
         .state('home.my-submission', {
@@ -93,7 +119,11 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider', function($
                     templateUrl: 'views/submission/my-submission.html',
                     controller: 'SubmissionController'
                 }
-            }
+            },
+            ncyBreadcrumb: {
+                label: 'Submission {{sub._id}}',
+                parent: 'home.my-submissions'
+            },
         })
         //access: normal user
         .state('home.assigned-submissions', {
@@ -103,7 +133,11 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider', function($
                     templateUrl: 'views/submission/assigned-submission-datatable.html',
                     controller: 'SubmissionController'
                 }
-            }
+            },
+            ncyBreadcrumb: {
+                label: 'Assigned Submissions',
+                parent: 'home'
+            },
         })
         //access: normal user
         .state('home.assigned-submission', {
@@ -113,27 +147,52 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider', function($
                     templateUrl: 'views/submission/assigned-submission.html',
                     controller: 'SubmissionController'
                 }
-            }
+            },
+            ncyBreadcrumb: {
+                label: 'Submission {{sub._id}}',
+                parent: 'home.assigned-submissions'
+            },
         })
         //access: normal user
         .state('home.assigned-submission.review', {
             views: {
                 'review-form@home.assigned-submission': {
                     templateUrl: 'views/reviews/reviewform.html',
-                    controller: 'ReviewController',
+                    controller: 'ReviewController'
                 }
             },
             params : { documentId: null },
+            ncyBreadcrumb: {
+                skip:true
+            },
         })
         //access: normal user
         .state('home.my-reviews', {
             url: 'my-reviews',
             views: {
                 'mainpanel@': {
-                    templateUrl: 'views/reviews/reviewdatatable.html',
-                    controller: 'SubmissionController'
+                    templateUrl: 'views/reviews/myreview-datatable.html',
+                    controller: 'ReviewController'
                 }
-            }
+            },
+            ncyBreadcrumb: {
+                label: 'My Reviews',
+                parent: 'home'
+            },
+        })
+        //access: normal user
+        .state('home.review', {
+            url: 'review/:id',
+            views: {
+                'mainpanel@': {
+                    templateUrl: 'views/reviews/reviewform.html',
+                    controller: 'ReviewController'
+                }
+            },
+            ncyBreadcrumb: {
+                label: 'Review {{review._id}}',
+                parent: 'home'
+            },
         })
         //access: chair
         .state('home.newevent', {
@@ -143,7 +202,11 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider', function($
                     templateUrl: 'views/event/eventform.html',
                     controller: 'EventController'
                 }
-            }
+            },
+            ncyBreadcrumb: {
+                label: 'New Event',
+                parent: 'home'
+            },
         })
         //access: chair
         .state('home.chair-events', {
@@ -153,6 +216,10 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider', function($
                     templateUrl: 'views/event/chair.eventdatatable.html',
                     controller: 'EventController'
                 }
+            },
+            ncyBreadcrumb: {
+                label: 'All Events',
+                parent: 'home'
             },
         })
         //access: chair
@@ -164,6 +231,10 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider', function($
                     controller: 'EventController'
                 }
             },
+            ncyBreadcrumb: {
+                label: 'Event {{event._id}}',
+                parent: 'home.chair-events'
+            },
         })
         //access: chair
         .state('home.chair-event.submissions', {
@@ -172,6 +243,9 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider', function($
                     templateUrl: 'views/submission/chair.submission-datatable.html',
                     controller: 'SubmissionController'
                 }
+            },
+            ncyBreadcrumb: {
+                skip:true
             },
         })
         //access: chair
@@ -182,7 +256,12 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider', function($
                     templateUrl: 'views/submission/chair.submission.html',
                     controller: 'SubmissionController'
                 }
-            }
+            },
+            ncyBreadcrumb: {
+                label: 'Submission {{sub._id}}',
+                //parent: 'home.chair-event({id:sub.submissionEventId})',
+                parent: 'home'
+            },
         })
         //access: chair
         .state('home.chair-submission.reviews', {
@@ -193,6 +272,9 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider', function($
                 }
             },
             params : { documentId: null },
+            ncyBreadcrumb: {
+                skip:true
+            },
         })
         .state('home.newsubmission', {
             url: 'submission',
@@ -264,7 +346,7 @@ mainApplicationModule.run(function ($rootScope, AuthService, $state) {
         if (error.redirectTo) {
             $state.go(error.redirectTo);
         } else {
-            $state.go('/')
+            $state.go('home')
         }
     })
 });

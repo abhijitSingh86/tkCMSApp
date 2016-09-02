@@ -8,8 +8,11 @@
                         <div layout-gt-sm="row" class="layout-gt-sm-row">
                             <md-input-container class="md-block" flex-gt-xs>
                                 <label>Name</label>
-                                <input type="text" name="name" ng-model="event.name">
+                                <input ng-required="true" type="text" name="name" ng-model="event.name">
                             </md-input-container>
+                            <div  ng-messages="eventForm.name.$error">
+                                <div ng-message="required">Name is required.</div>
+                            </div>
                         </div>
                         <div layout-gt-sm="row" class="layout-gt-sm-row">
                             <md-input-container class="md-block" flex-gt-xs>
@@ -19,12 +22,18 @@
                         </div>
                         <div layout-gt-sm="row" class="layout-gt-sm-row">
                             <label>Start Date</label>
-                            <md-datepicker name="startdate" ng-model="event.start_date">
+                            <md-datepicker ng-required="true" name="startdate" ng-model="event.start_date">
                             </md-datepicker>
+                            <div class="required" ng-messages="eventForm.startdate.$error">
+                                <div ng-message="required">Start date is required.</div>
+                            </div>
                         </div>
                         <div layout-gt-sm="row" class="layout-gt-sm-row">
                             <label>End Date</label>
-                            <md-datepicker name="enddate" ng-model="event.end_date"></md-datepicker>
+                            <md-datepicker ng-required="true" name="enddate" ng-model="event.end_date"></md-datepicker>
+                            <div class="required" ng-messages="eventForm.enddate.$error">
+                                <div ng-message="required">End Date is required.</div>
+                            </div>
                         </div>
                         <section layout="row" layout-sm="column" layout-align="end" layout-wrap>
                             <md-button type=submit  class="md-raised md-primary">Submit</md-button>
@@ -36,6 +45,18 @@
         <md-tab label="Submissions" ng-click="loadSubmissionsForChair()" ng-if="chair">
             <div layout-padding="" class="layout-padding" ui-view="datatable">
             </div>
+        </md-tab>
+        <md-tab label="User Request Management" ng-if="chair">
+            <md-tabs>
+                <md-tab label="Requests">
+                    <div flex layout="row" layout-padding ng-include="'views/event/interested-users-datatable.html'">
+                    </div>
+                </md-tab>
+                <md-tab label="Subscribed">
+                    <div flex layout="row" layout-padding ng-include="'views/event/subscribed-users-datatable.html'">
+                    </div>
+                </md-tab>
+            </md-tabs>
         </md-tab>
     </md-tabs>
 </div>

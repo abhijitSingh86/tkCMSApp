@@ -41,12 +41,14 @@
                 </md-tab-body>
                </div>
            </md-tab>
-            <md-tab label="Submission" ng-click="loadSubmissionForNormalUser()" ng-if="normalUser">
+            <md-tab label="Submission" ng-click="loadSubmissionForNormalUser()" ng-if="eventAccess && normalUser">
                 <div flex layout="row" layout-padding ng-include="'views/submission/submission-form.html'">
                 </div>
             </md-tab>
-            <md-tab label="Reviews" ng-click="loadAllReviewsForNormalUser()" ng-if="normalUser">
-                <div layout-padding="" class="layout-padding" ui-view="review-datatable">
+            <md-tab label="Reviews" ng-if="eventAccess && normalUser && hideReviewsTab">
+                <!--<div layout-padding="" class="layout-padding" ui-view="review-datatable">
+                </div>-->
+                <div flex layout="row" layout-padding ng-include="'views/reviews/reviews-inevents-datatable.html'">
                 </div>
             </md-tab>
        </md-tabs>

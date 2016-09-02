@@ -21,7 +21,7 @@ module.exports = function(app) {
      */
     app.route('/subEvent/addtointeresteduserlist/:subEventId')
         .put(SubmissionEventSchema.addToInterestedUserList)
-        .delete(SubmissionEventSchema.deleteFromInterestedUserList);
+        .post(SubmissionEventSchema.deleteFromInterestedUserList);
 
     /*
         to retrieve a list of accepted and not yet accepted user list for authors

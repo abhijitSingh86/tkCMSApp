@@ -34,8 +34,19 @@ exports.listAll = function(req, res) {
 exports.put = function(req, res, next) {
     ReviewersDocument.Place.findOneAndUpdate(req.reviewerDocument.id, req.body,{upsert: true}, function(err, reviewerDocument){
         if (err) {
-            return next(err);
-        } else {
+
+            var ReviewersDocument1 = new ReviewersDocument(req.body);
+            ReviewersDocument1.save(function(err) {
+                if (err) {
+                    console.log(err)
+                    return next(err);
+                } else {
+                    res.json(ReviewersDocument1);
+                }
+
+            });
+        }
+        else {
             res.json(subevnts);
         }
     });

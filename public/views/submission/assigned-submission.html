@@ -3,12 +3,14 @@
 <body>
 <div id="submissionpage">
     <md-tabs md-dynamic-height="true">
-        <md-tab label="Submissions" ng-init="loadSubmission()">
+        <md-tab label="Submission" ng-init="loadSubmission('assigned')">
             <div flex layout="row" layout-padding ng-include="'views/submission/submission-form.html'">
             </div>
         </md-tab>
         <md-tab label="Review" md-on-select="loadReview()" ng-if="normalUser">
-            <div layout-padding="" class="layout-padding" ui-view="review-form">
+            <!--<div layout-padding="" class="layout-padding" ui-view="review-form">
+            </div>-->
+            <div flex layout="row" layout-padding ng-include="'views/reviews/reviewform.html'">
             </div>
         </md-tab>
     </md-tabs>

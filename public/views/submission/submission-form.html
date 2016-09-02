@@ -31,8 +31,8 @@
                 <md-input-container  class="md-block" flex-gt-sm >
                     <label>Authors</label>
                     <md-select ng-disabled="chair" ng-model="sub.authors" multiple name="authors">
-                        <md-option ng-repeat="author in authors" value="{{author.id}}">
-                            {{author.name}}
+                        <md-option ng-repeat="author in authors" value="{{author._id}}">
+                            {{author.firstName}} {{author.lastName}} ({{author.email}})
                         </md-option>
                     </md-select>
                     <div ng-if="submissionForm.$submitted || submissionForm.authors.$touched" ng-messages="policyForm.authors.$error">
@@ -53,12 +53,12 @@
                 </md-input-container>
             </div>
             <section layout="row" layout-sm="column" ng-if="new" layout-align="end" layout-wrap>
-                <md-button ng-click="withdrawSubmission()" class="md-raised md-primary">Withdraw Submission</md-button>
+                <md-button ng-click="withdrawSubmission()" ng-if="showWithdraw" class="md-raised md-primary">Withdraw Submission</md-button>
                 <md-button type="submit" ng-click="submissionSubmit(sub) " name="submit" class="md-raised md-primary">Submit</md-button>
             </section>
             <section layout="row" layout-sm="column" ng-if="!new" layout-align="end" layout-wrap>
-                <md-button ng-click="withdrawSubmission()" class="md-raised md-primary">Withdraw Submission</md-button>
-                <md-button type="submit" ng-click="submissionForm.$valid && updateSubmissionSubmit(sub)" name="update" class="md-raised md-primary">Update</md-button>
+                <md-button ng-click="withdrawSubmission()" ng-if="showWithdraw" class="md-raised md-primary">Withdraw Submission</md-button>
+                <md-button type="submit" ng-click="submissionForm.$valid && updateSubmissionSubmit(sub)" ng-if="showUpdate" name="update" class="md-raised md-primary">Update</md-button>
             </section>
         </form>
     </md-content>

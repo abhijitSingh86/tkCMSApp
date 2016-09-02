@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div flex ng-controller="EventController" ng-init="renderUsersInterestedInEvent()">
+    <table datatable="ng" dt-options="dtOptions2" dt-column-defs="dtColumnDefs2" class="row-border hover">
+        <thead>
+        <tr>
+            <th>Select</th>
+            <th>User Name</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email Id</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="user in users track by $index">
+            <td><md-checkbox  aria-label="select User" ng-model="user.clicked" ng-change="toggle(user.id, selected)"></md-checkbox></td>
+            <td>{{ user.username }}</td>
+            <td>{{ user.firstName }}</td>
+            <td>{{ user.lastName }}</td>
+            <td>{{ user.email }}</td>
+        </tr>
+        </tbody>
+    </table>
+    <md-button ng-click="addToSubscribedUsers()" class="md-raised md-primary">
+        Accept Request
+    </md-button>
+</div>
+</body>
+</html>

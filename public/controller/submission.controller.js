@@ -6,14 +6,16 @@ app.controller('SubmissionController', function ($scope, $http, $mdToast, $state
     $scope.renderDataTable = function(parameter){
         var url;
         if(parameter == "mySubmissions"){
-            url = '/users/Subdocs/'+AuthService.getUserId();
+            //url = '/users/Subdocs/'+AuthService.getUserId();
+            url = '/user/review/'+AuthService.getUserId();
         }
         if(parameter == "assignedSubmissions"){
-            //url = '/users/Subdocs/'+AuthService.getUserId();
+            url = '/user/review/'+AuthService.getUserId();
         }
-        loadSubmissions('/subDocument') // change to url when server side complete
+        loadSubmissions(url) // change to url when server side complete
     }
     function loadSubmissions(url){
+        debugger;
         $http.get(url)
         // handle success
             .success(function (data, status) {
@@ -42,11 +44,31 @@ app.controller('SubmissionController', function ($scope, $http, $mdToast, $state
         $state.go("home.assigned-submission",{id: submission._id});
     }
 
-    $scope.loadSubmission= function() {
+    $scope.loadSubmission= function(type) {
+        if(type == "assigned"){
+            $scope.showWithdraw = false;
+            $scope.showUpdate = false;
+        } else {
+            $scope.showWithdraw = true;
+            $scope.showUpdate = true;
+        }
+        $http.get('/allusers')
+        // handle success
+            .success(function (data) {
+                $scope.authors = data;
+            })
+            // handle error
+            .error(function (data) {
+            });
         $http.get('/subDocument/' + $state.params.id)
         // handle success
             .success(function (data) {
                 $scope.sub = data;
+                $scope.sub.id = data._id;
+                angular.forEach(data.authors,function(obj){
+                    $scope.sub.authors.splice(obj);
+                    $scope.sub.authors.push(obj.id);
+                })
             })
             // handle error
             .error(function (data) {
@@ -58,7 +80,24 @@ app.controller('SubmissionController', function ($scope, $http, $mdToast, $state
     }
 
     $scope.loadReview = function(){
-        $state.go('home.assigned-submission.review',{documentId: $state.params.id});
+        //$state.go('home.assigned-submission.review',{documentId: $state.params.id});
+        var docId = {
+            "submissionDocId": $state.params.id
+        }
+        $http.post('/reviewForDocument/'+AuthService.getUserId(), docId)
+        // handle success
+            .success(function (data) {
+                if(data.status == "notsubmitted"){
+                    $scope.new = true;
+                } else {
+                    $scope.new = false;
+                    $scope.review = data;   
+                }
+                
+            })
+            // handle error
+            .error(function (data) {
+            });
     }
     /*Methods used for chair*/
     $scope.renderDataTableForChair = function(){
@@ -86,7 +125,7 @@ app.controller('SubmissionController', function ($scope, $http, $mdToast, $state
     }
 })
 
-app.controller('SubmissionFormController', function ($scope, $http, $mdToast, $state) {
+app.controller('SubmissionFormController', function ($scope, $http, $mdToast, $state, AuthService) {
     function getUserListForAuthor(){
         //to be changed
         $http.get('/users')
@@ -102,10 +141,13 @@ app.controller('SubmissionFormController', function ($scope, $http, $mdToast, $s
 
     $scope.submissionSubmit = function(sub){
         sub.submissionEventId = $state.params.id;
+        sub.createdBy = AuthService.getUserId();
         $http.post('/subDocument', sub)
             // handle success
             .success(function (data) {
                 $mdToast.show($mdToast.simple().textContent("Created Successfully"));
+                $scope.hideReviewsTab = true;
+                $scope.new = false;
             })
             // handle error
             .error(function (data) {
@@ -113,8 +155,9 @@ app.controller('SubmissionFormController', function ($scope, $http, $mdToast, $s
             });
     }
     $scope.updateSubmissionSubmit = function(sub) {
+        sub.submissionEventId = {};
         // send a put request to the server
-        $http.put('/subDocument/' + $state.params.id,
+        $http.put('/subDocument/' + sub.id,
             sub)
         // handle success
             .success(function (data) {
