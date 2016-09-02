@@ -30,6 +30,11 @@ module.exports = function(app) {
     app.route('/subEvent/retrieveApprovedAuthorsToEvent/:subEventId')
         .get(SubmissionEventSchema.retrieveApprovedAuthorsToEvent);
 
+    app.route('/subEvent/retrieveAcceptedAndNotAcceptedEventsForUser/:userId')
+        .get(SubmissionEventSchema.retrieveAcceptedAndNotAcceptedEventsForUser);
+
+
+
     app.param('subEventId', SubmissionEventSchema.submissionEventByID);
     app.param('userId', users.userByID);
 
@@ -42,6 +47,9 @@ module.exports = function(app) {
 
     app.route('/subEvent/getInterestedAuthors/:subEventId').
     get(SubmissionEventSchema.retrieveAuthorsToEvent);
+
+    app.route('/subEventsForUser/:userId').
+    get(SubmissionEventSchema.retrieveAllEventsForUser);
 
     app.param('subDocumentId', submissionDocument.submissionDocumentByID);
 };

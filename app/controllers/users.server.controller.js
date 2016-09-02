@@ -143,7 +143,8 @@ exports.intevents = function(req, res, next) {
 };
 
 exports.subevents = function(req, res, next) {
-    SubmissionEvent.find({SubscribedUsers : req.userId}).populate('name').populate('description').exec(function(err, subevnts) {
+    SubmissionEvent.find({SubscribedUsers : req.userId})
+        .populate('name').populate('description').exec(function(err, subevnts) {
         if (err) {
             return next(err);
         } else {
@@ -256,6 +257,36 @@ exports.getAssignedReviews = function getAllReviewUserSpecific(req, res){
         res.status(403).json({"error" : "Invalid request"});
     }
 };
+
+exports.getAllEventsForUser = function getAllEventsForUser(req,res){
+    if (true){//req.user) {
+        var id = req.user.id;
+        User.findOne({
+            _id: id
+        }).populate("assignedSubmissionEvents").exec(function(err, user) {
+            if (err) {
+                return res.status(400).json({"error":"Error occurred while query execution"});
+            } else {
+                
+                var array = [];
+                for(var i=0;i<user.assignedSubmissionEvents.length;i++){
+                    if(user.assignedSubmissionEvents[i].createdBy) delete user.assignedSubmissionEvents[i].createdBy;
+                    if(user.assignedSubmissionEvents[i].interestedUsers) delete user.assignedSubmissionEvents[i].interestedUsers;
+                    if(user.assignedSubmissionEvents[i].interestedUsersAsReviewer) delete user.assignedSubmissionEvents[i].interestedUsersAsReviewer;
+
+                    array.push(user.assignedSubmissionEvents[i]);
+                }
+                
+                res.json(
+                    array
+                );
+            }
+        });
+    } else {
+        res.status(403).json({"error" : "Invalid request"});
+    }
+};
+
 
 exports.getAllReviews = function getAllReviewUserSpecific(req,res){
     if (true){//req.user) {

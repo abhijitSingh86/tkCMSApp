@@ -5,6 +5,9 @@ module.exports = function(app) {
 
     //----------
 
+    app.route('/userEvents/:userId').
+    get(users.getAllEventsForUser);
+
     app.route('/userreview/:userId').
     get(users.getAllReviews);
 
