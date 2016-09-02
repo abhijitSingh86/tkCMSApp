@@ -8,13 +8,13 @@ exports.create = function(req, res, next) {
         submissionEvent.createdBy = req.user._id;
 
         if(new Date(req.body.start_date) > new Date(req.body.end_date)) {
-            res.json({"error": "Start date can't be greater than End date"});
+            res.status(400).json({"error": "Start date can't be greater than End date"});
             return;
         }
 
         submissionEvent.save(function(err) {
             if (err) {
-                return next(err);
+                return res.status(400).json({"error":"Error while creating the Event"});
             } else {
                 res.json({"success":submissionEvent});
             }
@@ -27,7 +27,7 @@ exports.create = function(req, res, next) {
 exports.list = function(req, res, next) {
     SubmissionEvent.find().populate('createdBy','firstName').populate('interestedUsers','firstName').exec(function(err, subevnts) {
         if (err) {
-            return next(err);
+            return res.status(400).json({"error":"Error while listing the Events"});
         } else {
             res.json(subevnts);
         }
@@ -37,7 +37,7 @@ exports.list = function(req, res, next) {
 exports.get = function(req, res, next) {
     SubmissionEvent.find().populate('createdBy','firstName').populate('interestedUsers','firstName').exec(function(err, subevnts) {
         if (err) {
-            return next(err);
+            return res.status(400).json({"error":"Error while getting the Event"});
         } else {
             res.json(subevnts);
         }
@@ -50,7 +50,7 @@ exports.read = function(req, res) {
         _id: req.submissionEvent.id
     }).populate('createdBy','firstName').populate('interestedUsers','firstName').exec(function(err, submissionEvent) {
         if (err) {
-            return next(err);
+            return res.status(400).json({"error":"Error while getting the Event"});
         } else {
             res.json(submissionEvent);
         }
@@ -62,7 +62,7 @@ exports.submissionEventByID = function(req, res, next, id) {
         _id: id
     }).populate('createdBy','firstName').exec(function(err, submissionEvent) {
         if (err) {
-            return next(err);
+            return res.status(400).json({"error":"Error while getting the Event"});
         } else {
             req.submissionEvent = submissionEvent;
             next();
@@ -74,7 +74,7 @@ exports.update = function(req, res, next) {
     if(req.user && user.isChair(req)) {
 
         if(new Date(req.body.start_date) > new Date(req.body.end_date)) {
-            res.json({"error": "Start date can't be greater than End date"});
+            res.status(400).json({"error": "Start date can't be greater than End date"});
             return;
         }
 
@@ -82,13 +82,13 @@ exports.update = function(req, res, next) {
         if (req.createdBy) req.createdBy = req.user._id;
         SubmissionEvent.findByIdAndUpdate(req.submissionEvent.id, req.body, function (err, submissionEvent) {
             if (err) {
-                return next(err);
+                return res.status(400).json({"error":"Error while updating the Event"});
             } else {
                 res.json(submissionEvent);
             }
         });
     }else{
-        res.json({"error":"User is not authorized to change the Event"});
+        res.status(400).json({"error":"User is not authorized to change the Event"});
     }
 };
 
@@ -96,13 +96,13 @@ exports.delete = function(req, res, next) {
     if(req.user && user.isChair(req)) {
         req.submissionEvent.remove(function(err) {
             if (err) {
-                return next(err);
+                return res.status(400).json({"error":"Error while deleting the Event"});
             } else {
                 res.json(req.submissionEvent);
             }
         })
     }else{
-        res.json({"error":"User is not authorized to change the Event"});
+        res.status(400).json({"error":"User is not authorized to change the Event"});
     }
 };
 
@@ -122,7 +122,7 @@ exports.addToInterestedUserList = function(req,res,next){
                 {new:true,safe: true, upsert: true},
                 function (err, submissionEvent) {
                     if (err) {
-                        return next(err);
+                        return res.status(400).json({"error":"Error while adding users into the Event"});
                     } else {
                         res.json(submissionEvent);
                     }
@@ -151,7 +151,7 @@ exports.deleteFromInterestedUserList = function(req,res,next){
                 {new:true,safe: true, upsert: true},
                 function (err, submissionEvent) {
                     if (err) {
-                        return next(err);
+                        return res.status(400).json({"error":"Error while deleting interested user for the Event"});
                     } else {
                         res.json(submissionEvent);
                     }
@@ -178,7 +178,7 @@ exports.retrieveInterestedReviewersForEvent = function(req, res, next){
             _id: req.submissionEvent.id
         }).populate('interestedUsersAsReviewer','firstName').exec(function(err, submissionEvent) {
             if (err) {
-                return next(err);
+                return res.status(400).json({"error":"Error while retrieving interested reviewers the Event"});
             } else {
                 res.json(submissionEvent.interestedUsersAsReviewer);
             }
@@ -193,7 +193,7 @@ exports.retrieveApprovedAuthorsToEvent = function(req,res,next){
             _id: submissionEventId
         }).populate('interestedUsers').exec(function(err, submissionEvent) {
             if (err) {
-                return next(err);
+                return res.status(400).json({"error":"Error while retrieving approved authors for the Event"});
             } else {
                 var acceptedArr = [];
                 var rejectedArr = [];
@@ -226,7 +226,7 @@ exports.retrieveAuthorsToEvent = function(req,res,next){
             _id: req.submissionEvent.id
         }).populate('interestedUsers','firstName').exec(function(err, submissionEvent) {
             if (err) {
-                return next(err);
+                return res.status(400).json({"error":"Error while retrieving interested authors of the Event"});
             } else {
                 res.json(submissionEvent.interestedUsers);
             }
