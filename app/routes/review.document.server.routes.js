@@ -21,7 +21,8 @@ module.exports = function(app) {
      */
     app.route('/reviewer').
     put(reviewerDocument.put).
-    post(reviewerDocument.create);
+    post(reviewerDocument.create).
+    get(reviewerDocument.listAll);
 
 
     /*
@@ -33,9 +34,12 @@ module.exports = function(app) {
     app.route('/reviewForDocument/:userId').
         post(reviewerDocument.getReviewForASubDocument)
 
-    /*retrieves all reviews based on doc id*/
-    app.route('/reviewer/getreviewer/:subDocumentId').
-    get(reviewerDocument.getDetails);
+    app.route('/review/getReviewForDocument/:subDocumentId').
+    get(reviewerDocument.getReviewDetailForDocument);
+
+
+
+
 
     app.param('reviewerId', reviewerDocument.reviewersDocumentByID);
     app.param('userId', users.userByID);

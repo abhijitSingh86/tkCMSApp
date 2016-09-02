@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div ng-controller="ReviewController" ng-init="renderDataTable()">
+    <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="row-border hover">
+        <thead>
+        <tr>
+            <th>Summary</th>
+            <th>Strong Points</th>
+            <th>Weak Points</th>
+            <th>Status</th>
+            <th>Created On</th>
+            <th>Created By</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="review in reviews">
+            <td>{{ review.summary }}</td>
+            <td>{{ review.majorStrongPoints }}</td>
+            <td>{{ review.majorWeakPoints }}</td>
+            <td>{{ review.status }}</td>
+            <td>{{ review.createdOn | date: "dd.MM.yyyy h:mm:ss"}}</td>
+            <td>{{ sub.createdBy.firstName }} {{ sub.createdBy.lastName }}({{ sub.createdBy.email }})</td>
+            <td>
+                <md-button class="md-primary" ng-click="goToReview(review)" aria-label="More Info">More Info</md-button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

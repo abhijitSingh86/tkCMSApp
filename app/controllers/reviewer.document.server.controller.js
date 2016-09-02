@@ -15,6 +15,18 @@ exports.list = function(req, res, next) {
         });
 };
 
+
+exports.listAll = function(req, res) {
+    ReviewersDocument.find().populate('submissionDocId').exec(function(err, result) {
+        if (err) {
+            res.status(400).json({"error":"Error processing the list all review call"})
+        } else {
+            res.json(result);
+        }
+    });
+};
+
+
 /*This will either create / update the review done by the reviewer for a individual submission
 *  Update/insert command based on the submission id.
 *
@@ -44,7 +56,7 @@ exports.put = function(req, res, next) {
  *   Select * from submissions where reviewer in (ui id)
   *
   * */
-exports.getDetails = function(req, res, next) {
+exports.getReviewDetailForDocument = function(req, res, next) {
     ReviewersDocument.find({submissionDocId: req.params.subDocumentId}).populate('createdBy','firstname')
         .populate('authors','firstname').exec(function(err, subevnts) {
         if (err) {
