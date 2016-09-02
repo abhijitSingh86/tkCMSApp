@@ -188,7 +188,7 @@ exports.retrieveInterestedReviewersForDocument = function(req, res, next){
                 if(submissionEvent.interestedUsersAsReviewer !=null) {
                     for (var i = 0; i < submissionEvent.interestedUsersAsReviewer.length; i++) {
                         if (submissionEvent.interestedUsersAsReviewer[i].id == req.submissionDocument.createdBy) {
-                            // 
+                            //
                         } else {
                             array.push(submissionEvent.interestedUsersAsReviewer[i]);
                         }
@@ -197,7 +197,7 @@ exports.retrieveInterestedReviewersForDocument = function(req, res, next){
 
                 if(submissionEvent.interestedUsers !=null) {
                     for (var i = 0; i < submissionEvent.interestedUsers.length; i++) {
-                        if (submissionEvent.interestedUsers[i].id == req.submissionDocument.createdBy) {
+                        if (submissionEvent.interestedUsers[i].id == req.submissionDocument.createdBy.id) {
 
                         } else {
                             array.push(submissionEvent.interestedUsers[i]);
