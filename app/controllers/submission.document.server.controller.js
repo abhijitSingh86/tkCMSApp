@@ -41,7 +41,7 @@ exports.read = function(req, res) {
 exports.submissionDocumentByID = function(req, res, next, id) {
     SubmissionDocument.findOne({
         _id: id
-    }).populate('createdBy').populate('authors').exec(function(err, submissionDocument) {
+    }).populate('createdBy').populate('authors').populate('submissionEventId').exec(function(err, submissionDocument) {
         if (err) {
             return next(err);
         } else {

@@ -204,7 +204,6 @@ exports.retrieveInterestedReviewersForDocument = function(req, res, next){
                         }
                     }
                 }
-
                 res.json(array);
             }
         });
