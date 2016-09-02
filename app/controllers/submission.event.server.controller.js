@@ -244,7 +244,7 @@ exports.retrieveApprovedAuthorsToEvent = function(req,res,next){
                 {
                     for(var i=0;i<submissionEvent.interestedUsers.length;i++) {
                         var assignedEvents = submissionEvent.interestedUsers[i].assignedSubmissionEvents;
-                        if (assignedEvents.indexOf(submissionEventId) != -1) {
+                        if (assignedEvents.indexOf(req.submissionEvent._id) != -1) {
                             acceptedArr.push(submissionEvent.interestedUsers[i].id);
                         } else {
                             rejectedArr.push(submissionEvent.interestedUsers[i].id);
@@ -273,7 +273,7 @@ exports.retrieveAuthorsToEvent = function(req,res,next){
     }
 };
 
-exports.retrieveEventsForUser = function(req,res,next){
+exports.retrieveAllEventsForUser = function(req,res,next){
     if(true) {//req.user && user.isChair(req)) {
         // req.submissionEvent.
         SubmissionEvent.find({
@@ -283,6 +283,36 @@ exports.retrieveEventsForUser = function(req,res,next){
                 return res.status(400).json({"error":"Error while retrieving Events for author"});
             } else {
                 res.json(submissionEvent);
+            }
+        });
+    }
+};
+
+exports.retrieveAcceptedAndNotAcceptedEventsForUser = function(req,res,next){
+    if(true) {//req.user && user.isChair(req)) {
+        // req.submissionEvent.
+        SubmissionEvent.find({
+            interestedUsers: { $in: [ mongoose.Types.ObjectId(req.user._id)]}
+        }).exec(function(err, submissionEvent) {
+            var acceptedArr = [];
+            var rejectedArr = [];
+            if (err) {
+                return res.status(400).json({"error":"Error while retrieving Events for author"});
+            }else if(submissionEvent == null){
+                return res.status(400).json({"error":"user is not interested in any event"});
+            }
+            else {
+                //TODO
+                for(var i=0;i<submissionEvent.length;i++) {
+                    var assignedEvents = req.user.assignedSubmissionEvents;
+                    if (assignedEvents.indexOf(submissionEvent[i]._id) != -1) {
+                        acceptedArr.push(submissionEvent[i]);
+                    } else {
+                        rejectedArr.push(submissionEvent[i]);
+                    }
+                }
+                res.json({"acceptedEvent":acceptedArr,"notAcceptedEvent":rejectedArr});
+                // res.json(submissionEvent);
             }
         });
     }
