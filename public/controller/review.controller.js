@@ -22,7 +22,7 @@ app.controller('ReviewController', function ($scope, $http, $mdToast, $state,$st
     };
     $scope.updateReview = function(review) {
         // send a put request to the server
-        $http.put('/reviewer/'+review._id,
+        $http.put('/reviewer/',
             review)
         // handle success
             .success(function (review) {
@@ -35,7 +35,7 @@ app.controller('ReviewController', function ($scope, $http, $mdToast, $state,$st
     };
     $scope.renderDataTable = function(){
         //Get all reviews for this particular document Id
-        var url = '/reviewer/getreviewer/'+$stateParams.documentId;
+        var url = '/review/getReviewForDocument/'+$stateParams.documentId;
             $http.get(url)
             // handle success
                 .success(function (data) {
@@ -44,6 +44,22 @@ app.controller('ReviewController', function ($scope, $http, $mdToast, $state,$st
                 // handle error
                 .error(function (data) {
                 });
+    }
+    $scope.renderDataTableForMyReviews = function(){
+        //Get all reviews for this particular document Id
+        var url = '/getAllReviewForUser/'+AuthService.getUserId();
+        $http.get(url)
+        // handle success
+            .success(function (data) {
+                $scope.reviews = data;
+            })
+            // handle error
+            .error(function (data) {
+            });
+    }
+
+    $scope.goToReview = function(review){
+        $state.go('home.review',{id:review._id});
     }
 });
 

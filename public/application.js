@@ -158,7 +158,7 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider','$breadcrum
             views: {
                 'review-form@home.assigned-submission': {
                     templateUrl: 'views/reviews/reviewform.html',
-                    controller: 'ReviewController',
+                    controller: 'ReviewController'
                 }
             },
             params : { documentId: null },
@@ -171,12 +171,26 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider','$breadcrum
             url: 'my-reviews',
             views: {
                 'mainpanel@': {
-                    templateUrl: 'views/reviews/reviewdatatable.html',
+                    templateUrl: 'views/reviews/myreview-datatable.html',
                     controller: 'ReviewController'
                 }
             },
             ncyBreadcrumb: {
                 label: 'My Reviews',
+                parent: 'home'
+            },
+        })
+        //access: normal user
+        .state('home.review', {
+            url: 'review/:id',
+            views: {
+                'mainpanel@': {
+                    templateUrl: 'views/reviews/reviewform.html',
+                    controller: 'ReviewController'
+                }
+            },
+            ncyBreadcrumb: {
+                label: 'Review {{review._id}}',
                 parent: 'home'
             },
         })

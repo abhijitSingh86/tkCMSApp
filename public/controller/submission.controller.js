@@ -6,7 +6,8 @@ app.controller('SubmissionController', function ($scope, $http, $mdToast, $state
     $scope.renderDataTable = function(parameter){
         var url;
         if(parameter == "mySubmissions"){
-            url = '/users/Subdocs/'+AuthService.getUserId();
+            //url = '/users/Subdocs/'+AuthService.getUserId();
+            url = '/user/review/'+AuthService.getUserId();
         }
         if(parameter == "assignedSubmissions"){
             url = '/user/review/'+AuthService.getUserId();
@@ -154,6 +155,7 @@ app.controller('SubmissionFormController', function ($scope, $http, $mdToast, $s
             });
     }
     $scope.updateSubmissionSubmit = function(sub) {
+        sub.submissionEventId = {};
         // send a put request to the server
         $http.put('/subDocument/' + sub.id,
             sub)

@@ -108,6 +108,14 @@ app.controller('EventController', function ($scope, $http, $mdToast, $state, DTO
                         // handle error
                         .error(function (data) {
                         });
+                    $http.get('/review/getReviewForDocument/' + data._id)
+                    // handle success
+                        .success(function (data) {
+                            $scope.reviews = data;
+                        })
+                        // handle error
+                        .error(function (data) {
+                        });
                 }
             })
             // handle error
@@ -115,7 +123,6 @@ app.controller('EventController', function ($scope, $http, $mdToast, $state, DTO
             });
 
         //retrieve document ID and store it in a variable to retrieve reviews
-
     };
 
     $scope.loadSubmissionForNormalUser = function(){
@@ -130,15 +137,15 @@ app.controller('EventController', function ($scope, $http, $mdToast, $state, DTO
     }
 
     $scope.loadAllReviewsForNormalUser = function(){
-        $state.go('home.event.reviews',{documentId: 1234});
+        $state.go('home.event.reviews',{documentId: documentIdForReviews});
     }
 
     $scope.addToInterestedUser = function(event){
         var sendData = {
-            "submissionEventId": event._id,
-            "users":[AuthService.getUserId()]
+            "interestedUsers":[AuthService.getUserId()]
         }
-        $http.put('assignEventToUsers', sendData)
+        var url = "/subEvent/addtointeresteduserlist/"+event._id;
+        $http.put(url, sendData)
         // handle success
             .success(function (data) {
                 //reload event page
@@ -169,6 +176,9 @@ app.controller('EventController', function ($scope, $http, $mdToast, $state, DTO
     };
     $scope.updateForm = function(event) {
         // send a put request to the server
+        event.createdBy = {};
+        event.interestedUsers = {};
+        event.interestedUsersAsReviewer = {};
         $http.put('/subEvent/' + $state.params.id,
             event)
         // handle success
@@ -237,8 +247,11 @@ app.controller('EventController', function ($scope, $http, $mdToast, $state, DTO
             $mdToast.show($mdToast.simple().textContent("Please select atleast one user"));
         } else {
             /*send list to service which will add users to subscribed users and refresh the table*/
-            var url = "/subEvent/addtointeresteduserlist/"+$state.params.id;
-            var usersList = {'interestedUsers':$scope.selected}
+            var url = "/assignEventToUsers/";
+            var usersList = {
+                "submissionEventId" : $state.params.id,
+                "users" : $scope.selected
+            }
 
             $http.put(url, usersList)
             // handle success
