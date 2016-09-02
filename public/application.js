@@ -17,10 +17,10 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider','$breadcrum
                 'header': {
                     templateUrl: 'views/partials/header.html'
                 },
-                'leftpanel': {
+                /*'leftpanel': {
                     templateUrl: 'views/partials/accordianPanel.html',
                     controller: 'LeftPanelController'
-                },
+                },*/
                 'mainpanel': {
                     templateUrl: 'views/partials/content.html'
                 },

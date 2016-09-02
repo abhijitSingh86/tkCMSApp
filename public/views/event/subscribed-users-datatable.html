@@ -6,7 +6,7 @@
 </head>
 <body>
 <div flex ng-controller="EventController" ng-init="renderUsersSubscribedInEvent()">
-    <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="row-border hover">
+    <table datatable="ng" dt-options="dtOptions1" dt-column-defs="dtColumnDefs1" class="row-border hover">
         <thead>
         <tr>
             <th>Select</th>
@@ -17,12 +17,12 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="user in users track by $index">
-            <td><md-checkbox  aria-label="select User" ng-model="user.clicked" ng-change="toggle(user.id, selected)"></md-checkbox></td>
-            <td>{{ user.username }}</td>
-            <td>{{ user.firstName }}</td>
-            <td>{{ user.lastName }}</td>
-            <td>{{ user.email }}</td>
+        <tr ng-repeat="userApproved in usersApproved track by $index">
+            <td><md-checkbox  aria-label="select User" ng-model="userApproved.clicked" ng-change="toggle(userApproved.id, selected)"></md-checkbox></td>
+            <td>{{ userApproved.username }}</td>
+            <td>{{ userApproved.firstName }}</td>
+            <td>{{ userApproved.lastName }}</td>
+            <td>{{ userApproved.email }}</td>
         </tr>
         </tbody>
     </table>

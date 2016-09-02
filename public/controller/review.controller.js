@@ -2,17 +2,31 @@
  * Created by manny on 24.08.2016.
  */
 var app = angular.module('reviewerModule', []);
-app.controller('ReviewController', function ($scope, $http, $mdToast, $state,$stateParams) {
+app.controller('ReviewController', function ($scope, $http, $mdToast, $state,$stateParams, AuthService) {
     $scope.reviewer = {}
-    $scope.submitForm = function(review) {
+    $scope.submitReview = function(review) {
         review.submissionDocId = $state.params.id;
+        review.createdBy = AuthService.getUserId();
         // send a post request to the server
         $http.post('/reviewer',
             review)
         // handle success
             .success(function (review) {
                 $mdToast.show($mdToast.simple().textContent("Created Successfully"));
-                //$state.go('home.review',{id: data._id});
+                $scope.new = false;
+            })
+            // handle error
+            .error(function (data) {
+                $mdToast.show($mdToast.simple().textContent("Error Occurred \n"+data));
+            });
+    };
+    $scope.updateReview = function(review) {
+        // send a put request to the server
+        $http.put('/reviewer/'+review._id,
+            review)
+        // handle success
+            .success(function (review) {
+                $mdToast.show($mdToast.simple().textContent("Created Successfully"));
             })
             // handle error
             .error(function (data) {
@@ -21,11 +35,19 @@ app.controller('ReviewController', function ($scope, $http, $mdToast, $state,$st
     };
     $scope.renderDataTable = function(){
         //Get all reviews for this particular document Id
-        $stateParams.documentId;
+        var url = '/reviewer/getreviewer/'+$stateParams.documentId;
+            $http.get(url)
+            // handle success
+                .success(function (data) {
+                    $scope.reviews = data;
+                })
+                // handle error
+                .error(function (data) {
+                });
     }
 });
 
-app.controller('UserListForReviewController', function ($http, $scope, DTOptionsBuilder, DTColumnDefBuilder, AuthService, $mdToast) {
+app.controller('UserListForReviewController', function ($http, $scope, DTOptionsBuilder, DTColumnDefBuilder, AuthService, $mdToast, $state) {
 
         $scope.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers');
         $scope.dtColumnDefs = [
@@ -36,20 +58,17 @@ app.controller('UserListForReviewController', function ($http, $scope, DTOptions
             DTColumnDefBuilder.newColumnDef(4),
         ];
         $scope.renderUsersToBeAssignedForReview = function(){
-            // url to get users to be assigned as a reviewer
-            $http.get('/users/'+AuthService.getUserId())
+            // url to get users to be assigned as a reviewer(to be changed)
+            $http.get('/allusers')
                 // handle success
                 .success(function (data) {
-                    // to be changed when service is ready
-                    var array = [];
-                    array.push(data);
-                    $scope.users = array;
+                    $scope.users = data;
                 })
                 // handle error
                 .error(function (data) {
                 });
         }
-    
+        
         $scope.selected = [];
         $scope.toggle = function (itemId, list) {
             var idx = list.indexOf(itemId);
@@ -66,8 +85,12 @@ app.controller('UserListForReviewController', function ($http, $scope, DTOptions
             } else {
                 /*send list to service which will assign this list of users as reviewers and refresh the table*/
                 // url to submit users to be assigned as a reviewer(to be changed)
-                var url;
-                $http.post(url, $scope.selected)
+                var url = "assignDocumentToUsersReview";
+                var data = {
+                    "submissionDocumentId":$state.params.id,
+                    "users":$scope.selected
+                }
+                $http.put(url, data)
                 // handle success
                     .success(function (data) {
                         $scope.renderUsersToBeAssignedForUser();
@@ -77,4 +100,16 @@ app.controller('UserListForReviewController', function ($http, $scope, DTOptions
                     });
             }
         };
+
+        $scope.renderUsersAssignedForReview = function(){
+            // url to get users assigned as a reviewer for a particular submission(to be changed)
+            $http.get('/allusers')
+            // handle success
+                .success(function (data) {
+                    $scope.users = data;
+                })
+                // handle error
+                .error(function (data) {
+                });
+        }
 })

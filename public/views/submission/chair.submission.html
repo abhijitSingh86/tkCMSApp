@@ -12,8 +12,16 @@
             </div>
         </md-tab>
         <md-tab label="Review Management" ng-if="chair">
-            <div flex layout="row" layout-padding ng-include="'views/reviews/usersdatatable.html'">
-            </div>
+            <md-tabs>
+                <md-tab label="Assign Users">
+                    <div flex layout="row" layout-padding ng-include="'views/reviews/assign-reviewers-datatable.html'">
+                    </div>
+                </md-tab>
+                <md-tab label="Assigned Reviewers">
+                    <div flex layout="row" layout-padding ng-include="'views/reviews/assigned-reviewers-datatable.html'">
+                    </div>
+                </md-tab>
+            </md-tabs>
         </md-tab>
         <md-tab label="Reviews" ng-click="loadAllReviewsForChair()" ng-if="chair">
             <div layout-padding="" class="layout-padding" ui-view="review-datatable">

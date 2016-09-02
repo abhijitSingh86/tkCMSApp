@@ -5,8 +5,8 @@
     <title>Title</title>
 </head>
 <body>
-<div flex ng-controller="EventController" ng-init="renderUsersInterestedInEvent()">
-    <table datatable="ng" dt-options="dtOptions2" dt-column-defs="dtColumnDefs2" class="row-border hover">
+<div flex ng-controller="UserListForReviewController" ng-init="renderUsersToBeAssignedForReview()">
+    <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="row-border hover">
         <thead>
         <tr>
             <th>Select</th>
@@ -26,8 +26,8 @@
         </tr>
         </tbody>
     </table>
-    <md-button ng-click="addToSubscribedUsers()" class="md-raised md-primary">
-        Accept Request
+    <md-button ng-click="add()" class="md-raised md-primary">
+        Add as Reviewer
     </md-button>
 </div>
 </body>

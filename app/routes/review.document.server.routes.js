@@ -33,6 +33,7 @@ module.exports = function(app) {
     app.route('/reviewForDocument/:userId').
         post(reviewerDocument.getReviewForASubDocument)
 
+    /*retrieves all reviews based on doc id*/
     app.route('/reviewer/getreviewer/:subDocumentId').
     get(reviewerDocument.getDetails);
 

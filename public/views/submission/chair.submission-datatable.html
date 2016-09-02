@@ -23,7 +23,7 @@
             <td>{{ sub.name }}</td>
             <td>{{ sub.keywords }}</td>
             <td>{{ sub.created | date: "dd.MM.yyyy h:mm:ss"}}</td>
-            <td>{{ sub.createdBy }}</td>
+            <td>{{ sub.createdBy.firstName }} {{ sub.createdBy.lastName }}({{ sub.createdBy.email }})</td>
             <td>
                 <md-button class="md-primary" ng-click="goToSubmissionForChair(sub)" aria-label="More Info">More Info</md-button>
             </td>
