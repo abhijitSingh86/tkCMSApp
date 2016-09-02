@@ -173,16 +173,53 @@ exports.retrieveUsersBelongingToEvent = function(req,res,next){
 };
 
 
+exports.retrieveInterestedReviewersForDocument = function(req, res, next){
+    if(true) {//req.user && user.isChair(req)) {
+        // req.submissionEvent.
+        SubmissionEvent.findOne({
+            _id: req.submissionDocument.submissionEventId
+        }).populate('interestedUsersAsReviewer','firstName').populate('interestedUsers','firstName').exec(function(err, submissionEvent) {
+            if (err) {
+                return res.status(400).json({"error":"Error while retrieving interested reviewers the Event"});
+            } else if(submissionEvent ==null){
+                res.json({});
+            }else {
+                var array = [];
+                if(submissionEvent.interestedUsersAsReviewer !=null) {
+                    for (var i = 0; i < submissionEvent.interestedUsersAsReviewer.length; i++) {
+                        if (submissionEvent.interestedUsersAsReviewer[i].id == req.submissionDocument.createdBy) {
+                            //
+                        } else {
+                            array.push(submissionEvent.interestedUsersAsReviewer[i]);
+                        }
+                    }
+                }
+
+                if(submissionEvent.interestedUsers !=null) {
+                    for (var i = 0; i < submissionEvent.interestedUsers.length; i++) {
+                        if (submissionEvent.interestedUsers[i].id == req.submissionDocument.createdBy.id) {
+
+                        } else {
+                            array.push(submissionEvent.interestedUsers[i]);
+                        }
+                    }
+                }
+                res.json(array);
+            }
+        });
+    }
+};
+
 exports.retrieveInterestedReviewersForEvent = function(req, res, next){
     if(true) {//req.user && user.isChair(req)) {
                 // req.submissionEvent.
         SubmissionEvent.findOne({
             _id: req.submissionEvent.id
-        }).populate('interestedUsersAsReviewer','firstName').exec(function(err, submissionEvent) {
+        }).populate('interestedUsersAsReviewer','firstName').populate('interestedUsers','firstName').exec(function(err, submissionEvent) {
             if (err) {
                 return res.status(400).json({"error":"Error while retrieving interested reviewers the Event"});
             } else {
-                res.json(submissionEvent.interestedUsersAsReviewer);
+                res.json(submissionEvent.interestedUsersAsReviewer,submissionEvent.interestedUsers);
             }
         });
     }

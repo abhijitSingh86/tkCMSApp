@@ -26,7 +26,7 @@ module.exports = function(app) {
 
 
     /*
-     get the review for particular submission document id
+     get the review for particular submission document id and user id
      {
      "submissionDocID" : ""
      }
@@ -34,10 +34,15 @@ module.exports = function(app) {
     app.route('/reviewForDocument/:userId').
         post(reviewerDocument.getReviewForASubDocument)
 
+    //get the review for particular submission document id
     app.route('/review/getReviewForDocument/:subDocumentId').
     get(reviewerDocument.getReviewDetailForDocument);
 
-
+    /*
+     listOfReviews For User specific as per the request param
+     */
+    app.route('/getAllReviewForUser/:userId')
+        .get(reviewerDocument.listOfReviewsForUser);
 
 
 
