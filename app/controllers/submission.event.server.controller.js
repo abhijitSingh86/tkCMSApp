@@ -1,6 +1,6 @@
 var SubmissionEvent = require("mongoose").model("SubmissionEvent");
 var user = require("../controllers/users.server.controller.js");
-
+var mongoose = require('mongoose');
 
 exports.create = function(req, res, next) {
     if(req.user && user.isChair(req)) {
@@ -268,6 +268,21 @@ exports.retrieveAuthorsToEvent = function(req,res,next){
                 return res.status(400).json({"error":"Error while retrieving interested authors of the Event"});
             } else {
                 res.json(submissionEvent.interestedUsers);
+            }
+        });
+    }
+};
+
+exports.retrieveEventsForUser = function(req,res,next){
+    if(true) {//req.user && user.isChair(req)) {
+        // req.submissionEvent.
+        SubmissionEvent.find({
+            interestedUsers: { $in: [ mongoose.Types.ObjectId(req.user.id)]}
+        }).exec(function(err, submissionEvent) {
+            if (err) {
+                return res.status(400).json({"error":"Error while retrieving Events for author"});
+            } else {
+                res.json(submissionEvent);
             }
         });
     }
