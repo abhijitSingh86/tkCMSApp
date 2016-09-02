@@ -238,7 +238,7 @@ exports.retrieveApprovedAuthorsToEvent = function(req,res,next){
                 var rejectedArr = [];
                 if(submissionEvent==null || submissionEvent.length ==0){
                     res.status(405).json({"error":"Invalid Event id"});
-                }else if(submissionEvent.interestedUsers.length ==null || submissionEvent.interestedUsers ==0) {
+                }else if(submissionEvent.interestedUsers ==null || submissionEvent.interestedUsers.length ==0) {
                     res.status(405).json({"error":"Empty interested user list"})
                 }else
                 {
