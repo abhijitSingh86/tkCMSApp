@@ -45,7 +45,8 @@ exports.put = function(req, res, next) {
   *
   * */
 exports.getDetails = function(req, res, next) {
-    ReviewersDocument.find({submissionDocId: req.subDocumentId}).populate('createdBy').populate('authors').exec(function(err, subevnts) {
+    ReviewersDocument.find({submissionDocId: req.params.subDocumentId}).populate('createdBy','firstname')
+        .populate('authors','firstname').exec(function(err, subevnts) {
         if (err) {
             return next(err);
         } else {
