@@ -71,7 +71,7 @@ exports.delete = function(req, res, next) {
     })
 };
 
-exports.listOfSubmissionDocumentForUserAndEvent = function  hiYeah(req,res,next){
+exports.listOfSubmissionDocumentForUserAndEvent = function  listOfSubmissionDocumentForUserAndEvent(req,res,next){
     if (true){//req.user) {
         var userId = req.body.userId;
         var eventId = req.body.submissionEventId;
@@ -87,6 +87,24 @@ exports.listOfSubmissionDocumentForUserAndEvent = function  hiYeah(req,res,next)
                 }else{
                     res.json(result);
                 }
+            }
+        });
+    } else {
+        res.status(403).json({"error" : "Invalid request"});
+    }
+}
+
+exports.listOfSubmissionDocumentForUser= function  listOfSubmissionDocumentForUser(req,res){
+    if (true){//req.user) {
+        var userId = req.body.userId;
+
+        SubmissionDocument.findOne({
+            createdBy : userId
+        }).exec(function(err, result) {
+            if (err) {
+                return res.status(400).json({"error":"Error occurred while query execution"});
+            } else {
+                    res.json(result);
             }
         });
     } else {

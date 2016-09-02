@@ -97,7 +97,6 @@ exports.listOfReviewsForUser = function getReviewUserSpecific(req, res){
     } else {
         res.status(403).json({"error" : "Invalid request"});
     }
-
 }
 
 

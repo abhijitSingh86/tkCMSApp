@@ -178,11 +178,11 @@ exports.retrieveInterestedReviewersForEvent = function(req, res, next){
                 // req.submissionEvent.
         SubmissionEvent.findOne({
             _id: req.submissionEvent.id
-        }).populate('interestedUsersAsReviewer','firstName').exec(function(err, submissionEvent) {
+        }).populate('interestedUsersAsReviewer','firstName').populate('interestedUsers','firstName').exec(function(err, submissionEvent) {
             if (err) {
                 return res.status(400).json({"error":"Error while retrieving interested reviewers the Event"});
             } else {
-                res.json(submissionEvent.interestedUsersAsReviewer);
+                res.json(submissionEvent.interestedUsersAsReviewer,submissionEvent.interestedUsers);
             }
         });
     }
