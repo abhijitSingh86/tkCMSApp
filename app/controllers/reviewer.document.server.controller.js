@@ -82,6 +82,23 @@ exports.create = function(req, res, next) {
         }
     });
 };
+exports.listOfReviewsForUser = function getReviewUserSpecific(req, res){
+    if (true){//req.user) {
+        var id = req.user.id;
+        ReviewersDocument.find({
+            createdBy : id
+        }).exec(function(err, result) {
+            if (err) {
+                return res.status(400).json({"error":"Error occurred while query execution to retrieve reviews"});
+            } else {
+                res.json(result);
+            }
+        });
+    } else {
+        res.status(403).json({"error" : "Invalid request"});
+    }
+
+}
 
 
 exports.getReviewForASubDocument = function getReviewDocumentSpecific(req, res,next){
