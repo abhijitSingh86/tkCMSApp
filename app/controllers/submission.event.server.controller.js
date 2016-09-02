@@ -79,6 +79,8 @@ exports.update = function(req, res, next) {
         }
 
         if (req.body._id) delete req.body._id;
+        if (req.body.interestedUsers) delete req.body.interestedUsers;
+        if (req.body.interestedUsersAsReviewer) delete req.body.interestedUsersAsReviewer;
         if (req.createdBy) req.createdBy = req.user._id;
         SubmissionEvent.findByIdAndUpdate(req.submissionEvent.id, req.body, function (err, submissionEvent) {
             if (err) {
