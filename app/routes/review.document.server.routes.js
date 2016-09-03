@@ -2,7 +2,7 @@ var reviewerDocument =  require('../controllers/reviewer.document.server.control
 var users =require('../../app/controllers/users.server.controller');
 
 module.exports = function(app) {
-    app.route('/reviewer/:reviewerId').
+    app.route('/review/:reviewerId').
     get(reviewerDocument.list);
 
     /*

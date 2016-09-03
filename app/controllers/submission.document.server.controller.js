@@ -1,5 +1,5 @@
 var SubmissionDocument = require("mongoose").model("SubmissionDocument");
-
+var mongoose = require("mongoose");
 
 
 exports.create = function(req, res, next) {
@@ -111,3 +111,20 @@ exports.listOfSubmissionDocumentForUser= function  listOfSubmissionDocumentForUs
         res.status(403).json({"error" : "Invalid request"});
     }
 }
+
+
+exports.listOfAllSubmissionsForEvent = function(req,res){
+  if(true) {//
+      var eventId = req.params.eventId;
+
+      SubmissionDocument.find({
+          submissionEventId: mongoose.Types.ObjectId(eventId)
+      },function(err,result){
+          if(err){
+              res.status(400).json({"error":"error retrieving the document for event id"});
+          }else{
+              res.json(result);
+          }
+      });
+  }
+};

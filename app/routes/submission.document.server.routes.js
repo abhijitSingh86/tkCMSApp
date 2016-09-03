@@ -30,6 +30,8 @@ module.exports = function(app) {
     app.route('/subDocumentByUserId')
         .post(submissionDocument.listOfSubmissionDocumentForUser);
 
+    app.route('/listOfAllSubmissionDocsForEvent/:eventId').
+    get(submissionDocument.listOfAllSubmissionsForEvent);
 
     app.param('subDocumentId', submissionDocument.submissionDocumentByID);
 

@@ -45,25 +45,19 @@ SubmissionDocumentSchema.pre('validate', function(next) {
         SubmissionEvent.findOne({_id : this.submissionEventId}).exec(function(err, subevnts) {
             if (err) {
                 console.log("Error retrieving event for Submission document validation check"+err);
-                next(Error("eror"));
+                next(Error("Error retrieving event for Submission document validation check"));
             } else if(subevnts ==null){next()}
             else{
-                // console.log(new Date(ct_dt) >= new Date(subevnts.start_date));
-
                 console.log(ct_dt+"--"+subevnts.start_date+"--"+subevnts.end_date);
-
-
                 if(ct_dt >= new Date(subevnts.start_date) && ct_dt <= new Date(subevnts.end_date)){
                     //fine its a valid submission
                     console.log(subevnts);
                     next();
                 }else{
-
                     console.log(subevnts);
                     console.log("condition didn't matched for event date");
                     next(Error("creation date should lie between event startDate and endDate"));
                 }
-                // res.json(subevnts);
             }
         });
     }
