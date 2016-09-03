@@ -28,7 +28,7 @@
                         </div>
                     </form>
 
-                    <form name="eventInterestForm" novalidate ng-submit="eventInterestForm.$valid && addToInterestedUser(event)" ng-if="!eventAccess && normalUser">
+                    <form name="eventInterestForm" novalidate ng-submit="eventInterestForm.$valid && addToInterestedUser(event)" ng-if="!eventAccess && normalUser && !waitingForApproval">
                         <div layout-gt-sm="column" class="layout-gt-sm-column">
                             <md-content>
                                 You are not subscribed to the event. Please Subscribe to the event to add submission.
@@ -38,6 +38,9 @@
                             </section>
                         </div>
                     </form>
+                    <md-content ng-if="waitingForApproval">
+                        You request is pending with admin. Please wait for approval
+                    </md-content>
                 </md-tab-body>
                </div>
            </md-tab>
@@ -45,7 +48,7 @@
                 <div flex layout="row" layout-padding ng-include="'views/submission/submission-form.html'">
                 </div>
             </md-tab>
-            <md-tab label="Reviews" ng-if="eventAccess && normalUser && hideReviewsTab">
+            <md-tab label="Reviews" ng-if="normalUser && hideReviewsTab">
                 <!--<div layout-padding="" class="layout-padding" ui-view="review-datatable">
                 </div>-->
                 <div flex layout="row" layout-padding ng-include="'views/reviews/reviews-inevents-datatable.html'">
