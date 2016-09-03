@@ -6,16 +6,56 @@ app.controller('SubmissionController', function ($scope, $http, $mdToast, $state
     $scope.renderDataTable = function(parameter){
         var url;
         if(parameter == "mySubmissions"){
-            //url = '/users/Subdocs/'+AuthService.getUserId();
+            url = 'subDocumentByUserId';
+            var userId = {
+                "userId": AuthService.getUserId()
+            }
+            $http.post(url, userId)
+            // handle success
+                .success(function (data, status) {
+                    debugger;
+                    $scope.subs = data;
+
+                    $scope.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers');
+                    $scope.dtColumnDefs = [
+                        DTColumnDefBuilder.newColumnDef(0),
+                        DTColumnDefBuilder.newColumnDef(1),
+                        DTColumnDefBuilder.newColumnDef(2),
+                        DTColumnDefBuilder.newColumnDef(3),
+                        DTColumnDefBuilder.newColumnDef(4),
+                        DTColumnDefBuilder.newColumnDef(5).notSortable()
+                    ];
+                })
+                // handle error
+                .error(function (data) {
+
+                });
             url = '/user/review/'+AuthService.getUserId();
         }
         if(parameter == "assignedSubmissions"){
             url = '/user/review/'+AuthService.getUserId();
+            $http.get(url)
+            // handle success
+                .success(function (data, status) {
+                    $scope.subs = data;
+
+                    $scope.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers');
+                    $scope.dtColumnDefs = [
+                        DTColumnDefBuilder.newColumnDef(0),
+                        DTColumnDefBuilder.newColumnDef(1),
+                        DTColumnDefBuilder.newColumnDef(2),
+                        DTColumnDefBuilder.newColumnDef(3),
+                        DTColumnDefBuilder.newColumnDef(4),
+                        DTColumnDefBuilder.newColumnDef(5).notSortable()
+                    ];
+                })
+                // handle error
+                .error(function (data) {
+
+                });
         }
-        loadSubmissions(url) // change to url when server side complete
     }
     function loadSubmissions(url){
-        debugger;
         $http.get(url)
         // handle success
             .success(function (data, status) {
@@ -63,11 +103,14 @@ app.controller('SubmissionController', function ($scope, $http, $mdToast, $state
         $http.get('/subDocument/' + $state.params.id)
         // handle success
             .success(function (data) {
+                debugger;
                 $scope.sub = data;
                 $scope.sub.id = data._id;
-                angular.forEach(data.authors,function(obj){
-                    $scope.sub.authors.splice(obj);
-                    $scope.sub.authors.push(obj.id);
+                $scope.users = angular.copy(data.authors);
+                delete $scope.sub.authors;
+                $scope.sub.authors = [];
+                $scope.users.forEach(function(item, index, object){
+                    $scope.sub.authors.push(item.id);
                 })
             })
             // handle error
@@ -101,7 +144,11 @@ app.controller('SubmissionController', function ($scope, $http, $mdToast, $state
     }
     /*Methods used for chair*/
     $scope.renderDataTableForChair = function(){
-        loadSubmissions('/subDocument') // change to url when server side complete
+        loadSubmissions('/listOfAllSubmissionDocsForEvent/'+$state.params.id);
+    }
+
+    $scope.renderAllSubmissionDataTableForChair = function(){
+        loadSubmissions('/subDocument/');
     }
 
     $scope.goToSubmissionForChair = function(submission){
@@ -111,23 +158,10 @@ app.controller('SubmissionController', function ($scope, $http, $mdToast, $state
     $scope.loadAllReviewsForChair = function(){
         $state.go('home.chair-submission.reviews',{documentId: $state.params.id});
     }
-    $scope.authorListOfSubmission = function(){
-        //to be changed: add url to get all author details of the submission
-        $http.get('/submission/authors/'+$state.params.id)
-            // handle success
-            .success(function (data, status) {
-                $scope.users = data;
-            })
-            // handle error
-            .error(function (data) {
-
-            });
-    }
 })
 
 app.controller('SubmissionFormController', function ($scope, $http, $mdToast, $state, AuthService) {
     function getUserListForAuthor(){
-        //to be changed
         $http.get('/users')
         // handle success
             .success(function (data, status) {
@@ -150,6 +184,7 @@ app.controller('SubmissionFormController', function ($scope, $http, $mdToast, $s
                 $scope.new = false;
                 $scope.showUpdate = "true";
                 $scope.showWithdraw = "true";
+                $scope.event = data;
             })
             // handle error
             .error(function (data) {
@@ -157,10 +192,11 @@ app.controller('SubmissionFormController', function ($scope, $http, $mdToast, $s
             });
     }
     $scope.updateSubmissionSubmit = function(sub) {
-        sub.submissionEventId = {};
-        sub.createdBy = {};
+        delete sub.submissionEventId ;
+        delete sub.createdBy;
+        debugger;
         // send a put request to the server
-        $http.put('/subDocument/' + sub.id,
+        $http.put('/subDocument/' + sub._id,
             sub)
         // handle success
             .success(function (data) {

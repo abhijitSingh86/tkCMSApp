@@ -180,7 +180,7 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider','$breadcrum
                 parent: 'home'
             },
         })
-        //access: normal user
+        //access: normal user/Chair User
         .state('home.review', {
             url: 'review/:id',
             views: {
@@ -249,6 +249,20 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider','$breadcrum
             },
         })
         //access: chair
+        .state('home.chair-allsubmissions', {
+            url: 'admin/all-submissions',
+            views: {
+                'mainpanel@': {
+                    templateUrl: 'views/submission/chair.all-submissions-datatable.html',
+                    controller: 'SubmissionController'
+                }
+            },
+            ncyBreadcrumb: {
+                label: "All Submissions",
+                parent: "home"
+            }
+        })
+        //access: chair
         .state('home.chair-submission', {
             url: 'admin/submission/:id',
             views: {
@@ -275,6 +289,20 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider','$breadcrum
             ncyBreadcrumb: {
                 skip:true
             },
+        })
+        //access: chair
+        .state('home.chair-allreviews', {
+            url: 'admin/all-reviews',
+            views: {
+                'mainpanel@': {
+                    templateUrl: 'views/reviews/chair.all-reviewsdatatable.html',
+                    controller: 'ReviewController'
+                }
+            },
+            ncyBreadcrumb: {
+                label: 'All Reviews',
+                parent: 'home'
+            }
         })
         .state('home.newsubmission', {
             url: 'submission',
