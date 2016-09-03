@@ -12,9 +12,11 @@ app.controller('EventController', function ($scope, $http, $mdToast, $state, DTO
         }
         else if(parameter == "subscribed"){
             url = "/users/Subevents/"+AuthService.getUserId();
+            //url = "/subEvent/retrieveAcceptedAndNotAcceptedEventsForUser/:userId";
         }
         else if(parameter == "interested"){
             url = '/user/submission/'+AuthService.getUserId();
+            //url = "/subEvent/retrieveAcceptedAndNotAcceptedEventsForUser/:userId";
         } else {
             $state.go('home');
         }
@@ -66,13 +68,35 @@ app.controller('EventController', function ($scope, $http, $mdToast, $state, DTO
                 if (data.end_date != null) data.end_date = new Date(data.end_date);
                 $scope.event = data;
                 var userId = AuthService.getUserId();
-                var interestedUsers = data.interestedUsers;
-                $scope.eventAccess = false;
+                debugger;
+                $http.get('/subEvent/retrieveApprovedAuthorsToEvent/'+$state.params.id)
+                // handle success
+                    .success(function (data) {
+                        $scope.users = [];
+                        $scope.eventAccess = false;
+                        $scope.waitingForApproval = false;
+                        angular.forEach(data.acceptedUser, function(id){
+                            if(id == userId){
+                                $scope.eventAccess = true;
+                            }
+                        })
+                        angular.forEach(data.notAcceptedUser, function(id){
+                            if(id == userId){
+                                $scope.eventAccess = false;
+                                $scope.waitingForApproval = true;
+                            }
+                        })
+                    })
+                    // handle error
+                    .error(function (data) {
+                    });
+                
+                /*var interestedUsers = data.interestedUsers;
                 angular.forEach(interestedUsers, function(value, key) {
                     if(value.id == userId){
                         $scope.eventAccess = true;
                     }
-                });
+                });*/
             })
             // handle error
             .error(function (data) {
@@ -149,6 +173,7 @@ app.controller('EventController', function ($scope, $http, $mdToast, $state, DTO
         // handle success
             .success(function (data) {
                 //reload event page
+                $scope.waitingForApproval = true;
                 $state.go('home.event',{id:event._id})
             })
             // handle error
@@ -162,12 +187,13 @@ app.controller('EventController', function ($scope, $http, $mdToast, $state, DTO
     /*Methods used for chair role*/
     $scope.submitForm = function(event) {
         // send a post request to the server
+        event.createdBy = AuthService.getUserId();
         $http.post('/subEvents',
             event)
         // handle success
             .success(function (data) {
                 $mdToast.show($mdToast.simple().textContent("Created Successfully"));
-                $state.go('home.event',{id: data.success._id});
+                $state.go('home.chair-event',{id: data.success._id});
             })
             // handle error
             .error(function (data) {
@@ -204,7 +230,21 @@ app.controller('EventController', function ($scope, $http, $mdToast, $state, DTO
         $state.go('home.chair-event',{id:event._id})
     }
 
-    $scope.renderUsersInterestedInEvent = function(){
+});
+
+app.controller('EventUsersController', function ($scope, $http, $mdToast, $state, DTOptionsBuilder, DTColumnDefBuilder, $rootScope, AuthService) {
+
+    $scope.initialize = function () {
+        $scope.dtOptions1 = DTOptionsBuilder.newOptions().withPaginationType('full_numbers');
+        $scope.dtColumnDefs1 = [
+            DTColumnDefBuilder.newColumnDef(0).notSortable(),
+            DTColumnDefBuilder.newColumnDef(1),
+            DTColumnDefBuilder.newColumnDef(2),
+            DTColumnDefBuilder.newColumnDef(3),
+            DTColumnDefBuilder.newColumnDef(4),
+        ];
+    }
+    $scope.initializeCols = function () {
         $scope.dtOptions2 = DTOptionsBuilder.newOptions().withPaginationType('full_numbers');
         $scope.dtColumnDefs2 = [
             DTColumnDefBuilder.newColumnDef(0).notSortable(),
@@ -213,6 +253,9 @@ app.controller('EventController', function ($scope, $http, $mdToast, $state, DTO
             DTColumnDefBuilder.newColumnDef(3),
             DTColumnDefBuilder.newColumnDef(4),
         ];
+    }
+
+    $scope.renderUsersInterestedInEvent = function(){
         // url to get users to be interested in a event(to be changed)
         $http.get('/subEvent/retrieveApprovedAuthorsToEvent/'+$state.params.id)
         // handle success
@@ -266,14 +309,6 @@ app.controller('EventController', function ($scope, $http, $mdToast, $state, DTO
     };
 
     $scope.renderUsersSubscribedInEvent = function(){
-        $scope.dtOptions1 = DTOptionsBuilder.newOptions().withPaginationType('full_numbers');
-        $scope.dtColumnDefs1 = [
-            DTColumnDefBuilder.newColumnDef(0).notSortable(),
-            DTColumnDefBuilder.newColumnDef(1),
-            DTColumnDefBuilder.newColumnDef(2),
-            DTColumnDefBuilder.newColumnDef(3),
-            DTColumnDefBuilder.newColumnDef(4),
-        ];
         // url to get users subscribed to an event(to be changed)
         $http.get('/subEvent/retrieveApprovedAuthorsToEvent/'+$state.params.id)
         // handle success

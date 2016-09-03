@@ -61,6 +61,16 @@ app.controller('ReviewController', function ($scope, $http, $mdToast, $state,$st
     $scope.goToReview = function(review){
         $state.go('home.review',{id:review._id});
     }
+    $scope.loadReview = function(){
+        $http.get("/review/"+$state.params.id)
+        // handle success
+            .success(function (data) {
+                $scope.reviews = data;
+            })
+            // handle error
+            .error(function (data) {
+            });
+    }
 });
 
 app.controller('UserListForReviewController', function ($http, $scope, DTOptionsBuilder, DTColumnDefBuilder, AuthService, $mdToast, $state) {
@@ -75,7 +85,7 @@ app.controller('UserListForReviewController', function ($http, $scope, DTOptions
         ];
         $scope.renderUsersToBeAssignedForReview = function(){
             // url to get users to be assigned as a reviewer(to be changed)
-            $http.get('/allusers')
+            $http.get('/subEvent/getInterestedReviewersForDocument/'+$state.params.id)
                 // handle success
                 .success(function (data) {
                     $scope.users = data;

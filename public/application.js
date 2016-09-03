@@ -185,7 +185,7 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider','$breadcrum
             url: 'review/:id',
             views: {
                 'mainpanel@': {
-                    templateUrl: 'views/reviews/reviewform.html',
+                    templateUrl: 'views/reviews/myreviewform.html',
                     controller: 'ReviewController'
                 }
             },

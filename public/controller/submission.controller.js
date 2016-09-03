@@ -148,6 +148,8 @@ app.controller('SubmissionFormController', function ($scope, $http, $mdToast, $s
                 $mdToast.show($mdToast.simple().textContent("Created Successfully"));
                 $scope.hideReviewsTab = true;
                 $scope.new = false;
+                $scope.showUpdate = "true";
+                $scope.showWithdraw = "true";
             })
             // handle error
             .error(function (data) {
@@ -156,6 +158,7 @@ app.controller('SubmissionFormController', function ($scope, $http, $mdToast, $s
     }
     $scope.updateSubmissionSubmit = function(sub) {
         sub.submissionEventId = {};
+        sub.createdBy = {};
         // send a put request to the server
         $http.put('/subDocument/' + sub.id,
             sub)

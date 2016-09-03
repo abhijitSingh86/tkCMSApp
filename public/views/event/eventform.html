@@ -23,7 +23,7 @@
                     <input type="text" name="description" ng-model="event.description">
                 </md-input-container>
             </div>
-            <div layout-gt-sm="row" class="layout-gt-sm-row">
+            <div layout="column" class="layout-gt-sm-row">
                 <label>Start Date</label>
                 <md-datepicker ng-required="true" name="startdate" ng-model="event.start_date">
                 </md-datepicker>
@@ -31,7 +31,7 @@
                     <div ng-message="required">Start date is required.</div>
                 </div>
             </div>
-            <div layout-gt-sm="row" class="layout-gt-sm-row">
+            <div layout="column" class="layout-gt-sm-row">
                 <label>End Date</label>
                 <md-datepicker ng-required="true" name="enddate" ng-model="event.end_date"></md-datepicker>
                 <div class="required" ng-messages="eventForm.enddate.$error">
