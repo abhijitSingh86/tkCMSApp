@@ -98,12 +98,17 @@ exports.listOfSubmissionDocumentForUser= function  listOfSubmissionDocumentForUs
     if (true){//req.user) {
         var userId = req.body.userId;
 
-        SubmissionDocument.findOne({
+        SubmissionDocument.find({
             createdBy : userId
         }).exec(function(err, result) {
             if (err) {
                 return res.status(400).json({"error":"Error occurred while query execution"});
             } else {
+                var array = [];
+                if(result != null && result.length >0)
+                    for(var i=0;i<result.length;i++){
+                        array.push(result[i]);
+                    }
                     res.json(result);
             }
         });
@@ -127,4 +132,18 @@ exports.listOfAllSubmissionsForEvent = function(req,res){
           }
       });
   }
+};
+
+exports.listOfAllReviewsForSubmissionDocument = function(req,res){
+    if(true) {//
+        SubmissionDocument.find({
+            _id: req.submissionDocument._id
+        }).populate("").exec(function(err,result){
+            if(err){
+                res.status(400).json({"error":"error retrieving the document for event id"});
+            }else{
+                res.json(result);
+            }
+        });
+    }
 };
