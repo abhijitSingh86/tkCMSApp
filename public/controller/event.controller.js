@@ -8,24 +8,79 @@ app.controller('EventController', function ($scope, $http, $mdToast, $state, DTO
         var url;
         var parameter = $state.params.filter;
         if(parameter == "all"){
-            url = "/subEvents"
+            url = "/subEvents";
+            $http.get(url)
+            // handle success
+                .success(function (data, status) {
+                    $scope.events = data;
+
+                    $scope.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers');
+                    $scope.dtColumnDefs = [
+                        DTColumnDefBuilder.newColumnDef(0),
+                        DTColumnDefBuilder.newColumnDef(1),
+                        DTColumnDefBuilder.newColumnDef(2),
+                        DTColumnDefBuilder.newColumnDef(3),
+                        DTColumnDefBuilder.newColumnDef(4),
+                        DTColumnDefBuilder.newColumnDef(5).notSortable()
+                    ];
+                })
+                // handle error
+                .error(function (data) {
+
+                });
         }
         else if(parameter == "subscribed"){
-            url = "/users/Subevents/"+AuthService.getUserId();
-            //url = "/subEvent/retrieveAcceptedAndNotAcceptedEventsForUser/:userId";
+            url = "/subEvent/retrieveAcceptedAndNotAcceptedEventsForUser/"+AuthService.getUserId();
+            $http.get(url)
+            // handle success
+                .success(function (data, status) {
+                    $scope.events = data.acceptedEvent;
+
+                    $scope.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers');
+                    $scope.dtColumnDefs = [
+                        DTColumnDefBuilder.newColumnDef(0),
+                        DTColumnDefBuilder.newColumnDef(1),
+                        DTColumnDefBuilder.newColumnDef(2),
+                        DTColumnDefBuilder.newColumnDef(3),
+                        DTColumnDefBuilder.newColumnDef(4),
+                        DTColumnDefBuilder.newColumnDef(5).notSortable()
+                    ];
+                })
+                // handle error
+                .error(function (data) {
+
+                });
         }
         else if(parameter == "interested"){
-            url = '/user/submission/'+AuthService.getUserId();
-            //url = "/subEvent/retrieveAcceptedAndNotAcceptedEventsForUser/:userId";
+            url = "/subEvent/retrieveAcceptedAndNotAcceptedEventsForUser/"+AuthService.getUserId();
+            $http.get(url)
+            // handle success
+                .success(function (data, status) {
+                    $scope.events = data.notAcceptedEvent;
+
+                    $scope.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers');
+                    $scope.dtColumnDefs = [
+                        DTColumnDefBuilder.newColumnDef(0),
+                        DTColumnDefBuilder.newColumnDef(1),
+                        DTColumnDefBuilder.newColumnDef(2),
+                        DTColumnDefBuilder.newColumnDef(3),
+                        DTColumnDefBuilder.newColumnDef(4),
+                        DTColumnDefBuilder.newColumnDef(5).notSortable()
+                    ];
+                })
+                // handle error
+                .error(function (data) {
+
+                });
         } else {
             $state.go('home');
         }
-        loadEvents(url);
     }
     function loadEvents(url){
         $http.get(url)
         // handle success
             .success(function (data, status) {
+                debugger;
                 $scope.events = data;
 
                 $scope.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers');
@@ -202,9 +257,9 @@ app.controller('EventController', function ($scope, $http, $mdToast, $state, DTO
     };
     $scope.updateForm = function(event) {
         // send a put request to the server
-        event.createdBy = {};
-        event.interestedUsers = {};
-        event.interestedUsersAsReviewer = {};
+        delete event.createdBy;
+        delete event.interestedUsers;
+        delete event.interestedUsersAsReviewer;
         $http.put('/subEvent/' + $state.params.id,
             event)
         // handle success
@@ -256,7 +311,6 @@ app.controller('EventUsersController', function ($scope, $http, $mdToast, $state
     }
 
     $scope.renderUsersInterestedInEvent = function(){
-        // url to get users to be interested in a event(to be changed)
         $http.get('/subEvent/retrieveApprovedAuthorsToEvent/'+$state.params.id)
         // handle success
             .success(function (data) {
@@ -309,7 +363,6 @@ app.controller('EventUsersController', function ($scope, $http, $mdToast, $state
     };
 
     $scope.renderUsersSubscribedInEvent = function(){
-        // url to get users subscribed to an event(to be changed)
         $http.get('/subEvent/retrieveApprovedAuthorsToEvent/'+$state.params.id)
         // handle success
             .success(function (data) {

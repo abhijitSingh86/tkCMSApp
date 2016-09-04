@@ -27,6 +27,14 @@
                     </div>
                 </md-input-container>
             </div>
+            <!--<div layout-gt-sm="row" class="layout-gt-sm-row">
+                <input type = "file" file-model = "myFile"  enctype="multipart/form-data"/>
+                &lt;!&ndash;<form action="/upload" method="post" enctype="multipart/form-data">
+                    <input type="file" name="displayImage"/>&ndash;&gt;
+               &lt;!&ndash; </form>&ndash;&gt;
+               <button class="btn btn-lg upload-btn" type="button" ng-click="uploadFile()">Confirm File</button>
+            </div>-->
+
             <div layout-gt-sm="row" class="layout-gt-sm-row">
                 <md-input-container  class="md-block" flex-gt-sm >
                     <label>Authors</label>
@@ -53,12 +61,12 @@
                 </md-input-container>
             </div>
             <section layout="row" layout-sm="column" ng-if="new" layout-align="end" layout-wrap>
-                <md-button ng-click="withdrawSubmission()" ng-if="showWithdraw" class="md-raised md-primary">Withdraw Submission</md-button>
+                <md-button ng-click="withdrawSubmission()" ng-if="showWithdraw"class="md-raised md-primary">Withdraw Submission</md-button>
                 <md-button type="submit" ng-click="submissionSubmit(sub) " name="submit" class="md-raised md-primary">Submit</md-button>
             </section>
             <section layout="row" layout-sm="column" ng-if="!new" layout-align="end" layout-wrap>
                 <md-button ng-click="withdrawSubmission()" ng-if="showWithdraw" class="md-raised md-primary">Withdraw Submission</md-button>
-                <md-button type="submit" ng-click="submissionForm.$valid && updateSubmissionSubmit(sub)" ng-if="showUpdate" name="update" class="md-raised md-primary">Update</md-button>
+                <md-button type="submit" ng-click="submissionForm.$valid && updateSubmissionSubmit(sub)" name="update" class="md-raised md-primary">Update</md-button>
             </section>
         </form>
     </md-content>

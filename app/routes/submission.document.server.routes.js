@@ -1,5 +1,9 @@
 var submissionDocument =  require('../controllers/submission.document.server.controller.js');
 module.exports = function(app) {
+
+    app.route('/upload').
+    post(submissionDocument.upload);
+
     app.route('/subDocument').
     post(submissionDocument.create).
     get(submissionDocument.list);
