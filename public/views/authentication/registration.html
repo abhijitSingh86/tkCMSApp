@@ -42,9 +42,9 @@
                         </div>
                     </div>
                 </md-input-container>
-                <section layout="row" layout-sm="column" layout-align="end" layout-wrap>
+                <section layout="row" layout-sm="column" layout-align="end" layout-wrap ng-show="showSuccess">
                     <md-button ng-click="backtologin()" class="md-raised md-primary">Back To Login</md-button>
-                    <md-button ng-click="register(user)" class="md-raised md-primary" ng-disabled="registrationForm.$invalid">Register</md-button>
+                    <md-button ng-click="register(user)" class="md-raised md-primary" ng-disabled="registrationForm.$invalid" data-ng-cloak="switchBool('showSuccess')">Register</md-button>
                 </section>
             </div>
         </form>

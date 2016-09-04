@@ -1,5 +1,6 @@
 <html>
 <head>
+<<<<<<< HEAD
     <script>
         function reset(){
             document.getElementById("usernm").value = "";
@@ -18,12 +19,33 @@
                 <label>UserName (required)</label>
                 <input ng-model="user.username" type="text" aria-setsize="10" ng-required="true">
             </md-input-container>
+=======
+   <script>
+      function reset(){
+         document.getElementById("usernm").value = "";
+         document.getElementById("passwd").value = "";
+      }
+   </script>
+</head>
+   <body layout="column">
+   <form class="form" ng-submit="login()">
+   <div ng-controller="LoginController"  ng-cloak="" class="inputIcons" align="center">
+      <h1 class="md-display-2">Open Conference Management System</h1>
+      <br>
+      <md-content class="autoScroll" style="margin-top: 7%">
+         <md-input-container class="md-icon-float md-block" flex="25" align="center">
+            <!-- Use floating label instead of placeholder -->
+            <label>UserName (required)</label>
+            <input ng-model="user.username" type="text" aria-setsize="10" ng-required="true">
+         </md-input-container>
+>>>>>>> 02a8715b9c10bcf81cd3bd0329b5a19c9c232c79
 
             <md-input-container class="md-block" flex="25" align="center">
                 <!-- Use floating placeholder instead of label -->
                 <input ng-model="user.password" type="password" placeholder="Password (required)" ng-required="true">
             </md-input-container>
 
+<<<<<<< HEAD
             <md-button class="md-raised" ng-click="login()"> Login </md-button>
             <md-button class="md-raised" onclick="reset()"> Reset </md-button>
             <p class="margin right-align medium-small"><a ng-href="#forget-pass">Forgot Your Password?</a>
@@ -32,3 +54,13 @@
     </div>
 </form>
 </body>
+=======
+         <md-button class="md-raised" ng-click="login()"> Login </md-button>
+         <md-button class="md-raised" onclick="reset()"> Reset </md-button>
+         <p class="margin right-align medium-small"><a ng-href="#forget-pass">Forgot Your Password?</a>
+         <a ui-sref="register">Register Now!!!</a> </p>
+      </md-content>
+   </div>
+   </form>
+   </body>
+>>>>>>> 02a8715b9c10bcf81cd3bd0329b5a19c9c232c79
