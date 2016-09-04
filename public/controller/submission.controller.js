@@ -1,6 +1,7 @@
 /**
  * Created by pratik_k on 8/24/2016.
  */
+var formData = new FormData();
 var app = angular.module('submissionModule', []);
 app.controller('SubmissionController', function ($scope, $http, $mdToast, $state, DTOptionsBuilder, DTColumnDefBuilder, $stateParams, AuthService) {
     $scope.renderDataTable = function(parameter){
@@ -160,7 +161,47 @@ app.controller('SubmissionController', function ($scope, $http, $mdToast, $state
     }
 })
 
-app.controller('SubmissionFormController', function ($scope, $http, $mdToast, $state, AuthService) {
+app.service('fileUpload', ['$http', function ($http) {
+    this.uploadFileToUrl = function(file, uploadUrl){
+        var fd = new FormData();
+        fd.append('file', file);
+
+        $http.post(uploadUrl, fd, {
+                transformRequest: angular.identity,
+                headers: {'Content-Type': undefined}
+            })
+
+            .success(function(){
+                console.log('file upload successfully');
+            })
+
+            .error(function(){
+                console.log('file upload failed');
+            });
+    }
+}]);
+
+
+app.controller('SubmissionFormController', function ($scope, $http, $mdToast, $state, AuthService,fileUpload, $window, $cookies) {
+
+    $scope.uploadFile = function(){
+        console.log('on change happened for file ' + $scope.submissionDoc);
+
+        var sub = $cookies.get('Submission');
+
+        console.log(sub);
+
+        console.log( $scope.submissionDoc.name);
+        console.log( $scope.myFile);
+        var file = $scope.myFile;
+
+        console.log('file is ' );
+        console.dir(file);
+
+        var uploadUrl = "/upload";
+        fileUpload.uploadFileToUrl(file, uploadUrl);
+    }
+
     function getUserListForAuthor(){
         $http.get('/users')
         // handle success
@@ -176,6 +217,7 @@ app.controller('SubmissionFormController', function ($scope, $http, $mdToast, $s
     $scope.submissionSubmit = function(sub){
         sub.submissionEventId = $state.params.id;
         sub.createdBy = AuthService.getUserId();
+
         $http.post('/subDocument', sub)
             // handle success
             .success(function (data) {
@@ -185,6 +227,7 @@ app.controller('SubmissionFormController', function ($scope, $http, $mdToast, $s
                 $scope.showUpdate = "true";
                 $scope.showWithdraw = "true";
                 $scope.event = data;
+
             })
             // handle error
             .error(function (data) {
@@ -194,13 +237,15 @@ app.controller('SubmissionFormController', function ($scope, $http, $mdToast, $s
     $scope.updateSubmissionSubmit = function(sub) {
         delete sub.submissionEventId ;
         delete sub.createdBy;
-        debugger;
+        $cookies.put('Submission',sub);
         // send a put request to the server
         $http.put('/subDocument/' + sub._id,
             sub)
         // handle success
             .success(function (data) {
                 $mdToast.show($mdToast.simple().textContent("Updated Successfully"));
+                $cookies.put('Submission',sub);
+                $window.location.href = "#/uploadDoc"
             })
             // handle error
             .error(function (data) {

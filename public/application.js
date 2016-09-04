@@ -1,6 +1,23 @@
 var mainApplicationModuleName = 'conference-system';
-var mainApplicationModule = angular.module(mainApplicationModuleName
-    , ['leftPanelModule','submissionModule','reviewerModule','authenticationServiceModule','loginModule','eventsModule','datatables','ngMaterial','ngMessages','ngRoute','ui.router','ngCookies','vAccordion','angularTrix', 'ncy-angular-breadcrumb']);
+var mainApplicationModule = angular.module(mainApplicationModuleName, ['leftPanelModule','submissionModule','reviewerModule','authenticationServiceModule','loginModule','eventsModule','datatables',
+        'ngMaterial','ngMessages','ngRoute','ui.router','ngCookies','vAccordion','angularTrix', 'ncy-angular-breadcrumb']);
+
+mainApplicationModule.directive('fileModel', ['$parse', function ($parse) {
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs) {
+            var model = $parse(attrs.fileModel);
+            var modelSetter = model.assign;
+
+            element.bind('change', function(){
+                scope.$apply(function(){
+                    modelSetter(scope, element[0].files[0]);
+                });
+            });
+        }
+    };
+}]);
+
 
 mainApplicationModule.config(['$stateProvider', '$urlRouterProvider','$breadcrumbProvider', function($stateProvider, $urlRouterProvider, $breadcrumbProvider) {
     $breadcrumbProvider.setOptions({
@@ -313,6 +330,15 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider','$breadcrum
                 }
             },
         })
+        .state('home.uploadDoc', {
+            url: 'uploadDoc',
+            views: {
+                'mainpanel@': {
+                    templateUrl: 'views/submission/uploadDoc.html',
+                    controller: 'SubmissionFormController'
+                }
+            },
+        })
         .state('home.reviewersubmit', {
             url: 'review',
             views: {
@@ -382,3 +408,11 @@ angular.element(document).ready(function() {
     angular.bootstrap(document, [mainApplicationModuleName]);
 });
 
+$('#upload-btn').on('click', function (){
+    $('#upload-input').click();
+    $('.progress-bar').text('0%');
+    $('.progress-bar').width('0%');
+});
+$('#upload-input').on('change', function(){
+    console.log('on change happened for file');
+});

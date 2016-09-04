@@ -1,0 +1,24 @@
+<div flex layout="row" layout-padding>
+    <md-content flex layout-padding id="content" class="submission-container">
+        <form ng-controller="SubmissionFormController" name="submissionDoc" novalidate >
+
+            <div layout-gt-sm="row" class="layout-gt-sm-row">
+                <input type = "file" file-model = "myFile"  enctype="multipart/form-data"/>
+                <!--<form action="/upload" method="post" enctype="multipart/form-data">
+                    <input type="file" name="displayImage"/>-->
+               <!-- </form>-->
+               <button class="btn btn-lg upload-btn" type="button" ng-click="uploadFile()">Confirm File</button>
+            </div>
+
+
+            <section layout="row" layout-sm="column" ng-if="new" layout-align="end" layout-wrap>
+                <md-button ng-click="withdrawSubmission()" ng-if="showWithdraw"class="md-raised md-primary">Withdraw Submission</md-button>
+                <md-button type="submit" ng-click="submissionSubmit(sub) " name="submit" class="md-raised md-primary">Submit</md-button>
+            </section>
+            <section layout="row" layout-sm="column" ng-if="!new" layout-align="end" layout-wrap>
+                <md-button ng-click="withdrawSubmission()" ng-if="showWithdraw" class="md-raised md-primary">Withdraw Submission</md-button>
+                <md-button type="submit" ng-click="submissionDoc.$valid && updateSubmissionSubmit(sub)" name="update" class="md-raised md-primary">Update</md-button>
+            </section>
+        </form>
+    </md-content>
+</div>
