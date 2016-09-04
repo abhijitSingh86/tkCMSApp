@@ -37,6 +37,10 @@ module.exports = function(app) {
     app.route('/listOfAllSubmissionDocsForEvent/:eventId').
     get(submissionDocument.listOfAllSubmissionsForEvent);
 
+    // app.route('/listOfAllReviewsForSubmissionDocument/:subDocumentId').
+    // get(submissionDocument.listOfAllReviewsForSubmissionDocument);
+
+
     app.param('subDocumentId', submissionDocument.submissionDocumentByID);
 
 };

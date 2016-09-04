@@ -215,7 +215,7 @@ exports.retrieveInterestedReviewersForEvent = function(req, res, next){
                 // req.submissionEvent.
         SubmissionEvent.findOne({
             _id: req.submissionEvent.id
-        }).populate('interestedUsersAsReviewer','firstName').populate('interestedUsers','firstName').exec(function(err, submissionEvent) {
+        }).populate('interestedUsersAsReviewer','firstName email lastName').populate('interestedUsers','firstName email lastName').exec(function(err, submissionEvent) {
             if (err) {
                 return res.status(400).json({"error":"Error while retrieving interested reviewers the Event"});
             } else {
