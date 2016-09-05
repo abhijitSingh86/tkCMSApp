@@ -161,27 +161,28 @@ app.controller('SubmissionController', function ($scope, $http, $mdToast, $state
     }
 })
 
-app.service('fileUpload', ['$http', function ($http,AuthService) {
-    this.uploadFileToUrl = function(file,userId, uploadUrl){
-        var fd = new FormData();
+app.service('fileUpload', ['$http', function ($http,$window,AuthService) {
+    this.uploadFileToUrl = function(file, userId, uploadUrl, fd){
+       /* var fd = new FormData();
         //file.name= 'test.pdf';
         fd.append('file', file);
+*/
 
-
-        $http.post(uploadUrl, fd, {
+       return $http.post(uploadUrl, fd, {
                 transformRequest: angular.identity,
                 headers: {'Content-Type': undefined,
                             'SubmissionID' : userId
                 }
-            })
+            });
 
-            .success(function(){
+           /* .success(function(){
                 console.log('file upload successfully');
+                $window.location.href = "#/home"
             })
 
             .error(function(){
                 console.log('file upload failed');
-            });
+            });*/
     }
 }]);
 
@@ -207,7 +208,20 @@ var subid;
         console.dir(file);
 
         var uploadUrl = "/upload";
-        fileUpload.uploadFileToUrl(file,userId, uploadUrl);
+
+        var fd = new FormData();
+        //file.name= 'test.pdf';
+        fd.append('file', file);
+
+        fileUpload.uploadFileToUrl(file,userId, uploadUrl, fd)
+            .success(function(){
+                console.log('file upload successfully');
+                $window.location.href = "#/home"
+            })
+
+            .error(function(){
+                console.log('file upload failed');
+            });
     }
 
     function getUserListForAuthor(){
