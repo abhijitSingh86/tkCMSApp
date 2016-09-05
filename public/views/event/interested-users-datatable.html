@@ -5,8 +5,8 @@
     <title>Title</title>
 </head>
 <body>
-<div flex ng-controller="EventUsersController" ng-init="renderUsersInterestedInEvent()">
-    <table datatable="ng" dt-options="dtOptions1" dt-column-defs="dtColumnDefs1" dt-instance="dtInstance" class="row-border hover" ng-init="initialize()">
+<div flex ng-controller="EventUsersNotAcceptedController as ctrl" ng-init="renderUsersInterestedInEvent()">
+    <table datatable="ng" dt-options="ctrl.dtOptions1" dt-column-defs="ctrl.dtColumnDefs1" dt-instance="ctrl.dtInstance1" class="row-border hover" ng-init="initialize()">
         <thead>
         <tr>
             <th>Select</th>

@@ -61,4 +61,12 @@ angular.module('loginModule',[]).controller('LoginController',
             $scope.backtologin = function () {
                 $state.go('login');
             }
+
+            $scope.successText = "Some content";
+            $scope.showSuccess = true;
+
+            $scope.switchBool = function(value) {
+                $scope[value] = !$scope[value];
+
+            };
         });
