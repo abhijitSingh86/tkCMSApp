@@ -1,6 +1,6 @@
 var mainApplicationModuleName = 'conference-system';
-var mainApplicationModule = angular.module(mainApplicationModuleName, ['leftPanelModule','submissionModule','reviewerModule','authenticationServiceModule','loginModule','eventsModule','datatables',
-        'ngMaterial','ngMessages','ngRoute','ui.router','ngCookies','vAccordion','angularTrix', 'ncy-angular-breadcrumb','ngResource']);
+var mainApplicationModule = angular.module(mainApplicationModuleName, ['leftPanelModule','submissionModule','reviewerModule','authenticationServiceModule','loginModule','eventsModule','datatables', 'chartModule',
+        'ngMaterial','ngMessages','ngRoute','ui.router','ngCookies','vAccordion','angularTrix', 'ncy-angular-breadcrumb','ngResource', 'chart.js']);
 
 mainApplicationModule.directive('fileModel', ['$parse', function ($parse) {
     return {

@@ -60,6 +60,18 @@
                     </md-select>
                 </md-input-container>
             </div>
+            <div layout-gt-sm="row" class="layout-gt-sm-row">
+                <md-input-container class="md-block" flex-gt-md>
+                    <label>Event Id</label>
+                    <input  ng-disabled="true" name="eventId" ng-model="sub.submissionEventId._id">
+                </md-input-container>
+            </div>
+            <div layout-gt-sm="row" class="layout-gt-sm-row">
+                <md-input-container class="md-block" flex-gt-md>
+                    <label>Event Name</label>
+                    <input  ng-disabled="true" name="eventName" ng-model="sub.submissionEventId.name">
+                </md-input-container>
+            </div>
             <section layout="row" layout-sm="column" ng-if="new" layout-align="end" layout-wrap>
                 <md-button ng-click="withdrawSubmission()" ng-if="showWithdraw"class="md-raised md-primary">Withdraw Submission</md-button>
                 <md-button type="submit" ng-click="submissionSubmit(sub) " name="submit" class="md-raised md-primary">Submit</md-button>
