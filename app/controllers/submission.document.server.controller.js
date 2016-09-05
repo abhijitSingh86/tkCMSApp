@@ -13,8 +13,8 @@ var storage = multer.diskStorage({ //multers disk storage settings
         cb(null, './uploads/')
     },
     filename: function (req, file, cb) {
-        var datetimestamp = Date.now();
-        cb(null, file.fieldname + '-' + datetimestamp + '.' + file.originalname.split('.')[file.originalname.split('.').length -1])
+        //var datetimestamp = Date.now();
+        cb(null, req.headers.submissionid + '.pdf')//file.fieldname + '-' + datetimestamp + '.' + file.originalname.split('.')[file.originalname.split('.').length -1])
     }
 });
 var upload = multer({ //multer settings
@@ -22,7 +22,9 @@ var upload = multer({ //multer settings
 }).single('file');
 
 exports.upload = function(req, res,next) {
+    
     console.log("here");
+    console.log(req.headers);
     upload(req,res,function(err){
         if(err){
             res.json({error_code:1,err_desc:err});
