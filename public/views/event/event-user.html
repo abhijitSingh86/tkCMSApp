@@ -48,7 +48,7 @@
                 <div flex layout="row" layout-padding ng-include="'views/submission/submission-form.html'">
                 </div>
             </md-tab>
-            <md-tab label="Reviews" ng-if="normalUser && hideReviewsTab">
+            <md-tab label="Reviews" ng-if="normalUser && eventAccess && hideReviewsTab">
                 <!--<div layout-padding="" class="layout-padding" ui-view="review-datatable">
                 </div>-->
                 <div flex layout="row" layout-padding ng-include="'views/reviews/reviews-inevents-datatable.html'">

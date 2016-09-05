@@ -23,7 +23,7 @@ app.controller('ReviewController', function ($scope, $http, $mdToast, $state,$st
     };
     $scope.updateReview = function(review) {
         // send a put request to the server
-        $http.put('/reviewer/',
+        $http.put('/review/'+review._id,
             review)
         // handle success
             .success(function (review) {
