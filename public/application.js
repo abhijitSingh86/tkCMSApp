@@ -372,7 +372,18 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider','$breadcrum
                 auth: authenticateLogin
             }
         })
-        function authenticateLogin(AuthService, $q, $rootScope) {
+        .state('forgot_pass', {
+
+            url:'/forgot_pass',
+            views: {
+                'mainpanel': {
+                    templateUrl: 'views/authentication/forgot_pass.html',
+                    controller : 'forgotPasswordController'
+                }
+            }
+        })
+
+    function authenticateLogin(AuthService, $q, $rootScope) {
             var deferred = $q.defer();
             if (AuthService.isLoggedIn()) {
                 deferred.reject({redirectTo: 'home'});
