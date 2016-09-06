@@ -14,6 +14,7 @@ app.controller('ReviewController', function ($scope, $http, $mdToast, $state,$st
             .success(function (review) {
                 $mdToast.show($mdToast.simple().textContent("Created Successfully"));
                 $scope.new = false;
+                $scope.review = review;
             })
             // handle error
             .error(function (data) {
@@ -22,7 +23,7 @@ app.controller('ReviewController', function ($scope, $http, $mdToast, $state,$st
     };
     $scope.updateReview = function(review) {
         // send a put request to the server
-        $http.put('/reviewer/',
+        $http.put('/review/'+review._id,
             review)
         // handle success
             .success(function (review) {
@@ -46,7 +47,7 @@ app.controller('ReviewController', function ($scope, $http, $mdToast, $state,$st
                 });
     }
     $scope.renderDataTableForMyReviews = function(){
-        //Get all reviews for this particular document Id
+        //Get all reviews for the logged in User
         var url = '/getAllReviewForUser/'+AuthService.getUserId();
         $http.get(url)
         // handle success
@@ -63,6 +64,23 @@ app.controller('ReviewController', function ($scope, $http, $mdToast, $state,$st
     }
     $scope.loadReview = function(){
         $http.get("/review/"+$state.params.id)
+        // handle success
+            .success(function (data) {
+                $scope.review = data[0];
+                if(AuthService.getUserId() == $scope.review.createdBy._id){
+                    $scope.allowUpdate = true;
+                } else {
+                    $scope.allowUpdate = false;
+                }
+            })
+            // handle error
+            .error(function (data) {
+            });
+    }
+    $scope.renderAllReviewsDataTableForChair = function(){
+        //Get all reviews
+        var url = '/reviewer/';
+        $http.get(url)
         // handle success
             .success(function (data) {
                 $scope.reviews = data;
@@ -119,7 +137,7 @@ app.controller('UserListForReviewController', function ($http, $scope, DTOptions
                 $http.put(url, data)
                 // handle success
                     .success(function (data) {
-                        $scope.renderUsersToBeAssignedForUser();
+                        $scope.renderUsersToBeAssignedForReview();
                     })
                     // handle error
                     .error(function (data) {

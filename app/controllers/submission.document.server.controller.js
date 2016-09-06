@@ -1,15 +1,73 @@
 var SubmissionDocument = require("mongoose").model("SubmissionDocument");
 var mongoose = require("mongoose");
+var express = require('express');
+var app = express();
+var path = require('path');
+var formidable = require('formidable');
+var fs = require('fs')
+var bodyParser = require('body-parser');
+var multer = require('multer');;
+
+var storage = multer.diskStorage({ //multers disk storage settings
+    destination: function (req, file, cb) {
+        cb(null, './uploads/')
+    },
+    filename: function (req, file, cb) {
+        //var datetimestamp = Date.now();
+        cb(null, req.headers.submissionid + '.pdf')//file.fieldname + '-' + datetimestamp + '.' + file.originalname.split('.')[file.originalname.split('.').length -1])
+    }
+});
+var upload = multer({ //multer settings
+    storage: storage
+}).single('file');
+
+exports.upload = function(req, res,next) {
+    
+    console.log("here");
+    console.log(req.headers);
+    upload(req,res,function(err){
+        if(err){
+            res.json({error_code:1,err_desc:err});
+            return;
+        }
+        res.json({error_code:0,err_desc:null});
+    })
+
+
+}
+
+exports.download = function(req,res) {
+    console.log("here");
+    console.log(req.params.userId);
+    console.log(req.params.subDocId);
+    //var nomefile = req.body.id;
+   // var nomefile = req.body.id;
+    var file = fs.readFileSync('./uploads/'+req.params.userId+'_'+ req.params.subDocId+'.pdf','binary');
+    console.log(file);
+    res.setHeader('Content-Length', file.length);
+    res.write(file,'binary');
+    res.end();
+
+};
+   /* res.status(200);
+    var filepath = path.normalize(__dirname + '/../../');
+    filepath += 'uploads';
+    console.log(filepath);
+   // var filename = req.params.userId+'_' +req.params.subDocId +'.pdf';
+    var filename='test_test.pdf';
+    res.download(filepath,filename);*/
+//};
 
 
 exports.create = function(req, res, next) {
-    var submissionEvent = new SubmissionDocument(req.body);
-    submissionEvent.save(function(err) {
+
+    var submissionDoc = new SubmissionDocument(req.body);
+    submissionDoc.save(function(err) {
         if (err) {
             console.log(err)
             return next(err);
         } else {
-            res.json(submissionEvent);
+            res.json(submissionDoc);
         }
     });
 };
@@ -98,12 +156,17 @@ exports.listOfSubmissionDocumentForUser= function  listOfSubmissionDocumentForUs
     if (true){//req.user) {
         var userId = req.body.userId;
 
-        SubmissionDocument.findOne({
+        SubmissionDocument.find({
             createdBy : userId
         }).exec(function(err, result) {
             if (err) {
                 return res.status(400).json({"error":"Error occurred while query execution"});
             } else {
+                var array = [];
+                if(result != null && result.length >0)
+                    for(var i=0;i<result.length;i++){
+                        array.push(result[i]);
+                    }
                     res.json(result);
             }
         });
@@ -127,4 +190,18 @@ exports.listOfAllSubmissionsForEvent = function(req,res){
           }
       });
   }
+};
+
+exports.listOfAllReviewsForSubmissionDocument = function(req,res){
+    if(true) {//
+        SubmissionDocument.find({
+            _id: req.submissionDocument._id
+        }).populate("").exec(function(err,result){
+            if(err){
+                res.status(400).json({"error":"error retrieving the document for event id"});
+            }else{
+                res.json(result);
+            }
+        });
+    }
 };

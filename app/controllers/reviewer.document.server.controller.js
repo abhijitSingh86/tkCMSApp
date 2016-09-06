@@ -17,7 +17,7 @@ exports.list = function(req, res, next) {
 
 
 exports.listAll = function(req, res) {
-    ReviewersDocument.find().populate('submissionDocId').exec(function(err, result) {
+    ReviewersDocument.find().populate('submissionDocId').populate("createdBy","firstName email lastName").exec(function(err, result) {
         if (err) {
             res.status(400).json({"error":"Error processing the list all review call"})
         } else {
@@ -31,23 +31,12 @@ exports.listAll = function(req, res) {
 *  Update/insert command based on the submission id.
 *
 * */
-exports.put = function(req, res, next) {
-    ReviewersDocument.Place.findOneAndUpdate(req.reviewerDocument.id, req.body,{upsert: true}, function(err, reviewerDocument){
+exports.put = function(req, res) {
+    ReviewersDocument.findOneAndUpdate(req.reviewerDocument.id, req.body, function(err, reviewerDocument){
         if (err) {
-
-            var ReviewersDocument1 = new ReviewersDocument(req.body);
-            ReviewersDocument1.save(function(err) {
-                if (err) {
-                    console.log(err)
-                    return next(err);
-                } else {
-                    res.json(ReviewersDocument1);
-                }
-
-            });
-        }
-        else {
-            res.json(subevnts);
+            res.status(400).json({"error":"Error saving reviewer document"});
+        }else {
+            res.json(reviewerDocument);
         }
     });
 };
