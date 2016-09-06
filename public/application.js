@@ -1,23 +1,6 @@
 var mainApplicationModuleName = 'conference-system';
-var mainApplicationModule = angular.module(mainApplicationModuleName, ['leftPanelModule','submissionModule','reviewerModule','authenticationServiceModule','loginModule','eventsModule','datatables', 'chartModule',
-        'ngMaterial','ngMessages','ngRoute','ui.router','ngCookies','vAccordion','angularTrix', 'ncy-angular-breadcrumb','ngResource', 'chart.js']);
-
-mainApplicationModule.directive('fileModel', ['$parse', function ($parse) {
-    return {
-        restrict: 'A',
-        link: function(scope, element, attrs) {
-            var model = $parse(attrs.fileModel);
-            var modelSetter = model.assign;
-
-            element.bind('change', function(){
-                scope.$apply(function(){
-                    modelSetter(scope, element[0].files[0]);
-                });
-            });
-        }
-    };
-}]);
-
+var mainApplicationModule = angular.module(mainApplicationModuleName
+    , ['leftPanelModule','submissionModule','reviewerModule','authenticationServiceModule','loginModule','eventsModule','datatables','ngMaterial','ngMessages','ngRoute','ui.router','ngCookies','vAccordion','angularTrix', 'ncy-angular-breadcrumb']);
 
 mainApplicationModule.config(['$stateProvider', '$urlRouterProvider','$breadcrumbProvider', function($stateProvider, $urlRouterProvider, $breadcrumbProvider) {
     $breadcrumbProvider.setOptions({
@@ -197,7 +180,7 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider','$breadcrum
                 parent: 'home'
             },
         })
-        //access: normal user/Chair User
+        //access: normal user
         .state('home.review', {
             url: 'review/:id',
             views: {
@@ -266,20 +249,6 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider','$breadcrum
             },
         })
         //access: chair
-        .state('home.chair-allsubmissions', {
-            url: 'admin/all-submissions',
-            views: {
-                'mainpanel@': {
-                    templateUrl: 'views/submission/chair.all-submissions-datatable.html',
-                    controller: 'SubmissionController'
-                }
-            },
-            ncyBreadcrumb: {
-                label: "All Submissions",
-                parent: "home"
-            }
-        })
-        //access: chair
         .state('home.chair-submission', {
             url: 'admin/submission/:id',
             views: {
@@ -307,34 +276,11 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider','$breadcrum
                 skip:true
             },
         })
-        //access: chair
-        .state('home.chair-allreviews', {
-            url: 'admin/all-reviews',
-            views: {
-                'mainpanel@': {
-                    templateUrl: 'views/reviews/chair.all-reviewsdatatable.html',
-                    controller: 'ReviewController'
-                }
-            },
-            ncyBreadcrumb: {
-                label: 'All Reviews',
-                parent: 'home'
-            }
-        })
         .state('home.newsubmission', {
             url: 'submission',
             views: {
                 'mainpanel@': {
                     templateUrl: 'views/submission/submission-form.html',
-                    controller: 'SubmissionFormController'
-                }
-            },
-        })
-        .state('home.uploadDoc', {
-            url: 'uploadDoc',
-            views: {
-                'mainpanel@': {
-                    templateUrl: 'views/submission/uploadDoc.html',
                     controller: 'SubmissionFormController'
                 }
             },
@@ -372,18 +318,7 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider','$breadcrum
                 auth: authenticateLogin
             }
         })
-        .state('forgot_pass', {
-
-            url:'/forgot_pass',
-            views: {
-                'mainpanel': {
-                    templateUrl: 'views/authentication/forgot_pass.html',
-                    controller : 'forgotPasswordController'
-                }
-            }
-        })
-
-    function authenticateLogin(AuthService, $q, $rootScope) {
+        function authenticateLogin(AuthService, $q, $rootScope) {
             var deferred = $q.defer();
             if (AuthService.isLoggedIn()) {
                 deferred.reject({redirectTo: 'home'});
@@ -419,11 +354,3 @@ angular.element(document).ready(function() {
     angular.bootstrap(document, [mainApplicationModuleName]);
 });
 
-$('#upload-btn').on('click', function (){
-    $('#upload-input').click();
-    $('.progress-bar').text('0%');
-    $('.progress-bar').width('0%');
-});
-$('#upload-input').on('change', function(){
-    console.log('on change happened for file');
-});
