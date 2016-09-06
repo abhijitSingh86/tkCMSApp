@@ -118,7 +118,22 @@ app.controller('SubmissionController', function ($scope, $http, $mdToast, $state
             .error(function (data) {
             });
     };
-
+    $scope.downloadfile =function(file) {
+        nfile = {id: file};
+        var responseType = 'arraybuffer';
+        $http.post('/subDocument/'+AuthService.getUserId()+'/'+$scope.sub.id, nfile, {responseType: 'arraybuffer'}).then(function(succ,err){
+            var blob = new Blob([succ.data], {type: "application/pdf"});
+            var fileURL = URL.createObjectURL(blob);
+            var a         = document.createElement('a');
+            a.href        = fileURL;
+            a.target      = '_blank';
+            a.download    = 'file.pdf';
+            document.body.appendChild(a);
+            a.click();
+            //saveAs(blob, "helloWorld.pdf");
+        });
+    };
+    
     $scope.loadAllReviewsForNormalUser = function(){
         $state.go('home.my-submission.reviews',{documentId: $state.params.id});
     }
