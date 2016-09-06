@@ -7,7 +7,31 @@
 <body>
 <!-- Container #3 -->
 <div flex layout="row">
-
+    <md-card flex class="row" ng-controller="LineCtrl" ng-if="chair">
+        <div class="col-lg-6 col-sm-12">
+            <div class="panel panel-default">
+                <md-toolbar class="md-hue-2">
+                    <div class="md-toolbar-tools">Submissions Statistics
+                    </div>
+                </md-toolbar>
+                <canvas class="chart chart-line" chart-data="data" chart-labels="labels"
+                        chart-series="series" chart-click="onClick"></canvas>
+            </div>
+        </div>
+    </md-card>
+    <md-card flex class="row" ng-controller="LineCtrl" ng-if="chair">
+        <div class="col-lg-6 col-sm-12">
+            <div class="panel panel-default">
+                <md-toolbar class="md-hue-2">
+                    <div class="md-toolbar-tools">Submissions Chart
+                    </div>
+                </md-toolbar>
+                <canvas id="pie" class="chart chart-pie"
+                        chart-data="data1" chart-labels="labels1" chart-options="options">
+                </canvas>
+            </div>
+        </div>
+    </md-card>
 </div>
 </body>
 </html>

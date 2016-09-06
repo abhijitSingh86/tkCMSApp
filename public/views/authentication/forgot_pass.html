@@ -1,17 +1,20 @@
-<div ng-controller="ResetPassCtrl" class="inputIcons" ng-app="MyApp1" align="center">
+<div class="inputIcons" align="center">
     <h5 class="md-display-2" align="center" style="margin-top: 7%">Please enter your email address</h5>
     <br>
     <md-content class="autoScroll" style="margin-top: 2%">
         <md-input-container class="md-icon-float md-block" flex="25" align="center">
             <!-- Use floating label instead of placeholder -->
-            <label>EMail Required</label>
-            <md-icon md-svg-src="images/icons/ic_person_24px.svg" class="name"></md-icon>
-            <input ng-model="resetPasswordEmail" type="text" aria-setsize="10">
+            <form name="myForm" ng-submit="login()">
+                <label>EMail Required</label>
+                <md-icon md-svg-src="images/icons/ic_person_24px.svg" class="name"></md-icon>
+                <input ng-model="resetPasswordEmail" type="email" aria-setsize="10" name="myAddress" ng-required="true" ng-change="resetPassword()">
+                <br>      <span ng-show="myForm.myAddress.$error.email">Not a valid e-mail address</span>
         </md-input-container>
 
-
-        <md-button class="md-button" required=""> <md-icon>Submit</md-icon></md-button>
-
+        <div>
+            <button class="md-button" required="true" ng-click="resetPassword()"> <md-icon>Submit</md-icon></button>
+            <button ui-sref="login"  class="md-button"> <md-icon>Back</md-icon></button></div>
     </md-content>
+    </form>
 
 </div>

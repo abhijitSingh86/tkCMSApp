@@ -1,6 +1,6 @@
 var mainApplicationModuleName = 'conference-system';
-var mainApplicationModule = angular.module(mainApplicationModuleName, ['leftPanelModule','submissionModule','reviewerModule','authenticationServiceModule','loginModule','eventsModule','datatables',
-        'ngMaterial','ngMessages','ngRoute','ui.router','ngCookies','vAccordion','angularTrix', 'ncy-angular-breadcrumb','ngResource']);
+var mainApplicationModule = angular.module(mainApplicationModuleName, ['leftPanelModule','submissionModule','reviewerModule','authenticationServiceModule','loginModule','eventsModule','datatables', 'chartModule',
+        'ngMaterial','ngMessages','ngRoute','ui.router','ngCookies','vAccordion','angularTrix', 'ncy-angular-breadcrumb','ngResource', 'chart.js']);
 
 mainApplicationModule.directive('fileModel', ['$parse', function ($parse) {
     return {
@@ -372,7 +372,18 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider','$breadcrum
                 auth: authenticateLogin
             }
         })
-        function authenticateLogin(AuthService, $q, $rootScope) {
+        .state('forgot_pass', {
+
+            url:'/forgot_pass',
+            views: {
+                'mainpanel': {
+                    templateUrl: 'views/authentication/forgot_pass.html',
+                    controller : 'forgotPasswordController'
+                }
+            }
+        })
+
+    function authenticateLogin(AuthService, $q, $rootScope) {
             var deferred = $q.defer();
             if (AuthService.isLoggedIn()) {
                 deferred.reject({redirectTo: 'home'});
