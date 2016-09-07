@@ -3,8 +3,8 @@ app.controller("LineCtrl", ['$scope', '$timeout', function ($scope, $timeout) {
     $scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
     $scope.series = ['Accepted Submissions', 'Open Submissions'];
     $scope.data = [
-        [65, 54, 85, 81, 59, 57, 47],
-        [24, 41, 42, 12, 85, 28, 91]
+        [65, 59, 80, 81, 56, 55, 40],
+        [28, 48, 40, 19, 86, 27, 90]
     ];
     $scope.onClick = function (points, evt) {
         console.log(points, evt);
@@ -13,8 +13,8 @@ app.controller("LineCtrl", ['$scope', '$timeout', function ($scope, $timeout) {
     // Simulate async data update
     $timeout(function () {
         $scope.data = [
-            [29, 49, 41, 18, 87, 28, 91],
-            [66, 58, 81, 82, 55, 54, 41]
+            [28, 48, 40, 19, 86, 27, 90],
+            [65, 59, 80, 81, 56, 55, 40]
         ];
     }, 3000);
 
