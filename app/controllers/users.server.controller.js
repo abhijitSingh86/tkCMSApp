@@ -99,7 +99,7 @@ exports.signup = function(req, res, next) {
         user.save(function(err) {
             if (err) {
                 var message = getErrorMessage(err);
-                res.json('error', message);
+                res.json({'error': message});
                 return res;
             }
             req.login(user, function(err) {
