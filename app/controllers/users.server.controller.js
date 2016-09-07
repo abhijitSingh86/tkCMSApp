@@ -99,7 +99,7 @@ exports.signup = function(req, res, next) {
         user.save(function(err) {
             if (err) {
                 var message = getErrorMessage(err);
-                res.json({'error': message});
+                res.status(400).json({'error': message});
                 return res;
             }
             req.login(user, function(err) {
@@ -119,7 +119,7 @@ exports.create = function(req, res, next) {
         user.save(function(err) {
             if (err) {
                 var message = getErrorMessage(err);
-                res.json({"user" : "invalid","error" : message});
+                res.status(400).json({"user" : "invalid","error" : message});
             }
             req.login(user, function(err) {
                 if (err) return next(err);
