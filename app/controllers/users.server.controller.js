@@ -99,14 +99,15 @@ exports.signup = function(req, res, next) {
         user.save(function(err) {
             if (err) {
                 var message = getErrorMessage(err);
-                res.json('error', message);
+                res.status(400).json({'error': message});
                 return res;
             }
-            req.login(user, function(err) {
-                if (err) return next(err);
-                return res.json({"action":"success"});
-            });
+            // req.login(user, function(err) {
+            //     if (err) return next(err);
+            // });
+            return res.json({"action":"success"});
         });
+
     } else {
         return res.json({"action":"success"});
     }
@@ -119,12 +120,12 @@ exports.create = function(req, res, next) {
         user.save(function(err) {
             if (err) {
                 var message = getErrorMessage(err);
-                res.json({"user" : "invalid","error" : message});
+                res.status(400).json({"user" : "invalid","error" : message});
             }
-            req.login(user, function(err) {
-                if (err) return next(err);
-                res.json({"user" : "valid"});
-            });
+            // req.login(user, function(err) {
+            //     if (err) return next(err);
+            //     res.json({"user" : "valid"});
+            // });
         });
     } else {
         res.json({"user" : "valid"});
@@ -351,6 +352,42 @@ exports.subscribeReviewerToDocument = function(req, res, next){
                     });
 
                 SubmissionDocument.update({_id: mongoose.Types.ObjectId(submissionDocumentId)}, {$addToSet: {reviewers: mongoose.Types.ObjectId(userList[i])}},
+                    {new: true, safe: true},
+                    function (err, output) {
+                        if (err) {
+                            return next(err);
+                        } else {
+
+                        }
+                    });
+            }
+            res.json({"success": 1});
+        }else{
+            res.status(400).json({"error":"Interested user list can't be empty"})
+        }
+    }else{
+        res.status(401).json({"error":"User is not authorized to change the Event"});
+    }
+};
+
+exports.removeReviewerFromDocument = function(req, res, next){
+    if(true){//req.user && user.isChair(req)) {
+
+        var userList = req.body.users;
+        var submissionDocumentId = req.body.submissionDocumentId;
+        if(userList && userList.length >0) {
+            for(var i=0;i<userList.length;i++) {
+                User.update({_id: mongoose.Types.ObjectId(userList[i])}, {$pull: {assignedSubmissionForReview: mongoose.Types.ObjectId(submissionDocumentId)}},
+                    {new: true, safe: true},
+                    function (err, output) {
+                        if (err) {
+                            return next(err);
+                        } else {
+                            //res.json({"success": output});
+                        }
+                    });
+
+                SubmissionDocument.update({_id: mongoose.Types.ObjectId(submissionDocumentId)}, {$pull: {reviewers: mongoose.Types.ObjectId(userList[i])}},
                     {new: true, safe: true},
                     function (err, output) {
                         if (err) {

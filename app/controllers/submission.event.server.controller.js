@@ -231,8 +231,22 @@ exports.retrieveInterestedReviewersForEventAndDocument = function(req, res, next
                     }
                     if(!flag && submissionEvent.interestedUsersAsReviewer[i].id != req.submissionDocument.createdBy.id){
                         accepted.push(submissionEvent.interestedUsersAsReviewer[i]);
-                    }else{
-                        notAccepted.push(submissionEvent.interestedUsersAsReviewer[i]);
+                    }else if(submissionEvent.interestedUsersAsReviewer[i].id != req.submissionDocument.createdBy.id){
+
+                        if(req.submissionDocument.authors && req.submissionDocument.authors.length>0){
+                            var flag2 =false;
+                            for(var j=0;j<req.submissionDocument.authors.length;j++) {
+                                if (submissionEvent.interestedUsersAsReviewer[i].id == req.submissionDocument.authors[j].id) {
+                                    flag2=true;
+                                    break;
+                                }
+                            }
+                            if(!flag2) {
+                                notAccepted.push(submissionEvent.interestedUsersAsReviewer[i]);
+                            }
+
+                        }
+
                     }
 
                 }
@@ -247,8 +261,20 @@ exports.retrieveInterestedReviewersForEventAndDocument = function(req, res, next
                     }
                     if(!flag && submissionEvent.interestedUsers[i].id != req.submissionDocument.createdBy.id){
                         accepted.push(submissionEvent.interestedUsers[i]);
-                    }else{
-                        notAccepted.push(submissionEvent.interestedUsers[i]);
+                    }else if(submissionEvent.interestedUsers[i].id != req.submissionDocument.createdBy.id) {
+                        if (req.submissionDocument.authors && req.submissionDocument.authors.length > 0) {
+                            var flag2 = false;
+                            for (var j = 0; j < req.submissionDocument.authors.length; j++) {
+                                if (submissionEvent.interestedUsers[i].id == req.submissionDocument.authors[j].id) {
+                                    flag2 = true;
+                                    break;
+                                }
+                            }
+                            if (!flag2) {
+                                notAccepted.push(submissionEvent.interestedUsers[i]);
+                            }
+                        }
+
                     }
                 }
 

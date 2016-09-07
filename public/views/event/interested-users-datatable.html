@@ -6,7 +6,7 @@
 </head>
 <body>
 <div flex ng-controller="EventUsersNotAcceptedController as ctrl" ng-init="renderUsersInterestedInEvent()">
-    <table datatable="ng" dt-options="ctrl.dtOptions1" dt-column-defs="ctrl.dtColumnDefs1" dt-instance="ctrl.dtInstance1" class="row-border hover" ng-init="initialize()">
+    <table datatable="ng" dt-options="ctrl.dtOptions1" dt-column-defs="ctrl.dtColumnDefs1" dt-instance="ctrl.dtInstance1" class="row-border hover">
         <thead>
         <tr>
             <th>Select</th>
@@ -17,7 +17,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="user in users track by $index">
+        <tr ng-repeat="user in ctrl.users track by $index">
             <td><md-checkbox  aria-label="select User" ng-model="user.clicked" ng-change="toggle(user.id, selected)"></md-checkbox></td>
             <td>{{ user.username }}</td>
             <td>{{ user.firstName }}</td>

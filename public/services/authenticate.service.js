@@ -1,5 +1,5 @@
 angular.module('authenticationServiceModule',[]).factory('AuthService',
-        function ($q, $timeout, $http, $rootScope, $state, $cookies,$cookieStore) {
+        function ($q, $timeout, $http, $rootScope, $state, $cookies,$cookieStore, $mdToast) {
             // create user variable
             var user = null;
 
@@ -72,6 +72,7 @@ angular.module('authenticationServiceModule',[]).factory('AuthService',
                             $cookieStore.put('globals', $rootScope.globals);
                             deferred.resolve();
                         } else {
+                            $mdToast.show($mdToast.simple().textContent(data.error));
                             user = false;
                             deferred.reject();
                         }
@@ -102,6 +103,7 @@ angular.module('authenticationServiceModule',[]).factory('AuthService',
                     })
                     // handle error
                     .error(function (data) {
+                        $mdToast.show($mdToast.simple().textContent(data.error));
                         user = false;
                         deferred.reject();
                     });
@@ -128,6 +130,7 @@ angular.module('authenticationServiceModule',[]).factory('AuthService',
                     })
                     // handle error
                     .error(function (data) {
+                        $mdToast.show($mdToast.simple().textContent(data.error));
                         deferred.reject();
                     });
 

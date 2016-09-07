@@ -104,14 +104,14 @@ app.controller('UserListForReviewController', function ($rootScope, $http, $scop
         ];
 
         function getNotAcceptedUsers() {
-            // url to get users to be assigned as a reviewer(to be changed)
+            // url to get users to be assigned as a reviewer
             return $http.get('/subEvent/getInterestedReviewersBasedOnDocument/'+$state.params.id);
         }
         $scope.renderUsersToBeAssignedForReview = function(){
             var promise = getNotAcceptedUsers();
             promise.then(
             function(payload) {
-                vm.users = payload.data.notAccepted;
+                vm.users = payload.data.accepted;
             },
             function(errorPayload) {
             });
@@ -132,7 +132,7 @@ app.controller('UserListForReviewController', function ($rootScope, $http, $scop
                 $mdToast.show($mdToast.simple().textContent("Please select atleast one user"));
             } else {
                 /*send list to service which will assign this list of users as reviewers and refresh the table*/
-                // url to submit users to be assigned as a reviewer(to be changed)
+                // url to submit users to be assigned as a reviewer
                 var url = "assignDocumentToUsersReview";
                 var data = {
                     "submissionDocumentId":$state.params.id,
@@ -153,7 +153,7 @@ app.controller('UserListForReviewController', function ($rootScope, $http, $scop
             var promise = getNotAcceptedUsers();
             promise.then(
                 function(payload) {
-                    vm.users = payload.data.notAccepted;
+                    vm.users = payload.data.accepted;
                 },
                 function(errorPayload) {
                 });
@@ -162,7 +162,7 @@ app.controller('UserListForReviewController', function ($rootScope, $http, $scop
             var promise = getNotAcceptedUsers();
             promise.then(
                 function(payload) {
-                    vm.users = payload.data.notAccepted;
+                    vm.users = payload.data.accepted;
                     $rootScope.$emit("reloadAssignedReviewers");
                 },
                 function(errorPayload) {
@@ -174,7 +174,7 @@ app.controller('AssignedUserListForReviewController', function ($rootScope, $htt
     var vm = this;
     vm.dtInstance = {};
     function getAcceptedUsers() {
-        // url to get users to be assigned as a reviewer(to be changed)
+        // url to get users to be assigned as a reviewer
         return $http.get('/subEvent/getInterestedReviewersBasedOnDocument/'+$state.params.id);
     }
 
@@ -182,23 +182,34 @@ app.controller('AssignedUserListForReviewController', function ($rootScope, $htt
         var promise = getAcceptedUsers();
         promise.then(
             function(payload) {
-                vm.usersAssigned = payload.data.accepted;
+                vm.usersAssigned = payload.data.notAccepted;
             },
             function(errorPayload) {
             });
     }
+    $scope.selected = [];
+    $scope.toggle = function (itemId, list) {
+        var idx = list.indexOf(itemId);
+        if (idx > -1) {
+            list.splice(idx, 1);
+        }
+        else {
+            list.push(itemId);
+        }
+    };
     $scope.remove = function() {
         if($scope.selected == 0){
             $mdToast.show($mdToast.simple().textContent("Please select atleast one user"));
         } else {
+            debugger;
             /*send list to service which will assign this list of users as reviewers and refresh the table*/
-            // url to submit users to be assigned as a reviewer(to be changed)
-            var url = "removeDocumentToUsersReview";
+            // url to submit users to be assigned as a reviewer
+            var url = "assignDocumentToUsersReview";
             var data = {
                 "submissionDocumentId":$state.params.id,
                 "users":$scope.selected
             }
-            $http.put(url, data)
+            $http.post(url, data)
             // handle success
                 .success(function (data) {
                     reload()
@@ -209,11 +220,10 @@ app.controller('AssignedUserListForReviewController', function ($rootScope, $htt
         }
     };
     $rootScope.$on("reloadAssignedReviewers", function(event,arg){
-        debugger;
         var promise = getAcceptedUsers();
         promise.then(
             function(payload) {
-                vm.usersAssigned =payload.data.accepted;
+                vm.usersAssigned =payload.data.notAccepted;
             },
             function(errorPayload) {
             });
@@ -222,7 +232,7 @@ app.controller('AssignedUserListForReviewController', function ($rootScope, $htt
         var promise = getAcceptedUsers();
         promise.then(
             function(payload) {
-                vm.usersAssigned = payload.data.accepted;
+                vm.usersAssigned = payload.data.notAccepted;
                 $rootScope.$emit("reloadToBeAssignedReviewers");
             },
             function(errorPayload) {

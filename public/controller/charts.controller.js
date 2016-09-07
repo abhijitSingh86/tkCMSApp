@@ -18,6 +18,6 @@ app.controller("LineCtrl", ['$scope', '$timeout', function ($scope, $timeout) {
         ];
     }, 3000);
 
-    $scope.labels1 = ["InProgress Submissions", "Completed Submissions", "Accepted Submissions"];
-    $scope.data1 = [300, 500, 100];
+    $scope.labels1 = ["InProgress Submissions", "Completed Submissions"];
+    $scope.data1 = [2, 5];
 }]);
