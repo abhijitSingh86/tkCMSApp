@@ -3,8 +3,8 @@ app.controller("LineCtrl", ['$scope', '$timeout', function ($scope, $timeout) {
     $scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
     $scope.series = ['Accepted Submissions', 'Open Submissions'];
     $scope.data = [
-        [64, 58, 81, 82, 57, 56, 41],
-        [27, 49, 41, 18, 85, 28, 91]
+        [65, 54, 85, 81, 59, 57, 47],
+        [24, 41, 42, 12, 85, 28, 91]
     ];
     $scope.onClick = function (points, evt) {
         console.log(points, evt);
