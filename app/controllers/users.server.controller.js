@@ -346,10 +346,21 @@ exports.subscribeReviewerToDocument = function(req, res, next){
                         if (err) {
                             return next(err);
                         } else {
-                            res.json({"success": output});
+                            //res.json({"success": output});
+                        }
+                    });
+
+                SubmissionDocument.update({_id: mongoose.Types.ObjectId(submissionDocumentId)}, {$addToSet: {reviewers: mongoose.Types.ObjectId(userList[i])}},
+                    {new: true, safe: true},
+                    function (err, output) {
+                        if (err) {
+                            return next(err);
+                        } else {
+
                         }
                     });
             }
+            res.json({"success": 1});
         }else{
             res.status(400).json({"error":"Interested user list can't be empty"})
         }
