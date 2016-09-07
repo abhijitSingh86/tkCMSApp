@@ -2,8 +2,11 @@
  * Created by pratik_k on 8/24/2016.
  */
 angular.module('loginModule',[]).controller('LoginController',
-        function ($scope, $location, AuthService,$rootScope, $state, $mdToast) {
-
+        function ($scope, $location, AuthService,$rootScope, $state, $mdToast, $http) {
+            var user = AuthService.getUser();
+            if(user !== undefined) {
+                $rootScope.userName = user.username;
+            }
             $scope.login = function () {
 
                 // call login from service
@@ -52,7 +55,6 @@ angular.module('loginModule',[]).controller('LoginController',
                     })
                     // handle error
                     .catch(function (data) {
-                        debugger;
                         $mdToast.show($mdToast.simple().textContent(data.error));
                     });
 
@@ -69,4 +71,31 @@ angular.module('loginModule',[]).controller('LoginController',
                 $scope[value] = !$scope[value];
 
             };
+
+            $scope.editProfile = function(user){
+                // send a put request to the server
+                $http.put('/users/'+user._id,
+                    user)
+                    // handle success
+                    .success(function (data) {
+                        $mdToast.show($mdToast.simple().textContent("Updated Successfully"));
+                        $scope.user = data;
+                    })
+                    // handle error
+                    .error(function (data) {
+                        $mdToast.show($mdToast.simple().textContent("Error Occurred \n"+data));
+                    });
+            }
+
+            $scope.loadUserProfile = function(){
+                $http.get('/users/'+AuthService.getUserId())
+                    // handle success
+                    .success(function (data) {
+                        $scope.user = data;
+                    })
+                    // handle error
+                    .error(function (data) {
+                        $mdToast.show($mdToast.simple().textContent("Error Occurred \n"+data));
+                    });
+            }
         });

@@ -1,6 +1,23 @@
 var mainApplicationModuleName = 'conference-system';
-var mainApplicationModule = angular.module(mainApplicationModuleName
-    , ['leftPanelModule','submissionModule','reviewerModule','authenticationServiceModule','loginModule','eventsModule','datatables','ngMaterial','ngMessages','ngRoute','ui.router','ngCookies','vAccordion','angularTrix', 'ncy-angular-breadcrumb']);
+var mainApplicationModule = angular.module(mainApplicationModuleName, ['leftPanelModule','submissionModule','reviewerModule','authenticationServiceModule','loginModule','eventsModule','datatables', 'chartModule',
+        'ngMaterial','ngMessages','ngRoute','ui.router','ngCookies','vAccordion','angularTrix', 'ncy-angular-breadcrumb','ngResource', 'chart.js']);
+
+mainApplicationModule.directive('fileModel', ['$parse', function ($parse) {
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs) {
+            var model = $parse(attrs.fileModel);
+            var modelSetter = model.assign;
+
+            element.bind('change', function(){
+                scope.$apply(function(){
+                    modelSetter(scope, element[0].files[0]);
+                });
+            });
+        }
+    };
+}]);
+
 
 mainApplicationModule.config(['$stateProvider', '$urlRouterProvider','$breadcrumbProvider', function($stateProvider, $urlRouterProvider, $breadcrumbProvider) {
     $breadcrumbProvider.setOptions({
@@ -56,6 +73,9 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider','$breadcrum
                 label: 'Event {{event._id}}',
                 parent: 'home'
             },
+            resolve: {
+                auth: authenticateNormalUserRole
+            }
         })
         //access: normal user
         .state('home.event.reviews', {
@@ -69,6 +89,9 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider','$breadcrum
             ncyBreadcrumb: {
                 skip:true
             },
+            resolve: {
+                auth: authenticateNormalUserRole
+            }
         })
         //access: normal user
         .state('home.events', {
@@ -83,6 +106,9 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider','$breadcrum
                 label: 'Events',
                 parent: 'home'
             },
+            resolve: {
+                auth: authenticateNormalUserRole
+            }
         })
         //access: normal user
         .state('home.my-submissions', {
@@ -97,6 +123,9 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider','$breadcrum
                 label: 'My Submissions',
                 parent: 'home'
             },
+            resolve: {
+                auth: authenticateNormalUserRole
+            }
         })
         //access: normal user
         .state('home.my-submission.reviews', {
@@ -110,6 +139,9 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider','$breadcrum
             ncyBreadcrumb: {
                 skip:true
             },
+            resolve: {
+                auth: authenticateNormalUserRole
+            }
         })
         //access: normal user
         .state('home.my-submission', {
@@ -124,6 +156,9 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider','$breadcrum
                 label: 'Submission {{sub._id}}',
                 parent: 'home.my-submissions'
             },
+            resolve: {
+                auth: authenticateNormalUserRole
+            }
         })
         //access: normal user
         .state('home.assigned-submissions', {
@@ -138,6 +173,9 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider','$breadcrum
                 label: 'Assigned Submissions',
                 parent: 'home'
             },
+            resolve: {
+                auth: authenticateNormalUserRole
+            }
         })
         //access: normal user
         .state('home.assigned-submission', {
@@ -152,6 +190,9 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider','$breadcrum
                 label: 'Submission {{sub._id}}',
                 parent: 'home.assigned-submissions'
             },
+            resolve: {
+                auth: authenticateNormalUserRole
+            }
         })
         //access: normal user
         .state('home.assigned-submission.review', {
@@ -165,6 +206,9 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider','$breadcrum
             ncyBreadcrumb: {
                 skip:true
             },
+            resolve: {
+                auth: authenticateNormalUserRole
+            }
         })
         //access: normal user
         .state('home.my-reviews', {
@@ -179,8 +223,11 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider','$breadcrum
                 label: 'My Reviews',
                 parent: 'home'
             },
+            resolve: {
+                auth: authenticateNormalUserRole
+            }
         })
-        //access: normal user
+        //access: normal user/Chair User
         .state('home.review', {
             url: 'review/:id',
             views: {
@@ -207,6 +254,9 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider','$breadcrum
                 label: 'New Event',
                 parent: 'home'
             },
+            resolve: {
+                auth: authenticateChairUserRole
+            }
         })
         //access: chair
         .state('home.chair-events', {
@@ -221,6 +271,9 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider','$breadcrum
                 label: 'All Events',
                 parent: 'home'
             },
+            resolve: {
+                auth: authenticateChairUserRole
+            }
         })
         //access: chair
         .state('home.chair-event', {
@@ -235,6 +288,9 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider','$breadcrum
                 label: 'Event {{event._id}}',
                 parent: 'home.chair-events'
             },
+            resolve: {
+                auth: authenticateChairUserRole
+            }
         })
         //access: chair
         .state('home.chair-event.submissions', {
@@ -247,6 +303,26 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider','$breadcrum
             ncyBreadcrumb: {
                 skip:true
             },
+            resolve: {
+                auth: authenticateChairUserRole
+            }
+        })
+        //access: chair
+        .state('home.chair-allsubmissions', {
+            url: 'admin/all-submissions',
+            views: {
+                'mainpanel@': {
+                    templateUrl: 'views/submission/chair.all-submissions-datatable.html',
+                    controller: 'SubmissionController'
+                }
+            },
+            ncyBreadcrumb: {
+                label: "All Submissions",
+                parent: "home"
+            },
+            resolve: {
+                auth: authenticateChairUserRole
+            }
         })
         //access: chair
         .state('home.chair-submission', {
@@ -259,9 +335,11 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider','$breadcrum
             },
             ncyBreadcrumb: {
                 label: 'Submission {{sub._id}}',
-                //parent: 'home.chair-event({id:sub.submissionEventId})',
                 parent: 'home'
             },
+            resolve: {
+                auth: authenticateChairUserRole
+            }
         })
         //access: chair
         .state('home.chair-submission.reviews', {
@@ -275,15 +353,38 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider','$breadcrum
             ncyBreadcrumb: {
                 skip:true
             },
+            resolve: {
+                auth: authenticateChairUserRole
+            }
         })
-        .state('home.newsubmission', {
-            url: 'submission',
+        //access: chair
+        .state('home.chair-allreviews', {
+            url: 'admin/all-reviews',
             views: {
                 'mainpanel@': {
-                    templateUrl: 'views/submission/submission-form.html',
+                    templateUrl: 'views/reviews/chair.all-reviewsdatatable.html',
+                    controller: 'ReviewController'
+                }
+            },
+            ncyBreadcrumb: {
+                label: 'All Reviews',
+                parent: 'home'
+            },
+            resolve: {
+                auth: authenticateChairUserRole
+            }
+        })
+        .state('home.uploadDoc', {
+            url: 'uploadDoc',
+            views: {
+                'mainpanel@': {
+                    templateUrl: 'views/submission/uploadDoc.html',
                     controller: 'SubmissionFormController'
                 }
             },
+            resolve: {
+                auth: authenticateNormalUserRole
+            }
         })
         .state('home.reviewersubmit', {
             url: 'review',
@@ -319,7 +420,6 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider','$breadcrum
             }
         })
         .state('forgot_pass', {
-
             url:'/forgot_pass',
             views: {
                 'mainpanel': {
@@ -328,12 +428,43 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider','$breadcrum
                 }
             }
         })
+        .state('home.my-profile', {
+            url:'my-profile',
+            views: {
+                'mainpanel@': {
+                    templateUrl: 'views/authentication/editprofile.html',
+                    controller : 'LoginController'
+                }
+            },
+            ncyBreadcrumb: {
+                label: 'My Profile',
+                parent: 'home'
+            },
+        })
         function authenticateLogin(AuthService, $q, $rootScope) {
             var deferred = $q.defer();
             if (AuthService.isLoggedIn()) {
                 deferred.reject({redirectTo: 'home'});
             } else {
                 deferred.resolve({});
+            }
+            return deferred.promise;
+        }
+        function authenticateNormalUserRole(AuthService, $q, $rootScope) {
+            var deferred = $q.defer();
+            if (!AuthService.checkUserRole()) {
+                deferred.resolve({});
+            } else {
+                deferred.reject({redirectTo: 'home'});
+            }
+            return deferred.promise;
+        }
+        function authenticateChairUserRole(AuthService, $q, $rootScope) {
+            var deferred = $q.defer();
+            if (AuthService.checkUserRole()) {
+                deferred.resolve({});
+            } else {
+                deferred.reject({redirectTo: 'home'});
             }
             return deferred.promise;
         }
@@ -364,3 +495,11 @@ angular.element(document).ready(function() {
     angular.bootstrap(document, [mainApplicationModuleName]);
 });
 
+$('#upload-btn').on('click', function (){
+    $('#upload-input').click();
+    $('.progress-bar').text('0%');
+    $('.progress-bar').width('0%');
+});
+$('#upload-input').on('change', function(){
+    console.log('on change happened for file');
+});
