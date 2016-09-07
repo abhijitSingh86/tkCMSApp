@@ -35,10 +35,10 @@
                     <md-icon md-svg-src="images/key.svg" style="display:inline-block;"></md-icon>
                     <label>Password</label>
                     <input type="password" name="password" ng-model="user.password"
-                           required minlength="6" maxlength="100" ng-pattern="" />
+                           required minlength="7" maxlength="100" ng-pattern="" />
                     <div ng-messages="registrationForm.password.$error">
                         <div ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']">
-                            Password should be at least 6 characters and must contain a capital letter and a number.
+                            Password should be at least 6 characters.
                         </div>
                     </div>
                 </md-input-container>
