@@ -293,9 +293,9 @@ exports.retrieveApprovedAuthorsToEvent = function(req,res,next){
                     for(var i=0;i<submissionEvent.interestedUsers.length;i++) {
                         var assignedEvents = submissionEvent.interestedUsers[i].assignedSubmissionEvents;
                         if (assignedEvents.indexOf(req.submissionEvent._id) != -1) {
-                            acceptedArr.push(submissionEvent.interestedUsers[i].id);
+                            acceptedArr.push(submissionEvent.interestedUsers[i]);
                         } else {
-                            rejectedArr.push(submissionEvent.interestedUsers[i].id);
+                            rejectedArr.push(submissionEvent.interestedUsers[i]);
                         }
                     }
                     res.json({"acceptedUser":acceptedArr,"notAcceptedUser":rejectedArr});
