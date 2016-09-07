@@ -182,7 +182,7 @@ exports.listOfAllSubmissionsForEvent = function(req,res){
 
       SubmissionDocument.find({
           submissionEventId: mongoose.Types.ObjectId(eventId)
-      },function(err,result){
+      }).populate('createdBy','firstName').exec(function(err,result){
           if(err){
               res.status(400).json({"error":"error retrieving the document for event id"});
           }else{

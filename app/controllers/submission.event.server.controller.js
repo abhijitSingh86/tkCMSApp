@@ -231,7 +231,7 @@ exports.retrieveInterestedReviewersForEventAndDocument = function(req, res, next
                     }
                     if(!flag && submissionEvent.interestedUsersAsReviewer[i].id != req.submissionDocument.createdBy.id){
                         accepted.push(submissionEvent.interestedUsersAsReviewer[i]);
-                    }else{
+                    }else if(submissionEvent.interestedUsersAsReviewer[i].id != req.submissionDocument.createdBy.id){
                         notAccepted.push(submissionEvent.interestedUsersAsReviewer[i]);
                     }
 
@@ -247,7 +247,7 @@ exports.retrieveInterestedReviewersForEventAndDocument = function(req, res, next
                     }
                     if(!flag && submissionEvent.interestedUsers[i].id != req.submissionDocument.createdBy.id){
                         accepted.push(submissionEvent.interestedUsers[i]);
-                    }else{
+                    }else if(submissionEvent.interestedUsers[i].id != req.submissionDocument.createdBy.id){
                         notAccepted.push(submissionEvent.interestedUsers[i]);
                     }
                 }
