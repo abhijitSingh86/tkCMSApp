@@ -10,7 +10,8 @@ angular.module('authenticationServiceModule',[]).factory('AuthService',
                 logout: logout,
                 register: register,
                 checkUserRole: checkUserRole,
-                getUserId : getUserId
+                getUserId : getUserId,
+                getUser: getUser
             });
             function isLoggedIn() {
                 var globals= $cookieStore.get('globals');
@@ -28,6 +29,14 @@ angular.module('authenticationServiceModule',[]).factory('AuthService',
                 if (typeof(globals) != "undefined")
                 {
                     return globals.currentUser.id;
+                }
+            }
+            function getUser() {
+                var globals= $cookieStore.get('globals');
+                //Check if user is already logged in, redirect to home page
+                if (typeof(globals) != "undefined")
+                {
+                    return globals.currentUser;
                 }
             }
             function checkUserRole() {

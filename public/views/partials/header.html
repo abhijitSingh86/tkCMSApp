@@ -70,8 +70,16 @@
         </md-menu-bar>
     </section>
     <span flex> </span>
-    <section layout="row" layout-sm="column" >
-        <md-button ng-controller="LoginController" class="glyphicon glyphicon-log-out pull-right" ng-click="logout()"> Logout</md-button>
+    <section>
+        <md-menu>
+            <md-button ng-click="$mdOpenMenu()" ng-bind="userName">
+                {{userName}}
+            </md-button>
+            <md-menu-content>
+                <md-menu-item><md-button ><a ui-sref=".my-profile">My Profile</a></md-button></md-menu-item>
+                <md-menu-item><md-button ng-controller="LoginController" class="glyphicon glyphicon-log-out pull-right" ng-click="logout()"> Logout</md-button></md-menu-item>
+            </md-menu-content>
+        </md-menu>
     </section>
 </md-toolbar>
 </body>

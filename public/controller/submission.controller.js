@@ -14,7 +14,6 @@ app.controller('SubmissionController', function ($scope, $http, $mdToast, $state
             $http.post(url, userId)
             // handle success
                 .success(function (data, status) {
-                    debugger;
                     $scope.subs = data;
 
                     $scope.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers');
@@ -104,7 +103,6 @@ app.controller('SubmissionController', function ($scope, $http, $mdToast, $state
         $http.get('/subDocument/' + $state.params.id)
         // handle success
             .success(function (data) {
-                debugger;
                 $scope.sub = data;
                 $scope.sub.id = data._id;
                 $scope.users = angular.copy(data.authors);
@@ -118,7 +116,7 @@ app.controller('SubmissionController', function ($scope, $http, $mdToast, $state
             .error(function (data) {
             });
     };
-    $scope.downloadfile =function(file) {
+  /*  $scope.downloadfile =function(file) {
         nfile = {id: file};
         var responseType = 'arraybuffer';
         $http.post('/subDocument/'+AuthService.getUserId()+'/'+$scope.sub.id, nfile, {responseType: 'arraybuffer'}).then(function(succ,err){
@@ -132,7 +130,7 @@ app.controller('SubmissionController', function ($scope, $http, $mdToast, $state
             a.click();
             //saveAs(blob, "helloWorld.pdf");
         });
-    };
+    };*/
     
     $scope.loadAllReviewsForNormalUser = function(){
         $state.go('home.my-submission.reviews',{documentId: $state.params.id});
@@ -217,7 +215,7 @@ var subid;
         var file =  $scope.myFile;
        // file.fileContent  = $scope.myFile;
         //file.submissionID = 'Submission1';
-        var userId = AuthService.getUserId()+ '_'+ sessionStorage.getItem('subid');
+        var userId = AuthService.getUserId()+ '_'+ $state.params.id;
 
         console.log('file is ' );
         console.dir(file);
@@ -231,14 +229,28 @@ var subid;
         fileUpload.uploadFileToUrl(file,userId, uploadUrl, fd)
             .success(function(){
                 console.log('file upload successfully');
-                $window.location.href = "#/home"
+                //$window.location.href = "#/home"
             })
 
             .error(function(){
                 console.log('file upload failed');
             });
     }
-
+    $scope.downloadfile =function(file) {
+        nfile = {id: file};
+        var responseType = 'arraybuffer';
+        $http.post('/subDocument/'+AuthService.getUserId()+'/'+$state.params.id, nfile, {responseType: 'arraybuffer'}).then(function(succ,err){
+            var blob = new Blob([succ.data], {type: "application/pdf"});
+            var fileURL = URL.createObjectURL(blob);
+            var a         = document.createElement('a');
+            a.href        = fileURL;
+            a.target      = '_blank';
+            a.download    = 'file.pdf';
+            document.body.appendChild(a);
+            a.click();
+            //saveAs(blob, "helloWorld.pdf");
+        });
+    };
     function getUserListForAuthor(){
         $http.get('/users')
         // handle success
@@ -264,7 +276,7 @@ var subid;
                 $scope.showUpdate = "true";
                 $scope.showWithdraw = "true";
                 $scope.event = data;
-                $window.location.href = "#/uploadDoc";
+                //$window.location.href = "#/uploadDoc";
 
             })
             // handle error
@@ -284,7 +296,7 @@ var subid;
             .success(function (data) {
                 $mdToast.show($mdToast.simple().textContent("Updated Successfully"));
                 $cookies.put('Submission',sub);
-                $window.location.href = "#/uploadDoc"
+              //  $window.location.href = "#/uploadDoc"
             })
             // handle error
             .error(function (data) {
