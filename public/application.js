@@ -420,7 +420,6 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider','$breadcrum
             }
         })
         .state('forgot_pass', {
-
             url:'/forgot_pass',
             views: {
                 'mainpanel': {
@@ -428,6 +427,19 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider','$breadcrum
                     controller : 'forgotPasswordController'
                 }
             }
+        })
+        .state('home.my-profile', {
+            url:'my-profile',
+            views: {
+                'mainpanel@': {
+                    templateUrl: 'views/authentication/editprofile.html',
+                    controller : 'LoginController'
+                }
+            },
+            ncyBreadcrumb: {
+                label: 'My Profile',
+                parent: 'home'
+            },
         })
         function authenticateLogin(AuthService, $q, $rootScope) {
             var deferred = $q.defer();

@@ -17,7 +17,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="user in users track by $index">
+        <tr ng-repeat="user in ctrl.users track by $index">
             <td><md-checkbox  aria-label="select User" ng-model="user.clicked" ng-change="toggle(user.id, selected)"></md-checkbox></td>
             <td>{{ user.username }}</td>
             <td>{{ user.firstName }}</td>

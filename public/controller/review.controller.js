@@ -91,10 +91,9 @@ app.controller('ReviewController', function ($scope, $http, $mdToast, $state,$st
     }
 });
 
-app.controller('UserListForReviewController', function ($q, $http, $scope, DTOptionsBuilder, DTColumnDefBuilder, AuthService, $mdToast, $state) {
+app.controller('UserListForReviewController', function ($rootScope, $http, $scope, DTOptionsBuilder, DTColumnDefBuilder, AuthService, $mdToast, $state) {
         var vm = this;
         vm.dtInstance = {};
-        vm.dtInstance1 = {};
         $scope.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers');
         $scope.dtColumnDefs = [
             DTColumnDefBuilder.newColumnDef(0).notSortable(),
@@ -112,7 +111,7 @@ app.controller('UserListForReviewController', function ($q, $http, $scope, DTOpt
             var promise = getNotAcceptedUsers();
             promise.then(
             function(payload) {
-                $scope.users = payload.data.notAccepted;
+                vm.users = payload.data.notAccepted;
             },
             function(errorPayload) {
             });
@@ -150,56 +149,83 @@ app.controller('UserListForReviewController', function ($q, $http, $scope, DTOpt
             }
         };
 
-        function getAcceptedUsers() {
-            // url to get users to be assigned as a reviewer(to be changed)
-            return $http.get('/subEvent/getInterestedReviewersBasedOnDocument/'+$state.params.id);
-        }
-        $scope.renderUsersAssignedForReview = function(){
-            var promise = getAcceptedUsers();
+        $rootScope.$on("reloadToBeAssignedReviewers", function(event,arg){
+            var promise = getNotAcceptedUsers();
             promise.then(
                 function(payload) {
-                    $scope.usersAssigned = payload.data.accepted;
+                    vm.users = payload.data.notAccepted;
                 },
                 function(errorPayload) {
                 });
-        }
-        $scope.remove = function() {
-            if($scope.selected == 0){
-                $mdToast.show($mdToast.simple().textContent("Please select atleast one user"));
-            } else {
-                /*send list to service which will assign this list of users as reviewers and refresh the table*/
-                // url to submit users to be assigned as a reviewer(to be changed)
-                var url = "removeDocumentToUsersReview";
-                var data = {
-                    "submissionDocumentId":$state.params.id,
-                    "users":$scope.selected
-                }
-                $http.put(url, data)
-                // handle success
-                    .success(function (data) {
-                        reload()
-                    })
-                    // handle error
-                    .error(function (data) {
-                    });
-            }
-        };
-
+        });
         function reload() {
             var promise = getNotAcceptedUsers();
             promise.then(
                 function(payload) {
-                    vm.dtInstance.changeData(payload.data.notAccepted);
-                },
-                function(errorPayload) {
-                });
-
-            var promise1 = getAcceptedUsers();
-            promise1.then(
-                function(payload) {
-                    vm.dtInstance1.changeData(payload.data.accepted);
+                    vm.users = payload.data.notAccepted;
+                    $rootScope.$emit("reloadAssignedReviewers");
                 },
                 function(errorPayload) {
                 });
         }
 })
+
+app.controller('AssignedUserListForReviewController', function ($rootScope, $http, $scope, DTOptionsBuilder, DTColumnDefBuilder, AuthService, $mdToast, $state) {
+    var vm = this;
+    vm.dtInstance = {};
+    function getAcceptedUsers() {
+        // url to get users to be assigned as a reviewer(to be changed)
+        return $http.get('/subEvent/getInterestedReviewersBasedOnDocument/'+$state.params.id);
+    }
+
+    $scope.renderUsersAssignedForReview = function(){
+        var promise = getAcceptedUsers();
+        promise.then(
+            function(payload) {
+                vm.usersAssigned = payload.data.accepted;
+            },
+            function(errorPayload) {
+            });
+    }
+    $scope.remove = function() {
+        if($scope.selected == 0){
+            $mdToast.show($mdToast.simple().textContent("Please select atleast one user"));
+        } else {
+            /*send list to service which will assign this list of users as reviewers and refresh the table*/
+            // url to submit users to be assigned as a reviewer(to be changed)
+            var url = "removeDocumentToUsersReview";
+            var data = {
+                "submissionDocumentId":$state.params.id,
+                "users":$scope.selected
+            }
+            $http.put(url, data)
+            // handle success
+                .success(function (data) {
+                    reload()
+                })
+                // handle error
+                .error(function (data) {
+                });
+        }
+    };
+    $rootScope.$on("reloadAssignedReviewers", function(event,arg){
+        debugger;
+        var promise = getAcceptedUsers();
+        promise.then(
+            function(payload) {
+                vm.usersAssigned =payload.data.accepted;
+            },
+            function(errorPayload) {
+            });
+    });
+    function reload() {
+        var promise = getAcceptedUsers();
+        promise.then(
+            function(payload) {
+                vm.usersAssigned = payload.data.accepted;
+                $rootScope.$emit("reloadToBeAssignedReviewers");
+            },
+            function(errorPayload) {
+            });
+    }
+});

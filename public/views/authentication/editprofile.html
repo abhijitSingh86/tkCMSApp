@@ -1,13 +1,13 @@
-<div flex layout="row" layout-align="center" layout-padding>
-    <md-content ng-controller="LoginController" flex="40" layout-padding id="content" class="registration-container">
-        <form name="registrationForm" >
+    <md-content ng-controller="LoginController" layout-padding id="content" class="profile-container">
+        <form name="editProfileForm" ng-init="loadUserProfile()">
             <div layout-gt-md="column">
                 <md-toolbar layout-align="center center" class="signup-toolbar">
-                    <h3>Sign Up</h3>
+                    <h3>Profile Info</h3>
                 </md-toolbar>
                 <md-divider></md-divider>
                 <md-input-container class="md-block" flex-gt-md>
                     <md-icon md-svg-src="images/user.svg" style="display:inline-block;"></md-icon>
+                    <label>First Name</label>
                     <input required ng-model="user.firstName" placeholder="First Name">
                 </md-input-container>
                 <md-input-container class="md-block" flex-gt-md>
@@ -25,28 +25,40 @@
                     <label>Email</label>
                     <input name="email" ng-model="user.email"
                            required minlength="10" maxlength="100" ng-pattern="/^.+@.+\..+$/" />
-                    <div ng-messages="registrationForm.email.$error">
+                    <div ng-messages="editProfileForm.email.$error">
                         <div ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']">
                             Please enter a valid email id.
                         </div>
                     </div>
                 </md-input-container>
                 <md-input-container class="md-block" flex-gt-md>
-                    <md-icon md-svg-src="images/key.svg" style="display:inline-block;"></md-icon>
-                    <label>Password</label>
-                    <input type="password" name="password" ng-model="user.password"
-                           required minlength="6" maxlength="100" ng-pattern="" />
-                    <div ng-messages="registrationForm.password.$error">
-                        <div ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']">
-                            Password should be at least 6 characters and must contain a capital letter and a number.
-                        </div>
-                    </div>
+                    <md-icon md-svg-src="images/add-user.svg" style="display:inline-block;"></md-icon>
+                    <label>Personal Address</label>
+                    <input name="Address" ng-model="user.postalAddress">
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-md>
+                    <md-icon md-svg-src="images/add-user.svg" style="display:inline-block;"></md-icon>
+                    <label>University Name</label>
+                    <input required name="Univname" ng-model="user.university">
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-md>
+                    <md-icon md-svg-src="images/add-user.svg" style="display:inline-block;"></md-icon>
+                    <label>City</label>
+                    <input name="city" ng-model="user.city">
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-md>
+                    <md-icon md-svg-src="images/add-user.svg" style="display:inline-block;"></md-icon>
+                    <label>State</label>
+                    <input name="state" ng-model="user.state">
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-md>
+                    <md-icon md-svg-src="images/add-user.svg" style="display:inline-block;"></md-icon>
+                    <label>Country</label>
+                    <input name="country" ng-model="user.country">
                 </md-input-container>
                 <section layout="row" layout-sm="column" layout-align="end" layout-wrap ng-show="showSuccess">
-                    <md-button ng-click="backtologin()" class="md-raised md-primary">Back To Login</md-button>
-                    <md-button ng-click="register(user)" class="md-raised md-primary" ng-disabled="registrationForm.$invalid" data-ng-cloak="switchBool('showSuccess')">Register</md-button>
+                    <md-button ng-click="editProfile(user)" class="md-raised md-primary" ng-disabled="editProfileForm.$invalid" data-ng-cloak="switchBool('showSuccess')">Update</md-button>
                 </section>
             </div>
         </form>
     </md-content>
-</div>
