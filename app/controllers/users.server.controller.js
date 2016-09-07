@@ -102,11 +102,12 @@ exports.signup = function(req, res, next) {
                 res.status(400).json({'error': message});
                 return res;
             }
-            req.login(user, function(err) {
-                if (err) return next(err);
-                return res.json({"action":"success"});
-            });
+            // req.login(user, function(err) {
+            //     if (err) return next(err);
+            // });
+            return res.json({"action":"success"});
         });
+
     } else {
         return res.json({"action":"success"});
     }
@@ -121,10 +122,10 @@ exports.create = function(req, res, next) {
                 var message = getErrorMessage(err);
                 res.status(400).json({"user" : "invalid","error" : message});
             }
-            req.login(user, function(err) {
-                if (err) return next(err);
-                res.json({"user" : "valid"});
-            });
+            // req.login(user, function(err) {
+            //     if (err) return next(err);
+            //     res.json({"user" : "valid"});
+            // });
         });
     } else {
         res.json({"user" : "valid"});
