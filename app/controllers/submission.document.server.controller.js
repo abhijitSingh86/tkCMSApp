@@ -23,8 +23,8 @@ var upload = multer({ //multer settings
 
 exports.upload = function(req, res,next) {
     
-    console.log("here");
-    console.log(req.headers);
+   // console.log("here");
+    //console.log(req.headers);
     upload(req,res,function(err){
         if(err){
             res.json({error_code:1,err_desc:err});
@@ -37,13 +37,13 @@ exports.upload = function(req, res,next) {
 }
 
 exports.download = function(req,res) {
-    console.log("here");
-    console.log(req.params.userId);
-    console.log(req.params.subDocId);
+    ///console.log("here");
+   // console.log(req.params.userId);
+    //console.log(req.params.subDocId);
     //var nomefile = req.body.id;
    // var nomefile = req.body.id;
     var file = fs.readFileSync('./uploads/'+req.params.userId+'_'+ req.params.subDocId+'.pdf','binary');
-    console.log(file);
+   // console.log(file);
     res.setHeader('Content-Length', file.length);
     res.write(file,'binary');
     res.end();
