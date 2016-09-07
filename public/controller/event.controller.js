@@ -292,45 +292,38 @@ app.controller('EventUsersNotAcceptedController', function ($scope, $http, $mdTo
     vm.reloadData = reloadData;
     vm.dtInstance1 = {};
     function reloadData() {
-        var resetPaging = false;
-        $scope.users = getNotAcceptedAuthors();
-        vm.dtInstance1.changeData($scope.users);
+        var promise = getNotAcceptedAuthors();
+        promise.then(
+            function(payload) {
+                vm.users = payload.data.notAcceptedUser;
+            },
+            function(errorPayload) {
+            });
     }
     $rootScope.$on("reloadNotApprovedAuthorsTable", function(event){
         reloadData();
     });
     function getNotAcceptedAuthors()  {
-        var users = [];
-        $http.get('/subEvent/retrieveApprovedAuthorsToEvent/'+$state.params.id)
-        // handle success
-            .success(function (data) {
-                angular.forEach(data.notAcceptedUser, function(userId){
-                    $http.get('/users/'+userId)
-                        .success(function (data) {
-                            users.push(data);
-                        })
-                })
-            })
-            // handle error
-            .error(function (data) {
-            });
-        return users;
+        return $http.get('/subEvent/retrieveApprovedAuthorsToEvent/'+$state.params.id);
     }
 
-
-    $scope.initialize = function () {
-        $scope.dtOptions1 = DTOptionsBuilder.newOptions().withPaginationType('full_numbers');
-        $scope.dtColumnDefs1 = [
-            DTColumnDefBuilder.newColumnDef(0).notSortable(),
-            DTColumnDefBuilder.newColumnDef(1),
-            DTColumnDefBuilder.newColumnDef(2),
-            DTColumnDefBuilder.newColumnDef(3),
-            DTColumnDefBuilder.newColumnDef(4),
-        ];
-    }
+    vm.dtOptions1 = DTOptionsBuilder.newOptions().withPaginationType('full_numbers');
+    vm.dtColumnDefs1 = [
+        DTColumnDefBuilder.newColumnDef(0).notSortable(),
+        DTColumnDefBuilder.newColumnDef(1),
+        DTColumnDefBuilder.newColumnDef(2),
+        DTColumnDefBuilder.newColumnDef(3),
+        DTColumnDefBuilder.newColumnDef(4),
+    ];
 
     $scope.renderUsersInterestedInEvent = function(){
-        $scope.users = getNotAcceptedAuthors();
+        var promise = getNotAcceptedAuthors();
+        promise.then(
+            function(payload) {
+                vm.users = payload.data.notAcceptedUser;
+            },
+            function(errorPayload) {
+            });
     }
 
     $scope.selected = [];
@@ -372,25 +365,25 @@ app.controller('EventUsersAcceptedController', function ($scope, $http, $mdToast
     vm.reloadData = reloadData;
     vm.dtInstance = {};
     function reloadData() {
-        $scope.usersApproved = getApprovedAuthors();
-        /*$resource(getApprovedAuthors()).query().$promise.then(function(users) {
-            $scope.usersApproved = users;
-        });*/
-        vm.dtInstance.changeData($scope.usersApproved);
+        var promise = getApprovedAuthors();
+        promise.then(
+            function(payload) {
+                vm.usersApproved = payload.data.acceptedUser;
+            },
+            function(errorPayload) {
+            });
     }
     $rootScope.$on("reloadApprovedAuthorsTable", function(event,arg){
         reloadData();
     });
-    $scope.initializeCols = function () {
-        $scope.dtOptions2 = DTOptionsBuilder.newOptions().withPaginationType('full_numbers');
-        $scope.dtColumnDefs2 = [
-            DTColumnDefBuilder.newColumnDef(0).notSortable(),
-            DTColumnDefBuilder.newColumnDef(1),
-            DTColumnDefBuilder.newColumnDef(2),
-            DTColumnDefBuilder.newColumnDef(3),
-            DTColumnDefBuilder.newColumnDef(4),
-        ];
-    }
+    vm.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers');
+    vm.dtColumnDefs = [
+        DTColumnDefBuilder.newColumnDef(0).notSortable(),
+        DTColumnDefBuilder.newColumnDef(1),
+        DTColumnDefBuilder.newColumnDef(2),
+        DTColumnDefBuilder.newColumnDef(3),
+        DTColumnDefBuilder.newColumnDef(4),
+    ];
 
     $scope.selected = [];
     $scope.toggle = function (itemId, list) {
@@ -404,7 +397,13 @@ app.controller('EventUsersAcceptedController', function ($scope, $http, $mdToast
     };
     
     $scope.renderUsersSubscribedInEvent = function(){
-        $scope.usersApproved = getApprovedAuthors();
+        var promise = getApprovedAuthors();
+        promise.then(
+            function(payload) {
+                vm.usersApproved = payload.data.acceptedUser;
+            },
+            function(errorPayload) {
+            });
     }
 
     $scope.removeFromSubscribedUsers = function() {
@@ -427,20 +426,6 @@ app.controller('EventUsersAcceptedController', function ($scope, $http, $mdToast
     };
 
     function getApprovedAuthors()  {
-        var usersApproved = [];
-        $http.get('/subEvent/retrieveApprovedAuthorsToEvent/'+$state.params.id)
-        // handle success
-            .success(function (data) {
-                angular.forEach(data.acceptedUser, function(userId){
-                    $http.get('/users/'+userId)
-                        .success(function (data) {
-                            usersApproved.push(data);
-                        })
-                })
-            })
-            // handle error
-            .error(function (data) {
-            });
-        return usersApproved;
+        return $http.get('/subEvent/retrieveApprovedAuthorsToEvent/'+$state.params.id);
     }
 });

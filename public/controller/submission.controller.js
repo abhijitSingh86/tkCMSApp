@@ -288,6 +288,7 @@ var subid;
         sessionStorage.setItem('subid', sub.submissionEventId);
         delete sub.submissionEventId ;
         delete sub.createdBy;
+        delete sub.reviewers;
         $cookies.put('Submission',sub);
         // send a put request to the server
         $http.put('/subDocument/' + sub._id,
