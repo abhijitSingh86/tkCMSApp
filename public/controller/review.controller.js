@@ -104,7 +104,7 @@ app.controller('UserListForReviewController', function ($rootScope, $http, $scop
         ];
 
         function getNotAcceptedUsers() {
-            // url to get users to be assigned as a reviewer(to be changed)
+            // url to get users to be assigned as a reviewer
             return $http.get('/subEvent/getInterestedReviewersBasedOnDocument/'+$state.params.id);
         }
         $scope.renderUsersToBeAssignedForReview = function(){
@@ -132,7 +132,7 @@ app.controller('UserListForReviewController', function ($rootScope, $http, $scop
                 $mdToast.show($mdToast.simple().textContent("Please select atleast one user"));
             } else {
                 /*send list to service which will assign this list of users as reviewers and refresh the table*/
-                // url to submit users to be assigned as a reviewer(to be changed)
+                // url to submit users to be assigned as a reviewer
                 var url = "assignDocumentToUsersReview";
                 var data = {
                     "submissionDocumentId":$state.params.id,
@@ -174,7 +174,7 @@ app.controller('AssignedUserListForReviewController', function ($rootScope, $htt
     var vm = this;
     vm.dtInstance = {};
     function getAcceptedUsers() {
-        // url to get users to be assigned as a reviewer(to be changed)
+        // url to get users to be assigned as a reviewer
         return $http.get('/subEvent/getInterestedReviewersBasedOnDocument/'+$state.params.id);
     }
 
@@ -192,7 +192,7 @@ app.controller('AssignedUserListForReviewController', function ($rootScope, $htt
             $mdToast.show($mdToast.simple().textContent("Please select atleast one user"));
         } else {
             /*send list to service which will assign this list of users as reviewers and refresh the table*/
-            // url to submit users to be assigned as a reviewer(to be changed)
+            // url to submit users to be assigned as a reviewer
             var url = "removeDocumentToUsersReview";
             var data = {
                 "submissionDocumentId":$state.params.id,

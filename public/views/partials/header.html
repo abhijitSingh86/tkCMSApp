@@ -72,8 +72,8 @@
     <span flex> </span>
     <section>
         <md-menu>
-            <md-button ng-click="$mdOpenMenu()" ng-bind="userName">
-                {{userName}}
+            <md-button aria-label="Profile" ng-click="$mdOpenMenu()" ng-bind="userName">
+                 {{userName}}
             </md-button>
             <md-menu-content>
                 <md-menu-item><md-button ><a ui-sref=".my-profile">My Profile</a></md-button></md-menu-item>
