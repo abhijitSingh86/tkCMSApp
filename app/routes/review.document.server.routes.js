@@ -2,6 +2,8 @@ var reviewerDocument =  require('../controllers/reviewer.document.server.control
 var users =require('../../app/controllers/users.server.controller');
 
 module.exports = function(app) {
+
+    //Get all the documents assigned to the reviewer
     app.route('/review/:reviewerId').
     get(reviewerDocument.list).
     put(reviewerDocument.put);
@@ -20,6 +22,7 @@ module.exports = function(app) {
 
      }
      */
+    //Create or update review
     app.route('/reviewer').
     post(reviewerDocument.create).
     get(reviewerDocument.listAll);

@@ -38,6 +38,7 @@ var UserSchema = new Schema({
         required: 'Provider is required'
     },
     providerData: {},
+    
     created: {
         type: Date,
         default: Date.now
@@ -75,7 +76,12 @@ var UserSchema = new Schema({
     country: {
         type:String,
         default : ""
+    },
+    university: {
+        type:String,
+        default : ""
     }
+
 });
 UserSchema.virtual('fullName').get(function() {
     return this.firstName + ' ' + this.lastName;

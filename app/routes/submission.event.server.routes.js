@@ -3,11 +3,13 @@ var submissionDocument =  require('../controllers/submission.document.server.con
 var users =require('../../app/controllers/users.server.controller');
 var  passport = require("passport")
 module.exports = function(app) {
+
+    //create submission event or get list of all submission event.
     app.route('/subEvents').
     post(SubmissionEventSchema.create).
     get(SubmissionEventSchema.list);
 
-
+    //Get , read or update the submission event
     app.route('/subEvent/:subEventId').
         get(SubmissionEventSchema.read).
         put(SubmissionEventSchema.update).
@@ -29,7 +31,7 @@ module.exports = function(app) {
      */
     app.route('/subEvent/retrieveApprovedAuthorsToEvent/:subEventId')
         .get(SubmissionEventSchema.retrieveApprovedAuthorsToEvent);
-
+    
     app.route('/subEvent/retrieveAcceptedAndNotAcceptedEventsForUser/:userId')
         .get(SubmissionEventSchema.retrieveAcceptedAndNotAcceptedEventsForUser);
 
@@ -38,7 +40,7 @@ module.exports = function(app) {
     app.param('subEventId', SubmissionEventSchema.submissionEventByID);
     app.param('userId', users.userByID);
 
-    app.route('/subEvent/getInterestedReviewers/:subEventId/:subDocumentId').
+    app.route('/subEvent/getInterestedReviewersBasedOnDocument/:subDocumentId').
     get(SubmissionEventSchema.retrieveInterestedReviewersForEventAndDocument);
     
     app.route('/subEvent/getInterestedReviewers/:subEventId').

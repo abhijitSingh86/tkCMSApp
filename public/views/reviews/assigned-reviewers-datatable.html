@@ -5,8 +5,8 @@
     <title>Title</title>
 </head>
 <body>
-<div flex ng-controller="UserListForReviewController" ng-init="renderUsersToBeAssignedForReview()">
-    <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="row-border hover">
+<div flex ng-controller="AssignedUserListForReviewController as ctrl" ng-init="renderUsersAssignedForReview()">
+    <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" dt-instance="ctrl.dtInstance" class="row-border hover">
         <thead>
         <tr>
             <th>Select</th>
@@ -17,7 +17,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="user in users track by $index">
+        <tr ng-repeat="user in ctrl.usersAssigned track by $index">
             <td><md-checkbox  aria-label="select User" ng-model="user.clicked" ng-change="toggle(user.id, selected)"></md-checkbox></td>
             <td>{{ user.username }}</td>
             <td>{{ user.firstName }}</td>
@@ -26,8 +26,8 @@
         </tr>
         </tbody>
     </table>
-    <md-button ng-click="add()" class="md-raised md-primary">
-        Add as Reviewer
+    <md-button ng-click="remove()" class="md-raised md-primary">
+        Remove as Reviewer
     </md-button>
 </div>
 </body>

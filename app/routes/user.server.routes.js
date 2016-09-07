@@ -4,10 +4,11 @@ module.exports = function(app) {
     //app.route('/users').post(users.create).get(users.list);;
 
     //----------
-
+    //get All reviews for a user
     app.route('/userEvents/:userId').
     get(users.getAllEventsForUser);
 
+    //retrieve all the submission document list which are assigned to the user for review
     app.route('/userreview/:userId').
     get(users.getAllReviews);
 
@@ -53,7 +54,7 @@ module.exports = function(app) {
         put(users.subscribeReviewerToDocument);
     //--
 
-
+    //Create, update or delete
     app.route('/users/:userId').
     get(users.read).
     put(users.update).
@@ -62,10 +63,12 @@ module.exports = function(app) {
     app.param('userId', users.userByID);
     app.get('/api/loggedIn',users.loggedIn);
 
+    //signup user
     app.route('/signup')
         .get(users.renderSignup)
         .post(users.signup);
 
+    //signin User
     app.route('/signin')
         .get(users.renderSignin)
         .post(passport.authenticate('local'),
