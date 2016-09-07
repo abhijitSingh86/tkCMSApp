@@ -150,7 +150,6 @@ exports.deleteFromInterestedUserList = function(req,res,next){
             SubmissionEvent.findByIdAndUpdate(id,
                 // {$set : {name:"newName11"}},
                 {  $set: { interestedUsers: req.submissionEvent.interestedUsers}},
-                {new:true,safe: true, upsert: true},
                 function (err, submissionEvent) {
                     if (err) {
                         return res.status(400).json({"error":"Error while deleting interested user for the Event"});
@@ -214,12 +213,14 @@ exports.retrieveInterestedReviewersForEventAndDocument = function(req, res, next
     if(true) {//req.user && user.isChair(req)) {
                 // req.submissionEvent.
         SubmissionEvent.findOne({
-            _id: req.submissionEvent.id
-        }).populate('interestedUsersAsReviewer','firstName email lastName').populate('interestedUsers','firstName email lastName').exec(function(err, submissionEvent) {
+            _id: req.submissionDocument.submissionEventId
+        }).populate('interestedUsersAsReviewer','firstName email lastName').populate('interestedUsers','firstName email lastName')
+            .exec(function(err, submissionEvent) {
             if (err) {
                 return res.status(400).json({"error":"Error while retrieving interested reviewers the Event"});
             } else {
-                var array=[];
+                var accepted=[];
+                var notAccepted = [];
                 for(var i=0;i<submissionEvent.interestedUsersAsReviewer.length;i++) {
                     var flag=false;
                     for(var j=0;j<req.submissionDocument.reviewers.length;j++) {
@@ -228,11 +229,10 @@ exports.retrieveInterestedReviewersForEventAndDocument = function(req, res, next
                             break;
                         }
                     }
-
-
-
                     if(!flag && submissionEvent.interestedUsersAsReviewer[i].id != req.submissionDocument.createdBy.id){
-                        array.push(submissionEvent.interestedUsersAsReviewer[i]);
+                        accepted.push(submissionEvent.interestedUsersAsReviewer[i]);
+                    }else{
+                        notAccepted.push(submissionEvent.interestedUsersAsReviewer[i]);
                     }
 
                 }
@@ -246,12 +246,13 @@ exports.retrieveInterestedReviewersForEventAndDocument = function(req, res, next
                         }
                     }
                     if(!flag && submissionEvent.interestedUsers[i].id != req.submissionDocument.createdBy.id){
-                        array.push(submissionEvent.interestedUsers[i]);
+                        accepted.push(submissionEvent.interestedUsers[i]);
+                    }else{
+                        notAccepted.push(submissionEvent.interestedUsers[i]);
                     }
-
                 }
 
-                res.json(array);
+                res.json({"accepted":accepted,"notAccepted":notAccepted});
             }
         });
     }

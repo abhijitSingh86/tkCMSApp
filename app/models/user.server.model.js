@@ -75,7 +75,12 @@ var UserSchema = new Schema({
     country: {
         type:String,
         default : ""
+    },
+    university: {
+        type:String,
+        default : ""
     }
+
 });
 UserSchema.virtual('fullName').get(function() {
     return this.firstName + ' ' + this.lastName;
