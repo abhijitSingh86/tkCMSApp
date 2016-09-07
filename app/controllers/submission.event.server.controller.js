@@ -210,12 +210,59 @@ exports.retrieveInterestedReviewersForDocument = function(req, res, next){
     }
 };
 
-exports.retrieveInterestedReviewersForEvent = function(req, res, next){
+exports.retrieveInterestedReviewersForEventAndDocument = function(req, res, next){
     if(true) {//req.user && user.isChair(req)) {
                 // req.submissionEvent.
         SubmissionEvent.findOne({
             _id: req.submissionEvent.id
-        }).populate('interestedUsersAsReviewer','firstName').populate('interestedUsers','firstName').exec(function(err, submissionEvent) {
+        }).populate('interestedUsersAsReviewer','firstName email lastName').populate('interestedUsers','firstName email lastName').exec(function(err, submissionEvent) {
+            if (err) {
+                return res.status(400).json({"error":"Error while retrieving interested reviewers the Event"});
+            } else {
+                var array=[];
+                for(var i=0;i<submissionEvent.interestedUsersAsReviewer.length;i++) {
+                    var flag=false;
+                    for(var j=0;j<req.submissionDocument.reviewers.length;j++) {
+                        if (submissionEvent.interestedUsersAsReviewer[i].id == req.submissionDocument.reviewers[j].id) {
+                            flag=true;
+                            break;
+                        }
+                    }
+
+
+
+                    if(!flag && submissionEvent.interestedUsersAsReviewer[i].id != req.submissionDocument.createdBy.id){
+                        array.push(submissionEvent.interestedUsersAsReviewer[i]);
+                    }
+
+                }
+
+                for(var i=0;i<submissionEvent.interestedUsers.length;i++) {
+                    var flag=false;
+                    for(var j=0;j<req.submissionDocument.reviewers.length;j++) {
+                        if (submissionEvent.interestedUsers[i].id == req.submissionDocument.reviewers[j].id) {
+                            flag=true;
+                            break;
+                        }
+                    }
+                    if(!flag && submissionEvent.interestedUsers[i].id != req.submissionDocument.createdBy.id){
+                        array.push(submissionEvent.interestedUsers[i]);
+                    }
+
+                }
+
+                res.json(array);
+            }
+        });
+    }
+};
+
+exports.retrieveInterestedReviewersForEvent = function(req, res, next){
+    if(true) {//req.user && user.isChair(req)) {
+        // req.submissionEvent.
+        SubmissionEvent.findOne({
+            _id: req.submissionEvent.id
+        }).populate('interestedUsersAsReviewer','firstName email lastName').populate('interestedUsers','firstName email lastName').exec(function(err, submissionEvent) {
             if (err) {
                 return res.status(400).json({"error":"Error while retrieving interested reviewers the Event"});
             } else {

@@ -55,9 +55,27 @@ var UserSchema = new Schema({
     assignedSubmissionEvents : [{
         type : Schema.ObjectId,
         ref : "SubmissionEvent"
-    }]
+    }],
 
-    
+    postalAddress : {
+        type: String,
+        default : ""
+    },
+
+    city : {
+        type:String,
+        default : ""
+    },
+
+    state : {
+        type:String,
+        default : ""
+    },
+
+    country: {
+        type:String,
+        default : ""
+    }
 });
 UserSchema.virtual('fullName').get(function() {
     return this.firstName + ' ' + this.lastName;

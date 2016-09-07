@@ -38,6 +38,9 @@ module.exports = function(app) {
     app.param('subEventId', SubmissionEventSchema.submissionEventByID);
     app.param('userId', users.userByID);
 
+    app.route('/subEvent/getInterestedReviewers/:subEventId/:subDocumentId').
+    get(SubmissionEventSchema.retrieveInterestedReviewersForEventAndDocument);
+    
     app.route('/subEvent/getInterestedReviewers/:subEventId').
     get(SubmissionEventSchema.retrieveInterestedReviewersForEvent);
 

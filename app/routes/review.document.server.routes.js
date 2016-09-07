@@ -3,7 +3,8 @@ var users =require('../../app/controllers/users.server.controller');
 
 module.exports = function(app) {
     app.route('/review/:reviewerId').
-    get(reviewerDocument.list);
+    get(reviewerDocument.list).
+    put(reviewerDocument.put);
 
     /*
     POST to create a review in database
@@ -20,7 +21,6 @@ module.exports = function(app) {
      }
      */
     app.route('/reviewer').
-    put(reviewerDocument.put).
     post(reviewerDocument.create).
     get(reviewerDocument.listAll);
 

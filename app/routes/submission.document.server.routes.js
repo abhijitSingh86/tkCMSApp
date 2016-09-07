@@ -1,5 +1,10 @@
 var submissionDocument =  require('../controllers/submission.document.server.controller.js');
+var users =require('../../app/controllers/users.server.controller');
 module.exports = function(app) {
+
+    app.route('/upload').
+    post(submissionDocument.upload);
+
     app.route('/subDocument').
     post(submissionDocument.create).
     get(submissionDocument.list);
@@ -9,7 +14,9 @@ module.exports = function(app) {
     get(submissionDocument.read).
     put(submissionDocument.update).
     delete(submissionDocument.delete);
-
+    
+    app.route('/subDocument/:userId/:subDocId').
+        post(submissionDocument.download);
     /*
      listOfSubmissionDocumentForUserAndEvent
      {
@@ -33,6 +40,11 @@ module.exports = function(app) {
     app.route('/listOfAllSubmissionDocsForEvent/:eventId').
     get(submissionDocument.listOfAllSubmissionsForEvent);
 
+    // app.route('/listOfAllReviewsForSubmissionDocument/:subDocumentId').
+    // get(submissionDocument.listOfAllReviewsForSubmissionDocument);
+
+
     app.param('subDocumentId', submissionDocument.submissionDocumentByID);
+   
 
 };

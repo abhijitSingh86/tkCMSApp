@@ -36,6 +36,7 @@ var SubmissionDocumentSchema = new Schema({
         type : Schema.ObjectId,
         ref: "User"
     }]
+    ,status : String
 });
 
 
