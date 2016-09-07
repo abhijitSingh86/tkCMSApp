@@ -52,7 +52,7 @@ module.exports = function(app) {
     */
         app.route('/assignDocumentToUsersReview').
         put(users.subscribeReviewerToDocument).
-        delete(users.removeReviewerFromDocument);
+        post(users.removeReviewerFromDocument);
     //--
 
     //Create, update or delete
