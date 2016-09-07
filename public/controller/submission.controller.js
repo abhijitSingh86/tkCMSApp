@@ -14,7 +14,6 @@ app.controller('SubmissionController', function ($scope, $http, $mdToast, $state
             $http.post(url, userId)
             // handle success
                 .success(function (data, status) {
-                    debugger;
                     $scope.subs = data;
 
                     $scope.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers');
@@ -104,7 +103,6 @@ app.controller('SubmissionController', function ($scope, $http, $mdToast, $state
         $http.get('/subDocument/' + $state.params.id)
         // handle success
             .success(function (data) {
-                debugger;
                 $scope.sub = data;
                 $scope.sub.id = data._id;
                 $scope.users = angular.copy(data.authors);

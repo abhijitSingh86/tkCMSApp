@@ -5,8 +5,8 @@
     <title>Title</title>
 </head>
 <body>
-<div flex ng-controller="UserListForReviewController" ng-init="renderUsersToBeAssignedForReview()">
-    <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="row-border hover">
+<div flex ng-controller="UserListForReviewController as ctrl" ng-init="renderUsersToBeAssignedForReview()">
+    <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" dt-instance="ctrl.dtInstance" class="row-border hover">
         <thead>
         <tr>
             <th>Select</th>

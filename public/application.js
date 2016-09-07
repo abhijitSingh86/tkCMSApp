@@ -440,7 +440,7 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider','$breadcrum
         }
         function authenticateNormalUserRole(AuthService, $q, $rootScope) {
             var deferred = $q.defer();
-            if (AuthService.checkUserRole() != "chair") {
+            if (!AuthService.checkUserRole()) {
                 deferred.resolve({});
             } else {
                 deferred.reject({redirectTo: 'home'});
@@ -449,7 +449,7 @@ mainApplicationModule.config(['$stateProvider', '$urlRouterProvider','$breadcrum
         }
         function authenticateChairUserRole(AuthService, $q, $rootScope) {
             var deferred = $q.defer();
-            if (AuthService.checkUserRole() == "chair") {
+            if (AuthService.checkUserRole()) {
                 deferred.resolve({});
             } else {
                 deferred.reject({redirectTo: 'home'});
