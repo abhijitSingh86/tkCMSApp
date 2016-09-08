@@ -277,7 +277,7 @@ var subid;
                 $scope.showUpdate = "true";
                 $scope.showWithdraw = "true";
                 $scope.event = data;
-                //$window.location.href = "#/uploadDoc";
+                $window.location.href = "#/home";
 
             })
             // handle error
