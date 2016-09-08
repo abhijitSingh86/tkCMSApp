@@ -80,13 +80,13 @@
                 <md-button ng-click="withdrawSubmission()" ng-if="showWithdraw" class="md-raised md-primary">Withdraw Submission</md-button>
                 <md-button type="submit" ng-click="submissionForm.$valid && updateSubmissionSubmit(sub)" name="update" class="md-raised md-primary">Update</md-button>
             </section>
-            <section ng-if="normalUser">
+            <fieldset ng-disabled="!normalUser" style = "border:none ">
                 <input type = "file" file-model = "myFile"  enctype="multipart/form-data"/>
                 <!--<form action="/upload" method="post" enctype="multipart/form-data">
                     <input type="file" name="displayImage"/>-->
                 <!-- </form>-->
                 <md-button button class="md-raised md-primary" type="button" ng-click="uploadFile()">Confirm File</md-button>
-            </section>
+            </fieldset>
             <section>
                 <div layout-gt-sm="row" class="layout-gt-sm-row">
                     <md-button class="md-raised md-primary" type="button" ng-click="downloadfile()">Download File</md-button>

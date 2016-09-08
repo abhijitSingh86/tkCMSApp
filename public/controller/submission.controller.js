@@ -239,7 +239,7 @@ var subid;
     $scope.downloadfile =function(file) {
         nfile = {id: file};
         var responseType = 'arraybuffer';
-        $http.post('/subDocument/'+AuthService.getUserId()+'/'+$state.params.id, nfile, {responseType: 'arraybuffer'}).then(function(succ,err){
+        $http.post('/subDocument/'+$scope.sub.createdBy._id+'/'+$state.params.id, nfile, {responseType: 'arraybuffer'}).then(function(succ,err){
             var blob = new Blob([succ.data], {type: "application/pdf"});
             var fileURL = URL.createObjectURL(blob);
             var a         = document.createElement('a');
