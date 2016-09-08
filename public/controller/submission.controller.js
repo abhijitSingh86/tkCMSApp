@@ -215,7 +215,8 @@ var subid;
         var file =  $scope.myFile;
        // file.fileContent  = $scope.myFile;
         //file.submissionID = 'Submission1';
-        var userId = AuthService.getUserId()+ '_'+ $state.params.id;
+        var userId = AuthService.getUserId()+ '_'+ $scope.sub.submissionEventId._id;//$state.params.id;
+
 
         console.log('file is ' );
         console.dir(file);
@@ -239,7 +240,7 @@ var subid;
     $scope.downloadfile =function(file) {
         nfile = {id: file};
         var responseType = 'arraybuffer';
-        $http.post('/subDocument/'+$scope.sub.createdBy._id+'/'+$state.params.id, nfile, {responseType: 'arraybuffer'}).then(function(succ,err){
+        $http.post('/subDocument/'+$scope.sub.createdBy._id+'/'+$scope.sub.submissionEventId._id, nfile, {responseType: 'arraybuffer'}).then(function(succ,err){
             var blob = new Blob([succ.data], {type: "application/pdf"});
             var fileURL = URL.createObjectURL(blob);
             var a         = document.createElement('a');
