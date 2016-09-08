@@ -123,7 +123,6 @@ app.controller('EventController', function ($scope, $http, $mdToast, $state, DTO
                 if (data.end_date != null) data.end_date = new Date(data.end_date);
                 $scope.event = data;
                 var userId = AuthService.getUserId();
-                debugger;
                 $http.get('/subEvent/retrieveApprovedAuthorsToEvent/'+$state.params.id)
                 // handle success
                     .success(function (data) {
@@ -131,12 +130,12 @@ app.controller('EventController', function ($scope, $http, $mdToast, $state, DTO
                         $scope.eventAccess = false;
                         $scope.waitingForApproval = false;
                         angular.forEach(data.acceptedUser, function(id){
-                            if(id == userId){
+                            if(id._id == userId){
                                 $scope.eventAccess = true;
                             }
                         })
                         angular.forEach(data.notAcceptedUser, function(id){
-                            if(id == userId){
+                            if(id._id == userId){
                                 $scope.eventAccess = false;
                                 $scope.waitingForApproval = true;
                             }
